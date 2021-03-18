@@ -9,3 +9,8 @@ If this is the case, the Dashboard can be tested with the following commands fro
 First launch only: `npm install`
 
 `ng serve`
+
+Pro build for github pages
+
+1. `ng build --prod --base-href "/barebone_public_dashboard/"`
+2. `cp docs/index.html docs/404.html`
