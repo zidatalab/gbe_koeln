@@ -24,7 +24,7 @@ export class InterceptorService {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (request.url.includes(this.apiurl)) {
+    if (request.url.includes(this.apiurl) && !request.url.includes("login/refresh")) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this._auth.getToken()}`

@@ -1,10 +1,8 @@
-import { NgForOf, NgIf } from '@angular/common';
-import { AfterViewInit, Component, OnInit, Input, EventEmitter, Output, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input,  Renderer2 } from '@angular/core';
 import * as L from 'leaflet';
 import { icon, Marker } from 'leaflet';
 import { HttpClient } from '@angular/common/http';
-import { Feature, FeatureCollection, GeoJsonObject, GeoJsonTypes } from 'geojson';
-import { min, max, round, mean, std } from "mathjs";
+import { FeatureCollection } from 'geojson';
 import * as chroma from "chroma-js";
 
 @Component({
@@ -34,7 +32,7 @@ export class MapComponent implements OnInit {
 
   ngOnInit(): void {
     // Init vars
-    this.containername="mapdiv"+Math.round(Math.random()*1000).toString()+"_"+round(Math.random()*1000).toString();
+    this.containername="mapdiv"+Math.round(Math.random()*1000).toString()+"_"+Math.round(Math.random()*1000).toString();
     if (!this.Zoom) { this.Zoom = 5; };
     if (!this.center) { this.center = [51.948, 10.265]; };
     if (!this.opacity) { this.opacity = .6; };
@@ -143,9 +141,7 @@ export class MapComponent implements OnInit {
 
     info.update = function (props) {
       this._div.innerHTML = (props ? props[theid] : "") + '<br>';
-      let labelvalue = "";
-      // console.log("data:",thefilter(thedata, theid, props[theid]));
-      // this._div.innerHTML += (props ? propname + "=" + '' + labelvalue : "");
+      let labelvalue = "";      
     };
 
     info.addTo(mymap);
@@ -225,9 +221,9 @@ export class MapComponent implements OnInit {
   }
   makecutoffs(array, method = "equalint", bins) {
     let result = [];
-    let minv = min(array);
-    let maxv = max(array);
-    let steps = round((maxv - minv)/bins);
+    let minv = Math.min(array);
+    let maxv = Math.max(array);
+    let steps = Math.round((maxv - minv)/bins);
     let i = 0;
       while (i < bins) {
         result.push((i + 1) * steps + minv);

@@ -22,19 +22,18 @@ export class AppComponent {
 
   ngOnInit() {
     this._auth.currentUser.subscribe(data => {
-      if (data.data["email"]){
+      if (data){
+      if (data.data){
         this.currentuser = data.data;
         this.loginstatus = true;
-        this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];
-        console.log(this.currentuser);
+        this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];        
       }
       else {
         this.loginstatus = false;
         this.adminstatus = false;
       };
-      
-      
-      }
+           
+      }}
       )
 
   }

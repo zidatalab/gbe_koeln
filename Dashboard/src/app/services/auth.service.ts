@@ -47,13 +47,11 @@ export class AuthService {
         let httpOptions = {
             headers: new HttpHeaders({ 'Authorization': 'bearer '+this.getRefreshToken() })
           };
-        console.log("refreshing");
         return this.http.get(this._api.REST_API_SERVER+'login/refresh',httpOptions).subscribe(
             data=>{
                 let result :any = data;
                 this.setDataInLocalStorage('access_token',result.access_token)
-                this.updateUserData();
-                console.log("refresh success")
+                this.updateUserData();        
             },
             error => {console.log(error);}
         )
@@ -85,7 +83,6 @@ export class AuthService {
     } 
 
     updateUserData(){
-        console.log("updateUserData");
         this._api.getTypeRequest('users/profile/').subscribe(
             data => {
                 this.storeUserDetails(data);
@@ -94,7 +91,7 @@ export class AuthService {
             },
             error => 
             {
-                
+              return error  
             }
         )
     }
