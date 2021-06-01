@@ -21,7 +21,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; 
 import { InterceptorService } from './services/interceptor-service.service';
-import { PrivateComponent } from './pages/private/private.component' 
+import { PrivateComponent } from './pages/private/private.component';
+import { AdminComponent } from './pages/admin/admin.component' 
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -37,7 +38,8 @@ registerLocaleData(locales, 'de');
     BoxComponent,
     LoginComponent,
     ProfileComponent,
-    PrivateComponent
+    PrivateComponent,
+    AdminComponent
     
   ],
   imports: [

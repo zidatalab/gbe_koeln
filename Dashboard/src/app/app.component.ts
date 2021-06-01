@@ -9,10 +9,11 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Dashboard';
+  title = 'Test Dashboard';
   public currentuser : any;
   loginoption = true;
   public loginstatus:boolean;
+  public adminstatus:boolean;
 
   constructor(
     private _auth : AuthService,
@@ -21,26 +22,28 @@ export class AppComponent {
 
   ngOnInit() {
     this._auth.currentUser.subscribe(data => {
-      if (data){
-        this.loginstatus = true;
+      if (data.data["email"]){
         this.currentuser = data.data;
+        this.loginstatus = true;
+        this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];
+        console.log(this.currentuser);
       }
       else {
         this.loginstatus = false;
-        this.currentuser = data;
+        this.adminstatus = false;
+      };
+      
+      
       }
-      
-      
-      },
-      error => {
-        this.loginstatus = false;
-      })
+      )
 
   }
 
 
   logout(){
     this._auth.logout();
+    this.loginstatus = false;
+    this.adminstatus = false;
   }
 
 }

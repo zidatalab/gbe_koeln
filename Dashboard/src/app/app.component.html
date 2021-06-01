@@ -17,7 +17,7 @@
     <main>
       <section class="mat-typography">
         <mat-drawer-container autosize>
-          <mat-drawer #drawer mode="push" position="end" autoFocus="false">
+          <mat-drawer #drawer mode="push" position="start" autoFocus="false">
             <div class="menucontainer">
 
               <ng-container>
@@ -54,10 +54,19 @@
 
                 <a mat-icon-button (click)="drawer.toggle();" href="/profile">
                   <mat-icon class="icon">account_box</mat-icon>
-                  <span>Profil</span>
+                  <span>Benutzerprofil</span>
                 </a>
 
               </div>
+              <div *ngIf="this.adminstatus">
+
+                <a mat-icon-button (click)="drawer.toggle();" href="/admin">
+                  <mat-icon class="icon">account_box</mat-icon>
+                  <span>Administration</span>
+                </a>
+
+              </div>
+              
               <div *ngIf="this.loginstatus">
 
                 <a mat-icon-button (click)="drawer.toggle();logout();" href="/">

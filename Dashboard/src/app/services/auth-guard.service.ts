@@ -15,7 +15,8 @@ constructor(
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let result = false;
-    if (this._authService.getUserDetails()) {
+    let userdata = this._authService.getUserDetails()
+    if (userdata) {
       result = true;
     }
     else {
@@ -23,4 +24,19 @@ constructor(
     }
     return result;
   }
+
+  canActivateAdmin(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    let result = false;
+    let userdata = this._authService.getUserDetails()
+    if (userdata){
+    if (userdata["is_admin"] || userdata["is_superadmin"]) {
+      result = true;
+    }
+    }
+    else {
+      this._router.navigate(['/']);
+    }
+    return result;
+  }
+
 }

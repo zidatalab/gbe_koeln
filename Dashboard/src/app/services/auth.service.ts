@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'; 
 import { ApiService } from './api.service';
-import {HttpParams} from '@angular/common/http';  
+import {HttpClient, HttpParams , HttpHeaders} from '@angular/common/http';  
 import { Router } from '@angular/router'; 
 import { BehaviorSubject, Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -12,7 +12,9 @@ export class AuthService {
     private currentUserSubject: BehaviorSubject<any>;
     public currentUser: Observable<any>;
 
-    constructor(private _api:ApiService,
+    constructor(
+        private http:HttpClient,
+        private _api:ApiService,
         private router:Router) { 
             this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userInfo')));
             this.currentUser = this.currentUserSubject.asObservable();    
@@ -42,12 +44,18 @@ export class AuthService {
     }
     
     refreshToken(){
-        return this._api.getTypeRequest('login/refresh').subscribe(
+        let httpOptions = {
+            headers: new HttpHeaders({ 'Authorization': 'bearer '+this.getRefreshToken() })
+          };
+        console.log("refreshing");
+        return this.http.get(this._api.REST_API_SERVER+'login/refresh',httpOptions).subscribe(
             data=>{
                 let result :any = data;
-                this.setDataInLocalStorage('token',result.access_token)
+                this.setDataInLocalStorage('access_token',result.access_token)
                 this.updateUserData();
-            }
+                console.log("refresh success")
+            },
+            error => {console.log(error);}
         )
     }
 
@@ -56,7 +64,7 @@ export class AuthService {
     } 
 
     public getUserDetails() { 
-        return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null; 
+        return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo'))["data"] : null; 
     } 
      
     setDataInLocalStorage(variableName, data) { 
@@ -64,7 +72,11 @@ export class AuthService {
     } 
  
     public getToken() { 
-        return localStorage.getItem('token'); 
+        return localStorage.getItem('access_token'); 
+    } 
+
+    public getRefreshToken() { 
+        return localStorage.getItem('refresh_token'); 
     } 
  
     public logout(){
@@ -73,12 +85,14 @@ export class AuthService {
     } 
 
     updateUserData(){
-        this._api.getTypeRequest('users/me').subscribe(
+        console.log("updateUserData");
+        this._api.getTypeRequest('users/profile/').subscribe(
             data => {
                 this.storeUserDetails(data);
                 this.currentUserSubject.next(this.getUserDetails());
+                return data
             },
-            error =>
+            error => 
             {
                 
             }

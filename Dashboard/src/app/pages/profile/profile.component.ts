@@ -18,8 +18,10 @@ export class ProfileComponent implements OnInit {
   userdetails:any;
 
   ngOnInit(): void { 
-    this._api.getTypeRequest('users/me')
-    .subscribe(data=>{this.userdetails=data;})
+    this._auth.updateUserData();
+    this._api.getTypeRequest('users/profile/')
+    .subscribe(data=>{this.userdetails=data;});
+    this._auth.refreshToken();
 
   } 
 }

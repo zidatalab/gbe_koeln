@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'; 
 import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { map } from 'rxjs/operators'; 
+
  
 @Injectable({ 
   providedIn: 'root' 
@@ -8,8 +9,8 @@ import { map } from 'rxjs/operators';
 export class ApiService { 
  
  
-  public REST_API_SERVER = "http://localhost:8000/"; 
-  public REST_API_SERVER_CLIENTID = "TEST_Dashboard"; 
+  public REST_API_SERVER = "http://localhost:8000/" // "https://zidashboardapi.azurewebsites.net/"; 
+  public REST_API_SERVER_CLIENTID = "test"; 
 
   constructor(private httpClient: HttpClient) { } 
  
