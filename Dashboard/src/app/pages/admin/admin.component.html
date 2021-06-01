@@ -1,3 +1,14 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem" >
     <h1>Administration</h1>
+    <h2>Nutzerliste</h2>
+    <mat-list>
+        <ng-container *ngFor="let user of this.users">
+        <mat-list-item>
+            <mat-icon *ngIf="user['roles'].indexOf('superadmin')>=0" mat-list-icon>admin_panel_settings</mat-icon>
+            <mat-icon *ngIf="user['roles'].indexOf('superadmin')<0" mat-list-icon>account_circle</mat-icon>
+             <div mat-line><strong>{{user.full_name }} </strong></div>
+             <div mat-line>Email: {{user.email }}</div>
+            </mat-list-item>
+        </ng-container>
+       </mat-list>
 </div>
