@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
   userdetails:any;
 
   ngOnInit(): void { 
-    this.userdetails = this._auth.getUserDetails();    
+    this.userdetails = this._auth.getUserDetails();
+  
   } 
 }

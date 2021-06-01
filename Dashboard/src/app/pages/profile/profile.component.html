@@ -1,4 +1,30 @@
-<div class="container" fxLayout="column" fxLayoutGap="1rem" >
-    <h1>Willkommen, Sie sind eingeloggt.</h1>
-    <p>{{this.userdetails | json}}</p>
+<div class="container" fxLayout="column wrap" fxLayoutGap="1rem" >
+    <h1>Ihre Nutzerdaten</h1>    
+            <div fxLayout="row wrap"  fxLayoutGap="1rem">
+                <div fxFlex=10>Name:</div>
+                <div fxFlex><strong>{{this.userdetails.full_name}}</strong></div>
+            </div>
+            <div fxLayout="row wrap"  fxLayoutGap="1rem">
+                <div fxFlex=10>E-Mail:</div>
+                <div fxFlex><strong>{{this.userdetails.email}}</strong></div>
+            </div>
+            <div fxLayout="row wrap"  fxLayoutGap="1rem">
+                <div fxFlex=10>Rolle:</div>
+                <div fxFlex><strong>{{this.userdetails.roles[0]}}</strong></div>
+            </div>
+            <div *ngIf="this.userdetails.dashboards.length>0" fxLayout="row wrap"  fxLayoutGap="1rem" >
+                <div fxFlex=10>Dashboards:</div>
+                <div fxFlex><strong>{{this.userdetails.dashboards}}</strong></div>
+            </div>
+            <div *ngIf="this.userdetails.dashboard_admin.length>0" fxLayout="row wrap"  fxLayoutGap="1rem">
+                <div fxFlex=10>Dashboard Admin:</div>
+                <div fxFlex><strong>{{this.userdetails.dashboard_admin}}</strong></div>
+            </div>
+            <div *ngIf="this.userdetails.wrong_logins>0" fxLayout="row wrap"  fxLayoutGap="1rem">
+                <div fxFlex=10>Fehlerhafte Loginversuche seit der letzten Anmeldung:</div>
+                <div fxFlex><strong>{{this.userdetails.wrong_logins}}</strong></div>
+            </div>
+
+        
+    
 </div>
