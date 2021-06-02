@@ -1,7 +1,7 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div>
         <h1>Herzlich Willommen</h1>
-        <p>Dies ist nur ein Prototyp als Basis für die Entwicklung von Dashboards</p>       
+        <p>Dies ist ein Prototyp als Basis für die Entwicklung von Dashboards</p>       
     </div>
     <div>
         <h1>Daten</h1>
@@ -9,26 +9,33 @@
         <h3>Regionen</h3>
         <p>
         <mat-chip-list>
-            <mat-chip *ngFor="let item of this.levelvalues">
-                {{item}}
+            <mat-chip  (click)="this.setlevel('levelvalues',item);this.querydata();"  *ngFor="let item of this.levelvalues" 
+            [selected]="(this.levelsettings['levelvalues']==item)" color="primary" [disabled]="this.levelsettings['subgroups']!='Keine'">
+                {{item}} 
             </mat-chip>
         </mat-chip-list>
         </p>
+        <ng-container >
         <h3>Subgruppen</h3>
         <p>
         <mat-chip-list>
             <mat-chip-list>
-                <mat-chip *ngFor="let item of this.subgroups">
+                <ng-container  *ngFor="let item of this.subgroups">
+                <mat-chip (click)="this.setlevel('subgroups',item);this.querydata();" [disabled]="this.levelsettings['levelvalues']!==this.levelvalues[0]" 
+                [selected]="(this.levelsettings['subgroups']==item)" color="primary">
                     {{item}}
                 </mat-chip>
+                </ng-container>
             </mat-chip-list>
         </mat-chip-list>
         </p>
+        </ng-container>
         <h3>Outcomes</h3>
         <p>
         <mat-chip-list>
             <mat-chip-list>
-                <mat-chip *ngFor="let item of this.outcomes">
+                <mat-chip (click)="this.setlevel('outcomes',item);this.querydata();" *ngFor="let item of this.outcomes" 
+                [selected]="(this.levelsettings['outcomes']==item)" color="primary">
                     {{item}}
                 </mat-chip>
             </mat-chip-list>
