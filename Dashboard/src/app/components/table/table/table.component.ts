@@ -11,6 +11,8 @@ import {MatPaginator} from '@angular/material/paginator';
 export class TableComponent implements OnInit {
   @Input() data:any;
   @Input() columns:any;
+  @Input() newlabels:any;
+  @Input() pagesizes:any;
   datasource:any;
   displayedColumns:String[];
 
@@ -19,9 +21,11 @@ export class TableComponent implements OnInit {
 
 
   ngOnInit(){
+  if (!this.pagesizes){this.pagesizes=[10, 50,100]};
   this.displayedColumns =  this.columns;
   this.datasource = new MatTableDataSource(this.data); 
   }
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -29,5 +33,14 @@ export class TableComponent implements OnInit {
     this.datasource.sort = this.sort;
     this.datasource.paginator = this.paginator;    
   }
+
+  ngOnChanges(changes: any) {
+    this.displayedColumns =  this.columns;
+    this.datasource = new MatTableDataSource(this.data); 
+    this.datasource.sort = this.sort;
+    this.datasource.paginator = this.paginator;   
+
+  }
+
 
 }

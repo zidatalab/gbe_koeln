@@ -1,4 +1,4 @@
-<mat-table [dataSource]="this.datasource" matSort class="mat-elevation-z0">
+<mat-table [(dataSource)]="this.datasource" matSort class="mat-elevation-z0">
 
  <ng-container *ngFor="let thecol of displayedColumns">
   <ng-container [matColumnDef]="thecol">
@@ -10,4 +10,4 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
-<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+<mat-paginator [pageSizeOptions]="this.pagesizes" showFirstLastButtons></mat-paginator>
