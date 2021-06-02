@@ -12,8 +12,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$Dashboard-primary: mat.define-palette(mat.$indigo-palette);
-$Dashboard-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$Dashboard-accent: mat.define-palette(mat.$indigo-palette);
+$Dashboard-primary: mat.define-palette(mat.$pink-palette);
 
 // The warn palette is optional (defaults to red).
 $Dashboard-warn: mat.define-palette(mat.$red-palette);
@@ -43,8 +43,8 @@ $Dashboard-theme: mat.define-light-theme((
 @include mat.core();
 
 // Define the default theme (same as the example above).
-$primary: mat.define-palette(mat.$blue-palette);
-$primaryultralight: mat.define-palette(mat.$blue-palette, 50);
+$primary: mat.define-palette(mat.$pink-palette);
+$primaryultralight: mat.define-palette(mat.$pink-palette, 50);
 $accent:  mat.define-palette(mat.$light-green-palette, A200, A100, A400);
 $apptheme:   mat.define-light-theme($primary, $accent);
 
@@ -156,7 +156,7 @@ $custom-typography: mat.define-typography-config(
 
 
 html {
-  background-color: mat.get-color-from-palette($primary) ;
+  background-color: white;
 }
 
 body {

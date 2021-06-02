@@ -1,4 +1,39 @@
-<div class="container" fxLayout="row wrap" fxLayoutGap="1rem" fxLayoutAllign="space-around">
-    <h1>Herzlich Willommen</h1>
-         
+<div class="container" fxLayout="column" fxLayoutGap="1rem" fxLayoutAllign="space-around">
+    <div>
+        <h1>Herzlich Willommen</h1>
+        <p>Dies ist nur ein Prototyp als Basis für die Entwicklung von Dashboards</p>       
+    </div>
+    <div>
+        <h1>Daten</h1>
+        <p>Sie haben Zugriff auf folgende Daten:</p>
+        <h3>Regionen</h3>
+        <p>
+        <mat-chip-list>
+            <mat-chip *ngFor="let item of this.levelvalues">
+                {{item}}
+            </mat-chip>
+        </mat-chip-list>
+        </p>
+        <h3>Subgruppen</h3>
+        <p>
+        <mat-chip-list>
+            <mat-chip-list>
+                <mat-chip *ngFor="let item of this.subgroups">
+                    {{item}}
+                </mat-chip>
+            </mat-chip-list>
+        </mat-chip-list>
+        </p>
+        <h3>Outcomes</h3>
+        <p>
+        <mat-chip-list>
+            <mat-chip-list>
+                <mat-chip *ngFor="let item of this.outcomes">
+                    {{item}}
+                </mat-chip>
+            </mat-chip-list>
+        </mat-chip-list>
+    </p>
+
+    </div>
 </div>

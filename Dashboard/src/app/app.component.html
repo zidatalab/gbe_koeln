@@ -1,6 +1,6 @@
 <mat-sidenav-container autosize="true" scrollable="false">
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar color="transparent">
       <button (click)="drawer.toggle()" mat-icon-button class="example-icon"
         aria-label="Example icon-button with menu icon">
         <mat-icon>menu</mat-icon>
@@ -8,7 +8,7 @@
       <span>{{this.title}}</span>
       <span class="example-spacer"></span>
       <a href="https://www.zi.de">
-        <img src="https://ziwebstorage.blob.core.windows.net/appradar/assets/logo_zi_small_grey_transparent.png"
+        <img src="https://ziwebstorage.blob.core.windows.net/appradar/assets/logo_zi_small_transparent.png"
           style="height: 1.2rem;filter:brightness(120%);">
       </a>
 
@@ -20,7 +20,7 @@
             <div class="menucontainer">
 
               <ng-container>
-                <p style="color:#1d96f3"><strong>Navigation</strong></p>
+                <p class="primarycolor"><strong>Navigation</strong></p>
               </ng-container>
 
 
@@ -60,7 +60,7 @@
               <div *ngIf="this.adminstatus">
 
                 <a mat-icon-button (click)="drawer.toggle();" href="/admin">
-                  <mat-icon class="icon">account_box</mat-icon>
+                  <mat-icon class="icon">admin_panel_settings</mat-icon>
                   <span>Administration</span>
                 </a>
 

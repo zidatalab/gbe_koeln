@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { map } from 'rxjs/operators'; 
 import { retry } from 'rxjs/operators';
+
  
 @Injectable({ 
   providedIn: 'root' 
@@ -14,21 +15,69 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) { } 
  
-  getTypeRequest(url) { 
+  public  getTypeRequest(url) { 
     return this.httpClient.get(this.REST_API_SERVER+url).pipe(map(res => { 
       return res; 
     })).pipe(retry(5)); 
   } 
  
-  postTypeRequest(url, payload) { 
+  public  postTypeRequest(url, payload) { 
     return this.httpClient.post(this.REST_API_SERVER+url, payload).pipe(map(res => { 
       return res; 
     })).pipe(retry(5)); ; 
   } 
  
-  putTypeRequest(url, payload) { 
+  public  putTypeRequest(url, payload) { 
     return this.httpClient.put(this.REST_API_SERVER+url, payload).pipe(map(res => { 
       return res; 
     })) 
-  }   
+  }
+  
+// Data APIs
+public getValues(array, key) {
+  let values = [];
+  for (let item of array){
+    values.push(item[key]);
+  }
+  return values;
+}
+public  getKeys(array){
+ return Object.keys(array[0]);
+}
+
+public  getOptions(array, key){
+ return array.map(item => item[key])
+ .filter((value, index, self) => self.indexOf(value) === index)
+}
+
+public  filterArray(array,key,value){
+ let i =0
+ let result = []
+ for (let item of array){
+   if (item[key]==value){result.push(item)};
+   i = i+1
+ }
+ return result
+}
+
+public  getmetadata(name){
+  return JSON.parse(localStorage.getItem(name));
+}
+  
+public sortArray(array, key, order = "ascending") {
+  let result = array;
+  if (order == "ascending") {
+    return result.sort((a, b) => (a[key] < b[key] ? -1 : 1));
+  }
+  else {
+    return result.sort((a, b) => (a[key] > b[key] ? -1 : 1));
+  }
+
+
+
+}
+
+public sumArray(array) {
+  return array.reduce((a, b) => a + b, 0);
+}
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
 
 
 @Component({
@@ -10,41 +11,27 @@ export class StartComponent implements OnInit {
   
 
 
-  constructor() { }
+  constructor(private api: ApiService) { }
 
+  metadata :any;
+  sortdata: any;
+  level : any;
+  levelvalues:any;
+  subgroups:any;
+  outcomes:any;
 
-  
   ngOnInit(): void {
 
+    this.metadata = this.api.getmetadata("metadata");
+    this.sortdata = this.api.getmetadata("sortdata");
+    this.level = this.api.filterArray(this.metadata,"type","level")[0]["varname"];
+    this.levelvalues = this.api.filterArray(this.sortdata,"varname",this.level)[0]["values"];
+    this.subgroups = this.api.getValues(this.api.filterArray(this.metadata,"type","group"),"varname");
+    this.outcomes = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata,"topic","outcomes"),"varname"),"varname");
+    console.log(this.metadata,this.sortdata,this.level,this.levelvalues,this.subgroups,this.outcomes);
 
 
   }
-
-getValues(array, key) {
-   let values = [];
-   for (let item of array){
-     values.push(item[key]);
-   }
-   return values;
-}
-getKeys(array){
-  return Object.keys(array[0]);
-}
-
-getOptions(array, key){
-  return array.map(item => item[key])
-  .filter((value, index, self) => self.indexOf(value) === index)
-}
-
-filterArray(array,key,value){
-  let i =0
-  let result = []
-  for (let item of array){
-    if (item[key]==value){result.push(item)};
-    i = i+1
-  }
-  return result
-}
 
 
 

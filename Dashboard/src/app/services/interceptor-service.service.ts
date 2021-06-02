@@ -45,7 +45,7 @@ export class InterceptorService {
         }
 
         // Logout on Refresh error
-        if (request.url.includes(this.apiurl) && error.status == 422) {
+        if (request.url.includes(this.apiurl) &&  request.url.includes("login/refresh") && error.status == 422) {
           this.refreshTokenInProgress = false;
           this._auth.logout();
           this.router.navigate(["/"]);
