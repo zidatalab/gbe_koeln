@@ -1,14 +1,126 @@
-<div class="container" fxLayout="column" fxLayoutGap="1rem" >
+<div class="container" fxLayout="column" fxLayoutGap="1rem">
     <h1>Administration</h1>
-    <h2>Nutzerliste</h2>
-    <mat-list>
-        <ng-container *ngFor="let user of this.users">
-        <mat-list-item>
-            <mat-icon *ngIf="user['roles'].indexOf('superadmin')>=0" mat-list-icon>admin_panel_settings</mat-icon>
-            <mat-icon *ngIf="user['roles'].indexOf('superadmin')<0" mat-list-icon>account_circle</mat-icon>
-             <div mat-line><strong>{{user.full_name }} </strong></div>
-             <div mat-line>Email: {{user.email }}</div>
-            </mat-list-item>
-        </ng-container>
-       </mat-list>
+    <div *ngIf="!this.adduser && !this.adddata">
+        <h2>Nutzerliste</h2>
+        <mat-list>
+            <ng-container *ngFor="let user of this.users">
+                <mat-list-item>
+                    <mat-icon *ngIf="user['roles'].indexOf('superadmin')>=0" mat-list-icon>admin_panel_settings
+                    </mat-icon>
+                    <mat-icon *ngIf="user['roles'].indexOf('superadmin')<0" mat-list-icon>account_circle</mat-icon>
+                    <div mat-line><strong>{{!user.lastname? 'k.A.': user.anrede+" "+user.firstname+" "+user.lastname }} </strong> (Email: {{user.email
+                        }}) 
+                    <a *ngIf="this.currentuser['is_superadmin']" (click)="user.stammdaten=!user.stammdaten"> ></a>
+                    </div>
+                    <div mat-line >
+                        <mat-chip-list  *ngIf="!user.stammdaten">
+                            <mat-chip color="primary" (click)="this.updateuser(user.email,'user',!user['is_user'])"
+                                [selected]="user['is_user']">User</mat-chip>
+                            <mat-chip color="primary" (click)="this.updateuser(user.email,'admin',!user['is_admin'])"
+                                [selected]="user['is_admin']">Admin</mat-chip>
+                            <mat-chip color="primary"
+                                (click)="this.updateuser(user.email,'superadmin',!user['is_superadmin'])"
+                                [selected]="user['is_superadmin']">Superadmin</mat-chip>
+                        </mat-chip-list>
+                        <div *ngIf="user.stammdaten" mat-line>
+                           <span style="color: lightgray;">Nur für Admins</span>
+                            <mat-chip-list class="add-margin"  *ngIf="user.stammdaten">
+                                <mat-chip *ngIf="!user.chpwd" color="primary" (click)="this.deletuser(user.email)"
+                                    selected>löschen</mat-chip>
+                                <mat-chip *ngIf="!user.chpwd" color="accent" (click)="user.chpwd=!user.chpwd;user.rndpwd=this.rndpwd();"
+                                    selected>password zurücksetzen</mat-chip>          
+                                <div class="add-margin"  *ngIf="user.chpwd">
+                                    <p>Neues Password:</p><p><strong>{{user.rndpwd}}</strong> <a class="add-margin" (click)="this.copy(user.rndpwd)"><mat-icon >content_copy</mat-icon></a></p>
+                                    <p>
+                                    <mat-chip color="accent" (click)="user.chpwd=!user.chpwd;"
+                                    selected>abbrechen</mat-chip>&nbsp;&nbsp;<mat-chip color="primary" (click)="chpwd(user.email,user.rndpwd)"
+                                        selected>passwort setzen</mat-chip>    </p>
+                                </div>                      
+                            </mat-chip-list>
+                        </div>
+                        <div mat-line></div>
+                    </div>
+                </mat-list-item>
+            </ng-container>
+        </mat-list>
+    </div>
+
+    <div *ngIf="!this.adduser && !this.adddata" fxLayout="row wrap" fxLayoutGap="1rem"
+        fxLayoutAlign="start space-between">
+        <div fxFlex=100>
+            <h2>Aufgaben</h2>
+        </div>
+        <div>
+            <button mat-raised-button (click)="this.adduser=!this.adduser" color="primary">Nutzer hinzufügen</button>
+        </div>
+        <div>
+            <button mat-raised-button (click)="this.adddata=!this.adddata" color="primary">Daten</button>
+        </div>
+    </div>
+    <div fxLayout="row wrap" *ngIf="this.adduser">
+
+        
+        <div fxFlex=100>
+            <h2><strong>Nutzer hinzufügen</strong></h2>
+            <mat-card>
+                <form autocomplete="on" [formGroup]="myRegform">
+                    <h2><strong>Informationen</strong></h2>
+                    <h4><strong>Name</strong>:</h4>
+                    <mat-form-field appearance="fill" class="full-width">
+                        <mat-label>Anrede</mat-label>
+                        <mat-select name="anredefeld" formControlName="anrede" required>
+                            <mat-option value="Herr">Herr</mat-option><br>
+                            <mat-option value="Frau">Frau</mat-option><br>
+                            <mat-option value="Frau Dr.">Frau Dr.</mat-option><br>
+                            <mat-option value="Herr Dr.">Herr Dr.</mat-option><br>
+                            <mat-option value="Dr.">Dr.</mat-option><br>
+                            <mat-option value=" ">Kein Anrede</mat-option><br>
+                        </mat-select>
+                        <mat-error>Bitte wählen Sie eine bevorzugte Anrede für sich</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="full-width" required>
+                        <mat-label>Vorname</mat-label>
+                        <input matInput placeholder="First name" name="fname" formControlName="firstname">
+                        <mat-error>Fehler: Wir benötigen den Vornamen für die Registrierung.</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="full-width" required>
+                        <mat-label>Nachname</mat-label>
+                        <input matInput placeholder="Last Name" name="lname" formControlName="lastname">
+                        <mat-error>Fehler: Wir benötigen den Nachnamen für die Registrierung.</mat-error>
+                    </mat-form-field>
+                    <h4>Initiales <strong>Passwort</strong>:</h4>
+                    <mat-form-field appearance="fill" class="full-width">
+                        <mat-label>Passwort</mat-label>
+                        <mat-error>Passwort zu kurz</mat-error>
+                        <input matInput type="string" formControlName="password" required>
+                        <mat-hint>Bitte kopieren Sie das Passwort</mat-hint>
+                        <mat-hint *ngIf="this.myRegform.value.password.length<12">Ihr Passwort (mindestens 12 Zeichen).</mat-hint>
+                      </mat-form-field>
+                    <br><br><br>
+                    <h4><strong>E-Mail</strong> des neuen Nutzers</h4>
+                    <mat-form-field appearance="fill"                 
+                    class="full-width">
+                    <input matInput type="email" placeholder="Email" formControlName="email">
+                    <mat-icon matSuffix>email</mat-icon>
+                    <mat-error>Die E-Mail-Adresse ist ungültig</mat-error>
+                </mat-form-field>
+                </form>
+            </mat-card>
+            
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxFlex=20><button mat-raised-button (click)="this.addusernow();"
+                    color="accent">Hinzufügen</button></div>
+            <div fxFlex=20><button mat-raised-button (click)="this.adduser=!this.adduser;"
+                    color="primary">Abbrechen</button></div>
+        </div>
+
+    </div>
+    <div *ngIf="this.adddata">
+        <h2><strong>Daten hinzufügen</strong></h2>
+        <div fxLayoutAlign="space-between">
+            <div><button mat-raised-button (click)="this.adddata=!this.adddata" color="accent">Hinzufügen</button></div>
+            <div><button mat-raised-button (click)="this.adddata=!this.adddata" color="primary">Abbrechen</button></div>
+        </div>
+    </div>
 </div>

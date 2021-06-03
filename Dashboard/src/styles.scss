@@ -15,6 +15,7 @@
 $Dashboard-accent: mat.define-palette(mat.$indigo-palette);
 $Dashboard-primary: mat.define-palette(mat.$pink-palette);
 
+
 // The warn palette is optional (defaults to red).
 $Dashboard-warn: mat.define-palette(mat.$red-palette);
 
@@ -170,7 +171,7 @@ body {
     max-width: 1100px;
     min-height: 1000px;
     margin: auto;
-    padding: 0.5rem;
+    padding: 1.2rem;
     display: flex;
     padding-bottom: 5rem;
   }
@@ -183,10 +184,6 @@ body {
    
   
 }
-
-
-
-
 
 .label {
   text-align: center;
@@ -312,4 +309,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .red {
   background-color: crimson;
   color: black;
+}
+
+.add-margin {
+  margin:1em;
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'; 
-import { HttpClient, HttpHeaders } from '@angular/common/http'; 
+import { HttpClient, HttpHeaders , HttpParams } from '@angular/common/http'; 
 import { map } from 'rxjs/operators'; 
 import { retry } from 'rxjs/operators';
 
@@ -24,7 +24,7 @@ export class ApiService {
   public  postTypeRequest(url, payload) { 
     return this.httpClient.post(this.REST_API_SERVER+url, payload).pipe(map(res => { 
       return res; 
-    })).pipe(retry(5)); ; 
+    })); ; 
   } 
  
   public  putTypeRequest(url, payload) { 
@@ -33,6 +33,27 @@ export class ApiService {
     })) 
   }
   
+// Specific Requests
+
+public updateuser(user,setting,value){
+  let payload = {'email' : user,'key':setting,'value':value};
+  return this.postTypeRequest('userstatus', payload);
+}
+
+public deleteuser(user){
+  let payload = {};
+  return this.postTypeRequest('deleteuser?email='+user, payload);
+}
+
+public changeuserpwd(user,newpwd,oldpwd=""){
+  let payload = {"newpassword":newpwd,email:user};
+  if (oldpwd!=""){
+    payload["oldpassword"]=oldpwd;
+  }
+  return this.postTypeRequest('changepwd', payload);
+}
+
+
 // Data APIs
 public getValues(array, key) {
   let values = [];
