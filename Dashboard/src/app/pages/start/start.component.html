@@ -7,7 +7,7 @@
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat labore sed corrupti vitae neque, eligendi possimus sapiente repellat dolor, rem amet, modi vel rerum inventore totam! Facilis reiciendis, dolor soluta, fuga numquam cupiditate possimus hic necessitatibus, ad animi vitae corrupti accusamus nulla quam dolore nesciunt labore! Enim saepe odio reprehenderit.</p>
     </div>
 
-    <div *ngIf="this.data.length>0">
+    <div *ngIf="this.data">
         <h1>Auswahl</h1>
         <h3>Regionen</h3>
         <p>
@@ -47,7 +47,7 @@
             </mat-chip-list>
         </p>
     </div>
-    <div *ngIf="this.data.length>=1">
+    <div *ngIf="this.data">
         <h1>Ergebnisse</h1>
         <p >
             <app-table [(data)]="this.data" [columns]="this.datakeys"></app-table>

@@ -28,15 +28,15 @@ export class StartComponent implements OnInit {
   ngOnInit(): void {
     this.auth.currentUser.subscribe(data=>{this.currentuser=data;});    
     this.metadata = this.api.getmetadata("metadata");
-    if (this.metadata.length>0){
+    if (this.metadata){
     this.sortdata = this.api.getmetadata("sortdata");
     this.level = this.api.filterArray(this.metadata,"type","level")[0]["varname"];
     this.levelvalues = this.api.filterArray(this.sortdata,"varname",this.level)[0]["values"];
-    if (this.levelvalues.length>0){this.levelsettings["levelvalues"]= this.levelvalues[0];}
+    if (this.levelvalues){this.levelsettings["levelvalues"]= this.levelvalues[0];}
     this.subgroups = ["Keine"].concat(this.api.getValues(this.api.filterArray(this.metadata,"type","group"),"varname"));
-    if (this.subgroups.length>0){this.levelsettings["subgroups"]=this.subgroups[0];}
+    if (this.subgroups){this.levelsettings["subgroups"]=this.subgroups[0];}
     this.outcomes = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata,"topic","outcomes"),"varname"),"varname");
-    if (this.outcomes.length>0){this.levelsettings["outcomes"]=this.outcomes[0];}
+    if (this.outcomes){this.levelsettings["outcomes"]=this.outcomes[0];}
     this.querydata();
     }
   }

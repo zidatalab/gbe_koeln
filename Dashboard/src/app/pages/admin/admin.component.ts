@@ -23,7 +23,6 @@ export class AdminComponent implements OnInit {
   currentuser:any;
   ngOnInit(): void {
     this.currentuser = this.auth.getUserDetails();
-    console.log(this.currentuser);
     this.adduser = false;
     this.adddata = false;
     this.updateuserlist();
@@ -42,7 +41,7 @@ export class AdminComponent implements OnInit {
   }
 
   updateuserlist() {
-    this.api.getTypeRequest('users').subscribe(data => { this.users = data; console.log(data); })
+    this.api.getTypeRequest('users').subscribe(data => { this.users = data; })
   }
 
   buildForm() {
@@ -69,8 +68,6 @@ export class AdminComponent implements OnInit {
     let toadd = this.myRegform.value;
     this.api.postTypeRequest("newuser",toadd).subscribe(
       data => {
-        console.log(toadd);
-        //this.buildForm();
         this.adduser=false;
         this.updateuserlist();
       }
@@ -88,7 +85,6 @@ export class AdminComponent implements OnInit {
   }
 
   copy(item) {
-    console.log(item);
     document.addEventListener('copy', (e: ClipboardEvent) => {
       e.clipboardData.setData('text/plain', (item));
       e.preventDefault();

@@ -53,7 +53,7 @@ export class AuthService {
                 this.setDataInLocalStorage('access_token',result.access_token)
                 this.updateUserData();        
             },
-            error => {console.log(error);}
+            error => {}
         )
     }
 
