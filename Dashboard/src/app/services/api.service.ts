@@ -24,7 +24,7 @@ export class ApiService {
   public  postTypeRequest(url, payload) { 
     return this.httpClient.post(this.REST_API_SERVER+url, payload).pipe(map(res => { 
       return res; 
-    })); ; 
+    })).pipe(retry(3)); ; 
   } 
  
   public  putTypeRequest(url, payload) { 
@@ -40,9 +40,10 @@ public updateuser(user,setting,value){
   return this.postTypeRequest('userstatus', payload);
 }
 
-public deleteuser(user){
-  let payload = {};
-  return this.postTypeRequest('deleteuser?email='+user, payload);
+public deleteuser(user,password=""){
+  let payload = {"email":user};
+  if (password!=""){payload["password"]=password};
+  return this.postTypeRequest('deleteuser', payload);
 }
 
 public changeuserpwd(user,newpwd,oldpwd=""){

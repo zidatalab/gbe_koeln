@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
+
 
 
 @Component({
@@ -11,7 +13,7 @@ export class StartComponent implements OnInit {
   
 
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService,private auth:AuthService) { }
   metadata :any;
   sortdata: any;
   level : any;
@@ -21,8 +23,10 @@ export class StartComponent implements OnInit {
   levelsettings={};
   data : any;
   datakeys:any;
+  currentuser:any;
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
+    this.auth.currentUser.subscribe(data=>{this.currentuser=data;});    
     this.metadata = this.api.getmetadata("metadata");
     if (this.metadata.length>0){
     this.sortdata = this.api.getmetadata("sortdata");

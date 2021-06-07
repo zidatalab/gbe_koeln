@@ -5,10 +5,10 @@
         <mat-list>
             <ng-container *ngFor="let user of this.users">
                 <mat-list-item>
-                    <mat-icon *ngIf="user['roles'].indexOf('superadmin')>=0" mat-list-icon>admin_panel_settings
+                    <mat-icon color="primary" fxHide.lt-md=true *ngIf="user['roles'].indexOf('superadmin')>=0" mat-list-icon>admin_panel_settings
                     </mat-icon>
-                    <mat-icon *ngIf="user['roles'].indexOf('superadmin')<0" mat-list-icon>account_circle</mat-icon>
-                    <div mat-line><strong>{{!user.lastname? 'k.A.': user.anrede+" "+user.firstname+" "+user.lastname }} </strong> (Email: {{user.email
+                    <mat-icon  fxHide.lt-md=true *ngIf="user['roles'].indexOf('superadmin')<0" mat-list-icon>account_circle</mat-icon>
+                    <div mat-line><strong>{{!user.lastname? 'k.A.': user.anrede+" "+user.lastname }} </strong> ({{user.email
                         }}) 
                     <a *ngIf="this.currentuser['is_superadmin']" (click)="user.stammdaten=!user.stammdaten"> ></a>
                     </div>
@@ -39,6 +39,7 @@
                             </mat-chip-list>
                         </div>
                         <div mat-line></div>
+                        <div fxHide.gt-sm=true mat-line></div>
                     </div>
                 </mat-list-item>
             </ng-container>
@@ -109,7 +110,7 @@
             
         </div>
         <div fxLayout="row" fxLayoutAlign="space-between">
-            <div fxFlex=20><button mat-raised-button (click)="this.addusernow();"
+            <div fxFlex=20><button [disabled]="this.myRegform.value.password.length<12" mat-raised-button (click)="this.addusernow();"
                     color="accent">Hinzufügen</button></div>
             <div fxFlex=20><button mat-raised-button (click)="this.adduser=!this.adduser;"
                     color="primary">Abbrechen</button></div>

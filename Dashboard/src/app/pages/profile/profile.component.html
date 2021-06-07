@@ -1,30 +1,84 @@
-<div class="container" fxLayout="column wrap" fxLayoutGap="1rem" >
+<div class="container" fxLayout="row" fxLayoutGap="1rem"  fxLayoutAlign="space-around"
+*ngIf="!(this.deleteresult=='success')" >
+    <div class="small">
     <h1>Ihre Nutzerdaten</h1>    
             <div fxLayout="row wrap"  fxLayoutGap="1rem">
-                <div fxFlex=10>Name:</div>
-                <div fxFlex><strong>{{this.userdetails.full_name}}</strong></div>
+                <div fxFlex=20 fxFlex.lt-md=100>Name:</div>
+                <div fxFlex><strong>{{this.userdetails.anrede+' '+this.userdetails.firstname+' '+this.userdetails.lastname}}</strong></div>
             </div>
             <div fxLayout="row wrap"  fxLayoutGap="1rem">
-                <div fxFlex=10>E-Mail:</div>
+                <div fxFlex=20 fxFlex.lt-md=100>E-Mail:</div>
                 <div fxFlex><strong>{{this.userdetails.email}}</strong></div>
             </div>
             <div fxLayout="row wrap"  fxLayoutGap="1rem">
-                <div fxFlex=10>Rolle:</div>
-                <div fxFlex><strong>{{this.userdetails.roles[0]}}</strong></div>
+                <div fxFlex=20 fxFlex.lt-md=100>Rolle:</div>
+                <div fxFlex><strong>{{this.userdetails.roles}}</strong></div>
             </div>
             <div *ngIf="this.userdetails.dashboards.length>0" fxLayout="row wrap"  fxLayoutGap="1rem" >
-                <div fxFlex=10>Dashboards:</div>
+                <div fxFlex=20 fxFlex.lt-md=100>Dashboards:</div>
                 <div fxFlex><strong>{{this.userdetails.dashboards}}</strong></div>
             </div>
             <div *ngIf="this.userdetails.dashboard_admin.length>0" fxLayout="row wrap"  fxLayoutGap="1rem">
-                <div fxFlex=10>Dashboard Admin:</div>
+                <div fxFlex=20 fxFlex.lt-md=100>Dashboard Admin:</div>
                 <div fxFlex><strong>{{this.userdetails.dashboard_admin}}</strong></div>
             </div>
             <div *ngIf="this.userdetails.wrong_logins>0" fxLayout="row wrap"  fxLayoutGap="1rem">
-                <div fxFlex=10>Fehlerhafte Loginversuche seit der letzten Anmeldung:</div>
+                <div fxFlex=20 fxFlex.lt-md=100>Fehlerhafte Loginversuche seit der letzten Anmeldung:</div>
                 <div fxFlex><strong>{{this.userdetails.wrong_logins}}</strong></div>
             </div>
+            <div class="add-margin" style="max-width:400px;" fxLayout="row wrap" fxLayoutAlign="space-around" fxLayoutGap="1rem">
+                <div class="add-margin"><button mat-raised-button (click)="this.action='chpwd'" color="primary">Passwort ändern</button></div>
+                <div class="add-margin"><button mat-raised-button (click)="this.action='deleteaccount'" color="primary">Account löschen</button></div>
+            </div>
+            <div fxLayout="column" *ngIf="this.action=='chpwd'" style="max-width: 450px;">
+                <div ><h1>Passwort ändern</h1></div>
+                <div *ngIf="!this.pwdchange.ok">
+                    
+                        <mat-form-field  class="full-width" appearance="fill">
+                          <mat-label>Aktuelles Passwort</mat-label>
+                          <input  type="password"  [disabled]="this.pwdchange.progress"  matInput value="" [(ngModel)]="this.pwdrequest.oldpwd">                          
+                        </mat-form-field>
+                      
+                        <mat-form-field  class="full-width" appearance="fill">
+                          <mat-label>Neues Passwort</mat-label>
+                          <input type="password" [disabled]="this.pwdchange.progress" matInput value="" [(ngModel)]="this.pwdrequest.newpwd">
+                          <mat-hint>Mindestlänge 10 Zeichen</mat-hint>
+                        </mat-form-field>
+                </div>
+                <div>
+                    <mat-hint *ngIf="this.pwdchange.progress">ändere das Passwort...</mat-hint>
+                    <p  *ngIf="(this.pwdchange.done && !this.pwdchange.ok)"><mat-icon style="color:red">error</mat-icon> Fehler: Bitte prüfen Sie das aktuelle Passwort!</p>
+                                            <p *ngIf="(this.pwdchange.done && this.pwdchange.ok)"><mat-icon style="color:green">check_circle</mat-icon>Änderung erfolgreich, Sie bleiben eingeloggt.</p>
+                </div>
+                <div *ngIf="!this.pwdchange.ok" class="add-margin" fxLayout="row" fxLayoutAlign="space-between">
+                    <div><button  mat-raised-button (click)="this.action=''" color="primary">Abbrechen</button></div>
+                    <div><button mat-raised-button [disabled]="this.pwdrequest.newpwd.length<10" (click)="this.chpwd()" color="accent">Ändern</button></div>
+                </div>
+            </div>
+            <div *ngIf="this.action=='deleteaccount'"  style="max-width: 450px;">
+                <h1>Account löschen</h1>
+                <div>
+                    <p>Warnung: Diese Aktion kann nicht rückgängig gemacht werden</p>
+                    <p>Bitte geben Sie Ihr aktuelles Passwort zur Sicherheit ein:</p>
+                    <mat-form-field  class="full-width" appearance="fill">
+                        <mat-label>Aktuelles Passwort</mat-label>
+                        <input  type="password"  matInput value="" [(ngModel)]="this.deleterequest.pwd">                          
+                      </mat-form-field>
+                </div>
+                <div class="add-margin" fxLayout="row" fxLayoutAlign="space-between">
+                    <div><button mat-raised-button (click)="this.action=''" color="primary">Abbrechen</button></div>
+                    <div><button mat-raised-button (click)="this.deleteaccount()" [disabled]="this.deleterequest.pwd.length<10" color="primary">Jetzt löschen</button></div>
+                </div>
+                <div *ngIf="this.deleteresult=='error'">
+                    <p style="color:crimson">Es ist ein Fehler aufgetreten, bitte prüfen Sie Ihr Passwort.</p>
+                </div>
+            </div>
+        </div>
+
 
         
     
+</div>
+<div class="container" *ngIf="this.deleteresult=='success'">
+    <h1>Ihr Account wurde gelöscht</h1>
 </div>
