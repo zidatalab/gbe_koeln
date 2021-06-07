@@ -40,13 +40,8 @@ export class LoginComponent implements OnInit {
   login(){
     this.login_pending = true;
     this._auth.login(this.form.value).subscribe(data => {
-      let res:any = data;
-      this._auth.setDataInLocalStorage('access_token', res.access_token);
-      this._auth.setDataInLocalStorage('refresh_token', res.refresh_token);
-      this._auth.updateUserData();
       this.loggedin=true;  
       this.router.navigate(['/']);    
-      
     },error => {
       this.loginerror = true;
     });

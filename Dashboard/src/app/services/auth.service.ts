@@ -8,6 +8,8 @@ import { map } from 'rxjs/operators';
 @Injectable({ 
     providedIn: 'root' 
 }) 
+
+  
 export class AuthService { 
     private currentUserSubject: BehaviorSubject<any>;
     public currentUser: Observable<any>;
@@ -19,6 +21,10 @@ export class AuthService {
             this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userInfo')));
             this.currentUser = this.currentUserSubject.asObservable();    
     } 
+
+    public get currentUserValue(): any {
+        return this.currentUserSubject.value;
+      }
 
     OnlineStatus() {
         return merge<boolean>(
@@ -36,9 +42,19 @@ export class AuthService {
           .set('username', b.username)
           .set('password', b.password)
           .set('client_id', this._api.REST_API_SERVER_CLIENTID);
-        return this._api.postTypeRequest('login', payload); 
+          return this._api.postTypeRequest('login', payload).pipe(map(user => {
+            return this.logintasks(user);
+                  }));
       }
  
+    logintasks(user){
+        this.setDataInLocalStorage('refresh_token', user.refresh_token);
+        this.setDataInLocalStorage('access_token', user.access_token);
+        this.storeUserDetails(user.user);
+        this.currentUserSubject.next(user.user);
+        return user;
+    }
+    
     adduser(data){
         return this._api.postTypeRequest('newuser', data); 
     }
@@ -50,8 +66,8 @@ export class AuthService {
         return this.http.get(this._api.REST_API_SERVER+'login/refresh',httpOptions).subscribe(
             data=>{
                 let result :any = data;
-                this.setDataInLocalStorage('access_token',result.access_token)
-                this.updateUserData();        
+                this.setDataInLocalStorage('access_token',result.access_token);
+
             },
             error => {}
         )
@@ -78,22 +94,14 @@ export class AuthService {
     } 
  
     public logout(){
-        this.currentUserSubject.next(null);
         localStorage.clear(); 
+        this.currentUserSubject.next(null);
+        this.router.navigate(["/"]);
+  
     } 
 
-    updateUserData(){
-        this._api.getTypeRequest('users/profile/').subscribe(
-            data => {
-                this.storeUserDetails(data);
-                this.currentUserSubject.next(this.getUserDetails());
-                return data
-            },
-            error => 
-            {
-              return error  
-            }
-        )
+    public updateUserData(){
+        return this._api.getTypeRequest('users/profile/')
     }
     
 

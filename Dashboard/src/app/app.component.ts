@@ -32,8 +32,7 @@ export class AppComponent {
   autorefreshdata(){
     this._auth.currentUser.subscribe(data => {
       if (data){
-      if (data.data){
-        this.currentuser = data.data;
+        this.currentuser = data;
         this.loginstatus = true;
         this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];                
       }
@@ -42,7 +41,7 @@ export class AppComponent {
         this.adminstatus = false;
       };
            
-      }}
+      }
       );
     this.updatemetadata().subscribe(
       data => {

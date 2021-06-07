@@ -26,8 +26,9 @@ export class StartComponent implements OnInit {
   currentuser:any;
 
   ngOnInit(): void {
-    this.auth.currentUser.subscribe(data=>{this.currentuser=data;});    
-    this.metadata = this.api.getmetadata("metadata");
+    this.auth.currentUser.subscribe(data=>{this.currentuser=data;
+      this.metadata = this.api.getmetadata("metadata");
+    });    
     if (this.metadata){
     this.sortdata = this.api.getmetadata("sortdata");
     this.level = this.api.filterArray(this.metadata,"type","level")[0]["varname"];
