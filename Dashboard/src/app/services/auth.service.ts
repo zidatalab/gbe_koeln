@@ -48,6 +48,7 @@ export class AuthService {
       }
  
     logintasks(user){
+        console.log(user);
         this.setDataInLocalStorage('refresh_token', user.refresh_token);
         this.setDataInLocalStorage('access_token', user.access_token);
         this.storeUserDetails(user.user);
@@ -74,11 +75,11 @@ export class AuthService {
     }
 
     storeUserDetails(data) { 
-        return localStorage.setItem('userInfo', JSON.stringify({data}));
+        return localStorage.setItem('userInfo', JSON.stringify(data));
     } 
 
     public getUserDetails() { 
-        return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo'))["data"] : null; 
+        return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null; 
     } 
      
     setDataInLocalStorage(variableName, data) { 
@@ -95,9 +96,7 @@ export class AuthService {
  
     public logout(){
         localStorage.clear(); 
-        this.currentUserSubject.next(null);
-        this.router.navigate(["/"]);
-  
+        this.currentUserSubject.next(null);        
     } 
 
     public updateUserData(){

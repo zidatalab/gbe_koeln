@@ -15,6 +15,7 @@ export class StartComponent implements OnInit {
 
   constructor(private api: ApiService,private auth:AuthService) { }
   metadata :any;
+  metadataok:boolean;
   sortdata: any;
   level : any;
   levelvalues:any;
@@ -24,13 +25,32 @@ export class StartComponent implements OnInit {
   data : any;
   datakeys:any;
   currentuser:any;
+  data_rate:any;
+  data_number:any;
+  
 
   ngOnInit(): void {
-    this.auth.currentUser.subscribe(data=>{this.currentuser=data;
-      this.metadata = this.api.getmetadata("metadata");
-    });    
-    if (this.metadata){
+    this.auth.currentUser.subscribe(data=>{this.currentuser=data;});    
+    this.updatemetadata();
+    if (this.metadataok){this.querydata()}
+    // Wait if no metadata and try again. Fixes logout behaviour
+    else {
+      setTimeout(()=>{     
+        this.updatemetadata();
+        if (this.metadataok){this.querydata()};},1500);
+    }
+    }
+    
+
+  setlevel(level,value){
+    this.levelsettings[level]=value;        
+    this.querydata();
+  }
+
+  updatemetadata(){
+    this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
+    if ((!this.metadata==false) && (!this.sortdata==false)){
     this.level = this.api.filterArray(this.metadata,"type","level")[0]["varname"];
     this.levelvalues = this.api.filterArray(this.sortdata,"varname",this.level)[0]["values"];
     if (this.levelvalues){this.levelsettings["levelvalues"]= this.levelvalues[0];}
@@ -38,13 +58,11 @@ export class StartComponent implements OnInit {
     if (this.subgroups){this.levelsettings["subgroups"]=this.subgroups[0];}
     this.outcomes = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata,"topic","outcomes"),"varname"),"varname");
     if (this.outcomes){this.levelsettings["outcomes"]=this.outcomes[0];}
-    this.querydata();
+      this.metadataok = true;
     }
-  }
-
-  setlevel(level,value){
-    this.levelsettings[level]=value;        
-    this.querydata();
+    else {
+      this.metadataok = false;
+    }
   }
 
   querydata(){
@@ -52,7 +70,7 @@ export class StartComponent implements OnInit {
       "client_id": this.api.REST_API_SERVER_CLIENTID,
       "groupinfo": {},
       "showfields": [this.levelsettings["outcomes"]]};
-    let outcomeinfo = this.api.filterArray(this.metadata,"varname",this.levelsettings["outcomes"][0])["type"];
+    let outcomeinfo = this.api.filterArray(this.metadata,"varname",this.levelsettings["outcomes"])[0]['type'];
     query["groupinfo"][this.level] = this.levelsettings["levelvalues"];
     let i =0
     for (let group of this.subgroups){
@@ -69,23 +87,20 @@ export class StartComponent implements OnInit {
     if (index > -1) {
       this.datakeys.splice(index, 1);
     }
-    this.data = this.fixRates(data["data"],this.levelsettings["outcomes"],outcomeinfo);
+    this.data = data["data"],this.levelsettings["outcomes"];
+    if (outcomeinfo=='rate') {
+      this.data_number =  [];
+      this.data_rate =   [(this.levelsettings["outcomes"])];      
+    }
+    else {
+      this.data_number =   [(this.levelsettings["outcomes"])];
+      this.data_rate =  [];
+    }    
   });
     
-    
+   
   }
 
-  fixRates(array:any,rate:string,type:string){
-    if (type="rate"){
-    for (let el of array){
-      let topush = el;
-      topush[rate]=Math.round(topush[rate]*1000)/10;
-     
-    }
-    }    
-    return array;
-    
-  }
 
 
 }

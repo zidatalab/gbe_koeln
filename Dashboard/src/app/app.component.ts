@@ -60,6 +60,17 @@ export class AppComponent {
     this._auth.logout();
     this.loginstatus = false;
     this.adminstatus = false;
+    this.updatemetadata().subscribe(
+      data => {
+        this.setmetadata("metadata",data["data"]);
+        this.getsortdata().subscribe(data => {
+          this.setmetadata("sortdata",data);     
+        });
+
+      }
+    
+    );
+
   }
 
   getsortdata(){

@@ -3,7 +3,11 @@
  <ng-container *ngFor="let thecol of displayedColumns">
   <ng-container [matColumnDef]="thecol">
     <mat-header-cell *matHeaderCellDef mat-sort-header> {{thecol}} </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element[thecol]}} </mat-cell >
+    <mat-cell *matCellDef="let element"> 
+      <span *ngIf="this.outcomes_rate.indexOf(thecol)>=0">{{element[thecol] | percent }}</span>
+      <span *ngIf="this.outcomes_numeric.indexOf(thecol)>=0">{{element[thecol] | number }}</span>
+      <span *ngIf="(this.outcomes_rate.indexOf(thecol)<0) && (this.outcomes_numeric.indexOf(thecol)<0)">{{element[thecol]}}</span>
+    </mat-cell >
   </ng-container>
 </ng-container>
 

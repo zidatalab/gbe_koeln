@@ -11,6 +11,8 @@ import {MatPaginator} from '@angular/material/paginator';
 export class TableComponent implements OnInit {
   @Input() data:any;
   @Input() columns:any;
+  @Input() outcomes_numeric:any;
+  @Input() outcomes_rate:any;
   @Input() newlabels:any;
   @Input() pagesizes:any;
   datasource:any;
@@ -21,6 +23,8 @@ export class TableComponent implements OnInit {
 
 
   ngOnInit(){
+  if (!this.outcomes_numeric){this.outcomes_numeric=[]};
+  if (!this.outcomes_rate){this.outcomes_rate=[]};
   if (!this.pagesizes){this.pagesizes=[10, 50,100]};
   this.displayedColumns =  this.columns;
   this.datasource = new MatTableDataSource(this.data); 

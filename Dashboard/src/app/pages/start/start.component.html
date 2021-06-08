@@ -1,6 +1,6 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem" fxLayoutAllign="space-around">
     <div>
-        <h1>Herzlich Willommen <span *ngIf="this.currentuser"> {{this.currentuser.anrede?this.currentuser.anrede+" "+this.currentuser.lastname:"" }}</span></h1>        
+        <h1>Herzlich Willkommen <span *ngIf="this.currentuser"> {{this.currentuser.anrede?this.currentuser.anrede+" "+this.currentuser.lastname:"" }}</span></h1>        
     </div>
     <div *ngIf="!this.data">
         <h1>Kein Datenzugriff</h1>
@@ -50,7 +50,8 @@
     <div *ngIf="this.data">
         <h1>Ergebnisse</h1>
         <p >
-            <app-table [(data)]="this.data" [columns]="this.datakeys"></app-table>
+            <app-table [(data)]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate" 
+            [outcomes_numeric]="this.data_number"></app-table>
 
         </p>
     </div>
