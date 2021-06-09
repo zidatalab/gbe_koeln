@@ -50,7 +50,8 @@ export class StartComponent implements OnInit {
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
     if ((!this.metadata==false) && (!this.sortdata==false)){
-    this.level = this.api.filterArray(this.metadata,"type","level")[0]["varname"];
+      if (this.metadata.length>0){
+        this.level = this.api.filterArray(this.metadata,"type","level")[0]["varname"];
     this.levelvalues = this.api.filterArray(this.sortdata,"varname",this.level)[0]["values"];
     if (this.levelvalues){this.levelsettings["levelvalues"]= this.levelvalues[0];}
     this.subgroups = ["Keine"].concat(this.api.getValues(this.api.filterArray(this.metadata,"type","group"),"varname"));
@@ -58,6 +59,8 @@ export class StartComponent implements OnInit {
     this.outcomes = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata,"topic","outcomes"),"varname"),"varname");
     if (this.outcomes){this.levelsettings["outcomes"]=this.outcomes[0];}
       this.metadataok = true;
+      }
+    
     }
     else {
       this.metadataok = false;

@@ -271,8 +271,10 @@
 
 
         <div class="add-margin" fxLayoutAlign="space-between">
-            <div><button mat-raised-button (click)="uploadnewdata()" color="accent">Hinzufügen
-                    <!--[disabled]="!this.metadone"-->
+            <div><button mat-raised-button (click)="uploadnewdata()" 
+                [disabled]="!this.metadone"
+                color="accent">Hinzufügen
+                   
                 </button></div>
             <div><button mat-raised-button
                     (click)="this.adddata=!this.adddata;this.datafile=null;this.metadone=null;this.metadatafile=null;"
