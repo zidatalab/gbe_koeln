@@ -5,15 +5,18 @@
         <mat-list>
             <ng-container *ngFor="let user of this.users">
                 <mat-list-item>
-                    <mat-icon color="primary" fxHide.lt-md=true *ngIf="user['roles'].indexOf('superadmin')>=0" mat-list-icon>admin_panel_settings
+                    <mat-icon color="primary" fxHide.lt-md=true *ngIf="user['roles'].indexOf('superadmin')>=0"
+                        mat-list-icon>admin_panel_settings
                     </mat-icon>
-                    <mat-icon  fxHide.lt-md=true *ngIf="user['roles'].indexOf('superadmin')<0" mat-list-icon>account_circle</mat-icon>
-                    <div mat-line><strong>{{!user.lastname? 'k.A.': user.anrede+" "+user.lastname }} </strong> ({{user.email
-                        }}) 
-                    <a *ngIf="this.currentuser['is_superadmin']" (click)="user.stammdaten=!user.stammdaten"> ></a>
+                    <mat-icon fxHide.lt-md=true *ngIf="user['roles'].indexOf('superadmin')<0" mat-list-icon>
+                        account_circle</mat-icon>
+                    <div mat-line><strong>{{!user.lastname? 'k.A.': user.anrede+" "+user.lastname }} </strong>
+                        ({{user.email
+                        }})
+                        <a *ngIf="this.currentuser['is_superadmin']" (click)="user.stammdaten=!user.stammdaten"> ></a>
                     </div>
-                    <div mat-line >
-                        <mat-chip-list  *ngIf="!user.stammdaten">
+                    <div mat-line>
+                        <mat-chip-list *ngIf="!user.stammdaten">
                             <mat-chip color="primary" (click)="this.updateuser(user.email,'user',!user['is_user'])"
                                 [selected]="user['is_user']">User</mat-chip>
                             <mat-chip color="primary" (click)="this.updateuser(user.email,'admin',!user['is_admin'])"
@@ -23,19 +26,25 @@
                                 [selected]="user['is_superadmin']">Superadmin</mat-chip>
                         </mat-chip-list>
                         <div *ngIf="user.stammdaten" mat-line>
-                           <span style="color: lightgray;">Nur für Admins</span>
-                            <mat-chip-list class="add-margin"  *ngIf="user.stammdaten">
+                            <span style="color: lightgray;">Nur für Admins</span>
+                            <mat-chip-list class="add-margin" *ngIf="user.stammdaten">
                                 <mat-chip *ngIf="!user.chpwd" color="primary" (click)="this.deletuser(user.email)"
                                     selected>löschen</mat-chip>
-                                <mat-chip *ngIf="!user.chpwd" color="accent" (click)="user.chpwd=!user.chpwd;user.rndpwd=this.rndpwd();"
-                                    selected>password zurücksetzen</mat-chip>          
-                                <div class="add-margin"  *ngIf="user.chpwd">
-                                    <p>Neues Password:</p><p><strong>{{user.rndpwd}}</strong> <a class="add-margin" (click)="this.copy(user.rndpwd)"><mat-icon >content_copy</mat-icon></a></p>
+                                <mat-chip *ngIf="!user.chpwd" color="accent"
+                                    (click)="user.chpwd=!user.chpwd;user.rndpwd=this.rndpwd();" selected>password
+                                    zurücksetzen</mat-chip>
+                                <div class="add-margin" *ngIf="user.chpwd">
+                                    <p>Neues Password:</p>
+                                    <p><strong>{{user.rndpwd}}</strong> <a class="add-margin"
+                                            (click)="this.copy(user.rndpwd)">
+                                            <mat-icon>content_copy</mat-icon>
+                                        </a></p>
                                     <p>
-                                    <mat-chip color="accent" (click)="user.chpwd=!user.chpwd;"
-                                    selected>abbrechen</mat-chip>&nbsp;&nbsp;<mat-chip color="primary" (click)="chpwd(user.email,user.rndpwd)"
-                                        selected>passwort setzen</mat-chip>    </p>
-                                </div>                      
+                                        <mat-chip color="accent" (click)="user.chpwd=!user.chpwd;" selected>abbrechen
+                                        </mat-chip>&nbsp;&nbsp;<mat-chip color="primary"
+                                            (click)="chpwd(user.email,user.rndpwd)" selected>passwort setzen</mat-chip>
+                                    </p>
+                                </div>
                             </mat-chip-list>
                         </div>
                         <div mat-line></div>
@@ -60,7 +69,7 @@
     </div>
     <div fxLayout="row wrap" *ngIf="this.adduser">
 
-        
+
         <div fxFlex=100>
             <h2><strong>Nutzer hinzufügen</strong></h2>
             <mat-card>
@@ -95,33 +104,182 @@
                         <mat-error>Passwort zu kurz</mat-error>
                         <input matInput type="string" formControlName="password" required>
                         <mat-hint>Bitte kopieren Sie das Passwort</mat-hint>
-                        <mat-hint *ngIf="this.myRegform.value.password.length<12">Ihr Passwort (mindestens 12 Zeichen).</mat-hint>
-                      </mat-form-field>
+                        <mat-hint *ngIf="this.myRegform.value.password.length<12">Ihr Passwort (mindestens 12 Zeichen).
+                        </mat-hint>
+                    </mat-form-field>
                     <br><br><br>
                     <h4><strong>E-Mail</strong> des neuen Nutzers</h4>
-                    <mat-form-field appearance="fill"                 
-                    class="full-width">
-                    <input matInput type="email" placeholder="Email" formControlName="email">
-                    <mat-icon matSuffix>email</mat-icon>
-                    <mat-error>Die E-Mail-Adresse ist ungültig</mat-error>
-                </mat-form-field>
+                    <mat-form-field appearance="fill" class="full-width">
+                        <input matInput type="email" placeholder="Email" formControlName="email">
+                        <mat-icon matSuffix>email</mat-icon>
+                        <mat-error>Die E-Mail-Adresse ist ungültig</mat-error>
+                    </mat-form-field>
                 </form>
             </mat-card>
-            
+
         </div>
         <div fxLayout="row" fxLayoutAlign="space-between">
-            <div fxFlex=20><button [disabled]="this.myRegform.value.password.length<12" mat-raised-button (click)="this.addusernow();"
-                    color="accent">Hinzufügen</button></div>
+            <div fxFlex=20><button [disabled]="this.myRegform.value.password.length<12" mat-raised-button
+                    (click)="this.addusernow();" color="accent">Hinzufügen</button></div>
             <div fxFlex=20><button mat-raised-button (click)="this.adduser=!this.adduser;"
                     color="primary">Abbrechen</button></div>
         </div>
 
     </div>
-    <div *ngIf="this.adddata">
+    <div *ngIf="this.adddata" fxLayout="column" fxLayoutGap="10px">
         <h2><strong>Daten hinzufügen</strong></h2>
-        <div fxLayoutAlign="space-between">
-            <div><button mat-raised-button (click)="this.adddata=!this.adddata" color="accent">Hinzufügen</button></div>
-            <div><button mat-raised-button (click)="this.adddata=!this.adddata" color="primary">Abbrechen</button></div>
+        <mat-card>
+            <div>
+                <h3><strong>Was soll hochgeladen werden?</strong></h3>
+                <mat-radio-group [(ngModel)]="this.dataintend">
+                    <mat-radio-button value="dataupload">Daten hinzufügen&nbsp;&nbsp;</mat-radio-button>
+                    <mat-radio-button value="geodataupload">Geodaten hinzufügen&nbsp;</mat-radio-button>
+                </mat-radio-group>
+                <br><br>
+            </div>
+            <div *ngIf="this.dataintend=='dataupload'">
+                <h3><strong>1. Datei hochladen</strong> <span *ngIf="this.datafile">
+                        <mat-icon color="primary">check_circle</mat-icon>
+                    </span></h3>
+
+                <div *ngIf="!this.datafile" fxFlex.lt-md=100 fxFlex=50>
+
+                    <input type="file" accept='.csv' style="display: none"
+                        (change)="this.datafile=this.changeListener($event);" #dataInput>
+                    <br><br>
+                    <button mat-raised-button color="primary" (click)="dataInput.click()">Daten
+                        Auswählen</button>
+                </div>
+            </div>
+        </mat-card>
+        <mat-card *ngIf="this.metadatafile && this.dataintend=='dataupload'">
+            <div>
+
+                <h3><strong>2. Daten beschreiben</strong><span *ngIf="this.metadone">
+                        <mat-icon color="primary">check_circle</mat-icon>
+                    </span></h3>
+                <p>Bitte prüfen Sie die initinale Zuordnung sorgfältig. Jeder Upload muss mindestens zwei Variablen vom
+                    Bereich "ordering" enthalten
+                    (Typen: level,levelid). Ebenso sollten alle Subgruppenvariablen vom Typ Gruppe sein. Jede Variable
+                    aus den Bereichen "ordering" oder "sungroups" muss Angaben zur Referenzkategorie machen.
+                    Zellen für diese Kategorie müssen auch in der Tabelle zu finden sein. Die Variablen aus den
+                    Bereichen Outcomes oder
+                    Demography sollten vom Typ 'rate' oder 'number' sein. Das Hinzufügen einer Indikatorenbeschreibung
+                    ist optional.</p>
+            </div>
+            <div *ngIf="(this.datacheck.length>0)">
+                <mat-list>
+                    <h3 matSubheader><strong>Gefundene Fehler:</strong></h3>
+                    <mat-list-item *ngFor="let hinweis of this.datacheck">
+                        <mat-icon color="primary" mat-list-icon>error</mat-icon>
+                        <div mat-line><span class="primarycolor">{{hinweis}}</span></div>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+            <div class="smalltab" *ngIf="this.metadatafile && !this.metadone" fxflex=100>
+
+                <div class="tabheader" fxLayout="row wrap" fxLayoutGap="10px">
+                    <div fxFlex=15>Name</div>
+                    <div fxFlex=20>Thema</div>
+                    <div fxFlex=20>Typ</div>
+                    <div fxFlex>Referenzkategorie</div>
+                    <div fxFlex=15></div>
+
+                </div>
+
+                <div class="tabvalues primarycolor" *ngFor="let row of this.metadatafile" fxLayout="row wrap"
+                    fxLayoutGap="10px">
+                    <div fxFlex=15><br>{{row.varname}}</div>
+                    <div fxFlex=20>
+                        <mat-form-field appearance="outline" *ngIf="true">
+                            <mat-label>Bereich</mat-label>
+                            <mat-select [(value)]="row.topic" (selectionChange)="this.checkmetadata()">
+                                <mat-option *ngFor="let option of this.topicoptions" [value]="option">{{option}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex=20>
+                        <mat-form-field appearance="outline" *ngIf="true">
+                            <mat-label>Art</mat-label>
+                            <mat-select [(value)]="row.type" (selectionChange)="this.checkmetadata()">
+                                <mat-option *ngFor="let option of this.typeoptions" [value]="option">{{option}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex>
+                        <ng-container *ngIf="['ordering','subgroups'].indexOf(row.topic)>=0">
+                            <mat-form-field appearance="outline" *ngIf="true">
+                                <mat-label>Referenzkategorie</mat-label>
+                                <mat-select [(value)]="row.allforlevel" (selectionChange)="this.checkmetadata()">
+                                    <mat-option *ngFor="let option of this.getrefvalues(row.varname)" [value]="option">
+                                        {{option}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ng-container>
+                        <ng-container *ngIf="['ordering','subgroups'].indexOf(row.topic)<0">
+
+                        </ng-container>
+
+                    </div>
+                    <div fxFlex=15>
+                        <mat-chip-list>
+                            <mat-chip color="primary" (change)="this.checkmetadata()" [selected]="row.public"
+                                (click)="row.public=!row.public">
+                                <span *ngIf="row.public">Öffentlich</span>
+                                <span *ngIf="!row.public">Privat</span>
+                            </mat-chip>
+                            <mat-chip color="primary" [selected]="row.adddescr" (click)="row.adddescr=!row.adddescr">
+                                Beschreibung
+                            </mat-chip>
+                        </mat-chip-list>
+                    </div>
+                    <div *ngIf="row.adddescr" fxFlex=100>
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                            <mat-label>Indikatorenbeschreibung</mat-label>
+                            <textarea style="color:black" [(ngModel)]="row.description" matInput rows="10"
+                                cols="40"></textarea>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+                <div>
+                    <div><button mat-raised-button [disabled]="!(this.datacheck.length==0)" (click)="this.metadone=true"
+                            color="accent">Beschreibung
+                            Fertig</button></div>
+
+                </div>
+
+            </div>
+        </mat-card>
+
+        <div *ngIf="this.metadone">
+            <mat-card>
+                <h3><strong>3. Sollen die aktuellen Daten überschrieben werden?</strong></h3>
+                <p>
+                    <mat-slide-toggle [(ngModel)]="this.replacedata"></mat-slide-toggle>
+                    <span style="color:crimson;" *ngIf="this.replacedata">überschreiben</span>
+                    <span *ngIf="!this.replacedata">nicht überschreiben.</span>
+
+                </p>
+                <p *ngIf="!this.replacedata"><em>Achtung: Das Ergänzen der Daten ist aufwändig und erfordert ggf. viel
+                        Zeit. Bitte ergänzen Sie nur kleine Datenkörper!</em></p>
+            </mat-card>
+        </div>
+
+
+
+        <div class="add-margin" fxLayoutAlign="space-between">
+            <div><button mat-raised-button (click)="uploadnewdata()" color="accent">Hinzufügen
+                    <!--[disabled]="!this.metadone"-->
+                </button></div>
+            <div><button mat-raised-button
+                    (click)="this.adddata=!this.adddata;this.datafile=null;this.metadone=null;this.metadatafile=null;"
+                    color="primary">Abbrechen</button></div>
+        </div>
+        <div *ngIf="this.uploadres">
+            Upload: {{this.uploadres}}
         </div>
     </div>
 </div>

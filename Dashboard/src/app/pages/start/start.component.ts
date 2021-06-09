@@ -41,7 +41,6 @@ export class StartComponent implements OnInit {
     }
     }
     
-
   setlevel(level,value){
     this.levelsettings[level]=value;        
     this.querydata();
@@ -87,7 +86,7 @@ export class StartComponent implements OnInit {
     if (index > -1) {
       this.datakeys.splice(index, 1);
     }
-    this.data = data["data"],this.levelsettings["outcomes"];
+    setTimeout(()=>{this.data = data["data"]},0);
     if (outcomeinfo=='rate') {
       this.data_number =  [];
       this.data_rate =   [(this.levelsettings["outcomes"])];      
