@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
-import {  FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -17,100 +17,128 @@ export class AdminComponent implements OnInit {
 
   users: any;
   myRegform: any;
-  myDataUploadform:any;
+  myDataUploadform: any;
   adduser: boolean;
   newuser: any;
   adddata: boolean;
+  uploaderror: any;
   datafile: any;
   metadatafile: any;
-  metadone:boolean;
-  replacedata=true;
+  metadone: boolean;
+  replacedata = true;
   geojsonfile: any;
-  uploadres:string;
-  dataintend:string;
-  datacheck=[];
+  geouploadinfo: any;
+  areafeatures: any;
+  uploadres: string;
+  dataintend: string;
+  datacheck = [];
+  areavalues: any;
   currentuser: any;
-  topicoptions = ['ordering','subgroups','demography','outcomes']
-  typeoptions = ['level','levelid','group','rate','number']
+  allmetadata: any;
+  uploadarea: string;
+  uploadareaid: string;
+  topicoptions = ['ordering', 'subgroups', 'demography', 'outcomes']
+  typeoptions = ['level', 'levelid', 'group', 'rate', 'number']
   ngOnInit(): void {
-    this.datacheck=[];
     this.currentuser = this.auth.getUserDetails();
-    this.adduser = false;
-    this.adddata = true;
-    this.datafile = null;
-    this.metadatafile = null;
-    this.geojsonfile = null;
     this.updateuserlist();
+    this.resetall();
     this.buildForm();
-    this.dataintend="dataupload";
+    this.allmetadata = this.api.getmetadata("metadata");
+    let currentmetadata = this.api.filterArray(this.allmetadata, 'type', 'level')[0];
+
+    setTimeout(() => { this.areavalues = this.api.filterArray(this.api.getmetadata("sortdata"), 'varname', currentmetadata["varname"])[0]['values']; }, 0);
+
   }
 
-//File upload function
+  //File upload function
   changeListener(event) {
     let files = event.target.files;
     let file = files[0];
     let reader: FileReader = new FileReader();
     reader.readAsText(file);
     reader.onload = (e) => {
-      this.datafile = reader.result;      
+      this.datafile = reader.result;
       let varnames = this.datafile.split('\n').map(data => data.split(','))[0];
       let newmetadata = [];
       let index = 0;
-      for(let varname of varnames){
-        index = index+1;
-        let topush = {'varname':varname,'topic':"",'description':"","allforlevel":'',public:false}
-        if (index==1){
-          topush["topic"]="ordering";
-          topush["type"]="level";}
-        if (index==2){
-          topush["topic"]="ordering";
-          topush["type"]="levelid";
+      for (let varname of varnames) {
+        index = index + 1;
+        let topush = { 'varname': varname, 'topic': "", 'description': "", "allforlevel": '', public: false }
+        if (index == 1) {
+          topush["topic"] = "ordering";
+          topush["type"] = "level";
         }
-        if (index>2) {
-          topush["type"]="rate";
-          topush["topic"]="outcomes";
+        if (index == 2) {
+          topush["topic"] = "ordering";
+          topush["type"] = "levelid";
+        }
+        if (index > 2) {
+          topush["type"] = "rate";
+          topush["topic"] = "outcomes";
         }
 
 
         newmetadata.push(topush);
-        
+
       }
       this.metadone = false;
-      setTimeout(()=> {
+      setTimeout(() => {
         this.metadatafile = newmetadata;
-        this.checkmetadata();},0); // fixes https://blog.angular-university.io/angular-debugging/
-  
+        this.checkmetadata();
+      }, 0); // fixes https://blog.angular-university.io/angular-debugging/
+
     };
 
 
   }
 
+  changeListenerGEOJSON(event) {
+    let files = event.target.files;
+    let file = files[0];
+    let reader: FileReader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = (e) => {
+      setTimeout(() => {
+        this.geojsonfile = JSON.parse(reader.result.toString());
+        setTimeout(() => {
+          console.log(this.geojsonfile, Object.keys(this.geojsonfile['features'][0]['properties']));
+          this.areafeatures = Object.keys(this.geojsonfile['features'][0]['properties']);
+        }, 0);
+      }, 0); // fixes https://blog.angular-university.io/angular-debugging/
+
+    };
+
+
+  }
+
+
   csvToArray(text) {
     let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
     for (l of text) {
-        if ('"' === l) {
-            if (s && l === p) row[i] += l;
-            s = !s;
-        } else if (',' === l && s) l = row[++i] = '';
-        else if ('\n' === l && s) {
-            if ('\r' === p) row[i] = row[i].slice(0, -1);
-            row = ret[++r] = [l = '']; i = 0;
-        } else row[i] += l;
-        p = l;
+      if ('"' === l) {
+        if (s && l === p) row[i] += l;
+        s = !s;
+      } else if (',' === l && s) l = row[++i] = '';
+      else if ('\n' === l && s) {
+        if ('\r' === p) row[i] = row[i].slice(0, -1);
+        row = ret[++r] = [l = '']; i = 0;
+      } else row[i] += l;
+      p = l;
     }
     return ret;
-};
+  };
 
 
-  getrefvalues(value){
+  getrefvalues(value) {
     let data = this.datafile.split(/\r|\n|\r/);
     let dataarray = [];
-    let index=this.api.getValues(this.metadatafile,"varname").indexOf(value);
-    let i =0;
-    for (let row of data){
+    let index = this.api.getValues(this.metadatafile, "varname").indexOf(value);
+    let i = 0;
+    for (let row of data) {
       let topush = this.csvToArray(row)[0][index]
-      if (i>0 && dataarray.indexOf(topush)<0){dataarray.push(topush)}
-      i=i+1;
+      if (i > 0 && dataarray.indexOf(topush) < 0) { dataarray.push(topush) }
+      i = i + 1;
     }
 
     return dataarray;
@@ -147,73 +175,108 @@ export class AdminComponent implements OnInit {
         email: ["", [Validators.required, Validators.email]]
       }
     );
-    this.myRegform.patchValue({ "password": this.rndpwd() });    
+    this.myRegform.patchValue({ "password": this.rndpwd() });
 
   };
 
-  buildDataUploadForm(){
-    
+  buildDataUploadForm() {
 
-    if (this.dataintend=='geodataupload'){
-      this.myDataUploadform= new FormData();     
+    
+    if (this.dataintend == 'geodataupload') {
+      console.log("build geo")
+      this.myDataUploadform = new FormData();
+      this.geouploadinfo = {
+        'client_id': this.api.REST_API_SERVER_CLIENTID,
+        'levelnamevar': this.api.filterArray(this.allmetadata, "type", "level")[0]['varname'],
+        'levelname': this.uploadarea,
+        'levelidvar': this.api.filterArray(this.allmetadata, "type", "levelid")[0]['varname'],
+        'levelidname': this.uploadareaid
+      }
+      this.myDataUploadform.append('geodata', new Blob([JSON.stringify(this.geojsonfile)], { type: 'application/geo+json' }));
+      this.myDataUploadform.append('geodatainfo', JSON.stringify(this.geouploadinfo));
+      console.log(this.geouploadinfo,this.geojsonfile);
     }
 
-    if (this.dataintend=='dataupload'){
-      this.myDataUploadform= new FormData();
-      this.myDataUploadform.append('data',new Blob([this.datafile], { type: 'text/csv' }));
-      this.myDataUploadform.append('metadata',this.arrayToCsv(this.metadatafile) );
-  }}
+    if (this.dataintend == 'dataupload') {
+      this.myDataUploadform = new FormData();
+      this.myDataUploadform.append('data', new Blob([this.datafile], { type: 'text/csv' }));
+      this.myDataUploadform.append('metadata', this.arrayToCsv(this.metadatafile));
+    }
+  }
 
 
-  uploadnewdata(){
+  uploadnewdata() {
     this.buildDataUploadForm();
-    this.uploadres="pending";
-    this.api.postTypeRequest('upload_data/?replacedata='+this.replacedata,this.myDataUploadform).subscribe(data => {
-      console.log(data);
-      this.uploadres="success";
-    },
-    error=> {console.log(error);
-      this.uploadres="error";
-    })
+    this.uploadres = "pending";
+    this.uploaderror = null;
+    if (this.dataintend == 'dataupload') {
+      this.api.postTypeRequest('upload_data/?replacedata=' + this.replacedata, this.myDataUploadform).subscribe(data => {
+        console.log(data);
+        this.uploadres = "success";
+        setTimeout(() => {
+          this.resetall();
+        }, 1500);
+      },
+        error => {
+          console.log(error);
+          this.uploadres = "error";
+          this.uploaderror = error;
+        })
+    }
+    if (this.dataintend == 'geodataupload') {
+      this.api.postTypeRequest('upload_geodata/', this.myDataUploadform).subscribe(data => {
+        console.log(data);
+        this.uploadres = "success";
+        setTimeout(() => {
+          this.resetall();
+        }, 1500);
+      },
+        error => {
+          console.log(error);
+          this.uploadres = "error";
+          this.uploaderror = error;
+        })
+      
+    }
 
   }
 
-  checkmetadata(){
+  checkmetadata() {
     let err = []
     let test1counter = 0;
     let test2 = true;
     let test3 = true;
     let test4 = true;
     let test5 = true;
-    for (let item of this.metadatafile){
-      
-      if (item.topic=="ordering" && ['levelid','level'].indexOf(item.type)>=0){test1counter=test1counter+1;}
-      if (item.topic=="subgroups" && item.type !=='group'){test2=false;}
-      if (item.topic=="outcomes" && ['rate','number'].indexOf(item.type)>0){test3=false;}
-      if (item.topic=="demography" && ['rate','number'].indexOf(item.type)>0){test4=false;}      
-      }
-    if (test1counter!==2){
+    for (let item of this.metadatafile) {
+
+      if (item.topic == "ordering" && ['levelid', 'level'].indexOf(item.type) >= 0) { test1counter = test1counter + 1; }
+      if (item.topic == "subgroups" && item.type !== 'group') { test2 = false; }
+      if (item.topic == "outcomes" && ['rate', 'number'].indexOf(item.type) > 0) { test3 = false; }
+      if (item.topic == "demography" && ['rate', 'number'].indexOf(item.type) > 0) { test4 = false; }
+    }
+    if (test1counter !== 2) {
       err.push("Level, and levelid missing or not labelled as topic.")
     }
-    if (!test2){
+    if (!test2) {
       err.push("Subgroups not typed correctly")
     }
-    if (!test3){
+    if (!test3) {
       err.push("Outcomes not typed correctly")
     }
-    if (!test4){
+    if (!test4) {
       err.push("Demography not typed correctly")
     }
-    let test5data = this.api.filterArray(this.metadatafile,'topic','ordering').concat(this.api.filterArray(this.metadatafile,'topic','subgroups'))
-    test5 = this.api.getValues(this.api.filterArray(test5data,'allforlevel',''),'allforlevel').length==0;
+    let test5data = this.api.filterArray(this.metadatafile, 'topic', 'ordering').concat(this.api.filterArray(this.metadatafile, 'topic', 'subgroups'))
+    test5 = this.api.getValues(this.api.filterArray(test5data, 'allforlevel', ''), 'allforlevel').length == 0;
 
-    if (!test5){
-      console.log(test5data,test5data.length,this.api.getValues(this.api.filterArray(test5data,'allforlevel',''),'allforlevel').length)
-     err.push("Reference Levels not specified")
+    if (!test5) {
+      console.log(test5data, test5data.length, this.api.getValues(this.api.filterArray(test5data, 'allforlevel', ''), 'allforlevel').length)
+      err.push("Reference Levels not specified")
     }
-    
 
-    this.datacheck=err;
+
+    this.datacheck = err;
   }
 
   addusernow() {
@@ -245,12 +308,30 @@ export class AdminComponent implements OnInit {
     document.execCommand('copy');
   }
 
+  resetall() {
+    this.adddata = !this.adddata;
+    this.datafile = null;
+    this.metadone = null;
+    this.metadatafile = null;
+    this.uploadres = null;
+    this.datacheck = [];
+    this.adduser = false;
+    this.adddata = false;
+    this.datafile = null;
+    this.metadatafile = null;
+    this.geojsonfile = null;
+    this.uploadarea = null;
+    this.geouploadinfo = null;
+    this.uploadareaid = null;
+
+  }
+
   arrayToCsv(rows: object[]) {
-    if (!rows ) {
+    if (!rows) {
       return;
     }
-    if (rows && !rows.length ) {
-      rows=[rows];
+    if (rows && !rows.length) {
+      rows = [rows];
     }
     const separator = ',';
     const keys = Object.keys(rows[0]);

@@ -39,6 +39,12 @@ export class StartComponent implements OnInit {
         this.updatemetadata();
         if (this.metadataok){this.querydata()};},1500);
     }
+    // refresh token autoupdate
+    setInterval(()=>
+    {
+      this.auth.refreshToken();
+    },
+    1000*60*10)
     }
     
   setlevel(level,value){

@@ -63,9 +63,14 @@
         <div>
             <button mat-raised-button (click)="this.adduser=!this.adduser" color="primary">Nutzer hinzufügen</button>
         </div>
-        <div>
+        <div fxShow.lt-lg=false>
             <button mat-raised-button (click)="this.adddata=!this.adddata" color="primary">Daten</button>
         </div>
+
+    </div>
+    <div fxShow=false fxShow.lt-lg=true>
+        <h4>Hinweis:</h4>
+        <p>Daten und Metadaten können nur auf großen Bildschirmen bearbeitet werden.</p>
     </div>
     <div fxLayout="row wrap" *ngIf="this.adduser">
 
@@ -126,19 +131,68 @@
         </div>
 
     </div>
-    <div *ngIf="this.adddata" fxLayout="column" fxLayoutGap="10px">
+    <div *ngIf="this.adddata" fxLayout="column" fxLayoutGap="10px" fxShow.lt-lg=false>
         <h2><strong>Daten hinzufügen</strong></h2>
         <mat-card>
             <div>
                 <h3><strong>Was soll hochgeladen werden?</strong></h3>
                 <mat-radio-group [(ngModel)]="this.dataintend">
                     <mat-radio-button value="dataupload">Daten hinzufügen&nbsp;&nbsp;</mat-radio-button>
-                    <mat-radio-button value="geodataupload">Geodaten hinzufügen&nbsp;</mat-radio-button>
+                    <mat-radio-button *ngIf="this.areavalues" value="geodataupload">Geodaten hinzufügen&nbsp;
+                    </mat-radio-button>
                 </mat-radio-group>
                 <br><br>
             </div>
+            <div *ngIf="this.dataintend=='geodataupload'" fxLayout="column">
+                <div fxFlex=100>
+                    <h3><strong>1. GEOJSON Datei hochladen</strong> <span *ngIf="this.geojsonfile">
+                            <mat-icon color="primary">check_circle</mat-icon>
+                        </span></h3>
+                </div>
+                <div *ngIf="!this.geojsonfile" fxFlex.lt-md=100 fxFlex=50 fxLayout="column">
+
+                    <div fxFlex=100>
+                        <mat-form-field appearance="outline" *ngIf="true">
+                            <mat-label>Gebiet für Geodatendatei festlegen</mat-label>
+                            <mat-select [(value)]="this.uploadarea">
+                                <mat-option *ngFor="let option of this.areavalues" [value]="option">{{option}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                    <div fxFlex=100>
+                        <input type="file" accept='.geojson' style="display: none"
+                            (change)="this.changeListenerGEOJSON($event);" #dataInput>
+                        <br><br>
+                        <button [disabled]="!this.uploadarea" mat-raised-button color="primary"
+                            (click)="dataInput.click()">Daten
+                            Auswählen</button>
+                    </div>
+                    Uploadinfo: {{this.geouploadinfo | json}}
+                </div>
+                <div *ngIf="this.geojsonfile" fxLayout="column" fxLayoutGap="10px">
+                    <div fxFlex=100>
+                        <h3><strong>2. GEOJSON beschreiben</strong> <span *ngIf="this.geodatafile">
+                                <mat-icon color="primary">check_circle</mat-icon>
+                            </span></h3>
+                    </div>
+                    <div fxFlex=100>
+                        <mat-form-field appearance="outline" *ngIf="true">
+                            <mat-label>Wie lautet die Bezeichngung Regionen im geojson?</mat-label>
+                            <mat-select [(value)]="this.uploadareaid">
+                                <mat-option *ngFor="let option of this.areafeatures" [value]="option">{{option}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+
             <div *ngIf="this.dataintend=='dataupload'">
-                <h3><strong>1. Datei hochladen</strong> <span *ngIf="this.datafile">
+
+                <h3><strong>1. CSV Datei hochladen</strong> <span *ngIf="this.datafile">
                         <mat-icon color="primary">check_circle</mat-icon>
                     </span></h3>
 
@@ -270,18 +324,28 @@
 
 
 
-        <div class="add-margin" fxLayoutAlign="space-between">
-            <div><button mat-raised-button (click)="uploadnewdata()" 
-                [disabled]="!this.metadone"
-                color="accent">Hinzufügen
-                   
+        <div class="add-margin" fxLayoutAlign="space-between" 
+        *ngIf="(!this.uploadres || this.uploadres=='error')">
+            <div><button mat-raised-button (click)="uploadnewdata()" [disabled]="(!this.metadone) && (!this.uploadareaid)"
+                    color="accent">Hinzufügen
+
                 </button></div>
-            <div><button mat-raised-button
-                    (click)="this.adddata=!this.adddata;this.datafile=null;this.metadone=null;this.metadatafile=null;"
-                    color="primary">Abbrechen</button></div>
+            <div><button mat-raised-button (click)="this.resetall();" color="primary">Abbrechen</button></div>
         </div>
         <div *ngIf="this.uploadres">
-            Upload: {{this.uploadres}}
+            <mat-card>
+                <h1>Datenupload</h1>
+                <mat-spinner *ngIf="this.uploadres=='pending'" [diameter]="50"></mat-spinner>
+                <p *ngIf="this.uploadres=='pending'">Hinweis: Bitte haben Sie Geduld: Es kann etwas dauern wenn viele
+                    Daten aktualisiert oder gelöscht werden müssen.</p>
+                <p *ngIf="this.uploadres=='success'">
+                    <strong>Upload erfolgreich!</strong>
+                </p>
+                <p *ngIf="this.uploadres=='error'">
+                    <strong>Fehler beim Upload</strong> Fehlermeldung: <span
+                        class="primarycolor">{{this.uploaderror}}</span>
+                </p>
+            </mat-card>
         </div>
     </div>
 </div>

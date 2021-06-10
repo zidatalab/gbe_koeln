@@ -47,7 +47,8 @@ export class AppComponent {
       data => {
         this.setmetadata("metadata",data["data"]);
         this.getsortdata().subscribe(data => {
-          this.setmetadata("sortdata",data);     
+          this.setmetadata("sortdata",data["datalevels"]);     
+          this.setmetadata("geodata",data["geodata"]);        
         });
 
       }
@@ -64,7 +65,8 @@ export class AppComponent {
       data => {
         this.setmetadata("metadata",data["data"]);
         this.getsortdata().subscribe(data => {
-          this.setmetadata("sortdata",data);     
+          this.setmetadata("sortdata",data["datalevels"]);     
+          this.setmetadata("geodata",data["geodata"]);     
         });
 
       }
