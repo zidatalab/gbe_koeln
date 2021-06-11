@@ -28,7 +28,7 @@ export class PlotComponent implements OnInit {
   @Input() n_yticks = 8;
   @Input() xtickformat = "";
   
-  fontfamily = "Nunito, sans-serif";
+  fontfamily = "Lato, sans-serif";
   fontsize = ".85rem";
   fontcolor= "black";
 

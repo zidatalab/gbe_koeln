@@ -11,7 +11,7 @@
 
     <div *ngIf="this.data">
         <h1>Auswahl</h1>
-        <h3>Regionen</h3>
+        <h3><strong>Regionen</strong></h3>
         <p>
             <mat-chip-list>
                 <mat-chip (click)="this.setlevel('levelvalues',item);" *ngFor="let item of this.levelvalues"
@@ -22,7 +22,7 @@
             </mat-chip-list>
         </p>
         <ng-container>
-            <h3>Subgruppen</h3>
+            <h3><strong>Subgruppen</strong></h3>
             <p>
                 <mat-chip-list>
                     <mat-chip-list>
@@ -37,11 +37,22 @@
                 </mat-chip-list>
             </p>
         </ng-container>
-        <h3>Outcomes</h3>
+        <h3><strong>Outcomes</strong></h3>
         <p>
             <mat-chip-list>
                 <mat-chip-list>
                     <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes"
+                        [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                        {{item}}
+                    </mat-chip>
+                </mat-chip-list>
+            </mat-chip-list>
+        </p>
+        <h3><strong>Determinanten</strong></h3>
+        <p>
+            <mat-chip-list>
+                <mat-chip-list>
+                    <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.determinants"
                         [selected]="(this.levelsettings['outcomes']==item)" color="primary">
                         {{item}}
                     </mat-chip>

@@ -22,6 +22,7 @@ export class StartComponent implements OnInit {
   levelvalues: any;
   subgroups: any;
   outcomes: any;
+  determinants:any;
   levelsettings = {};
   data: any;
   datakeys: any;
@@ -68,6 +69,7 @@ export class StartComponent implements OnInit {
         this.subgroups = ["Keine"].concat(this.api.getValues(this.api.filterArray(this.metadata, "type", "group"), "varname"));
         if (this.subgroups) { this.levelsettings["subgroups"] = this.subgroups[0]; }
         this.outcomes = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata, "topic", "outcomes"), "varname"), "varname");
+        this.determinants = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata, "topic", "demography"), "varname"), "varname");
         if (this.outcomes) { this.levelsettings["outcomes"] = this.outcomes[0]; }
         this.metadataok = true;
       }
