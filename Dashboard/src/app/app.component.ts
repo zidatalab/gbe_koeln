@@ -23,13 +23,6 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
-    this.autorefreshdata();
-    // Refresh User and Datainfo every 10 Minutes
-    let refreshtimer = setInterval(() => this.autorefreshdata(), 1000*60*10); 
-    
-  }
-
-  autorefreshdata(){
     this._auth.currentUser.subscribe(data => {
       if (data){
         this.currentuser = data;
@@ -43,37 +36,31 @@ export class AppComponent {
            
       }
       );
+    this.autorefreshdata();
+    // Refresh User and Datainfo every 10 Minutes    
+  }
+
+  autorefreshdata(){    
     this.updatemetadata().subscribe(
       data => {
         this.setmetadata("metadata",data["data"]);
-        this.getsortdata().subscribe(data => {
-          this.setmetadata("sortdata",data["datalevels"]);     
-          this.setmetadata("geodata",data["geodata"]);        
-        });
-
-      }
-    
-    );
-
+      });
+    this.getsortdata().subscribe(data => {
+        this.setmetadata("sortdata",data["datalevels"]);     
+        this.setmetadata("geodata",this._api.getValues(data["geodata"],'_id'));        
+      });
   }
 
   logout(){
     this._auth.logout();
     this.loginstatus = false;
-    this.adminstatus = false;
-    this.updatemetadata().subscribe(
-      data => {
-        this.setmetadata("metadata",data["data"]);
-        this.getsortdata().subscribe(data => {
-          this.setmetadata("sortdata",data["datalevels"]);     
-          this.setmetadata("geodata",data["geodata"]);     
-        });
-
-      }
+    this.adminstatus = false;   
+    this.autorefreshdata();
+      };
     
-    );
+    
 
-  }
+  
 
   getsortdata(){
     return this._api.getTypeRequest("get_sortlevels/"+this._api.REST_API_SERVER_CLIENTID);        

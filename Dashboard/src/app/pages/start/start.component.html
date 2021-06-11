@@ -1,11 +1,13 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem" fxLayoutAllign="space-around">
-    <div>
-        <h1>Herzlich Willkommen <span *ngIf="this.currentuser"> {{this.currentuser.anrede?this.currentuser.anrede+" "+this.currentuser.lastname:"" }}</span></h1>        
+    <div *ngIf="this.currentuser">
+        <h1>Herzlich Willkommen <span> {{this.currentuser.anrede?this.currentuser.anrede+" "+this.currentuser.lastname:"" }}</span></h1>        
+        <p>Sie sind angemeldet und haben Zugriff auf alle verfügbaren Informationen.</p>
     </div>
-    <div *ngIf="!this.data">
-        <h1>Kein Datenzugriff</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat labore sed corrupti vitae neque, eligendi possimus sapiente repellat dolor, rem amet, modi vel rerum inventore totam! Facilis reiciendis, dolor soluta, fuga numquam cupiditate possimus hic necessitatibus, ad animi vitae corrupti accusamus nulla quam dolore nesciunt labore! Enim saepe odio reprehenderit.</p>
+    <div *ngIf="!this.currentuser">
+        <h1>Dashboard</h1>
+        <p>Dieses Dashboard ist ein Informationsportal zur Information zu einem wichtigen Thema. Nicht alle Informationen stehen für die Öffentlichkeit zur Verfügung. Berechtigte Benutzer*innen haben die Möglichkeit sich anzumelden, um Zugriff auf erweiterte Funktionen zu erhalten.</p>
     </div>
+
 
     <div *ngIf="this.data">
         <h1>Auswahl</h1>
@@ -15,7 +17,7 @@
                 <mat-chip (click)="this.setlevel('levelvalues',item);" *ngFor="let item of this.levelvalues"
                     [selected]="(this.levelsettings['levelvalues']==item)" color="primary"
                     [disabled]="this.levelsettings['subgroups']!='Keine'">
-                    {{item}}
+                    {{item}}<span *ngIf="this.geojson_available.indexOf(item)>=0"><mat-icon class="primarycolor flagicon">map</mat-icon></span>
                 </mat-chip>
             </mat-chip-list>
         </p>

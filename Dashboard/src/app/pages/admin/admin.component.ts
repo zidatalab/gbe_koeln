@@ -102,7 +102,6 @@ export class AdminComponent implements OnInit {
       setTimeout(() => {
         this.geojsonfile = JSON.parse(reader.result.toString());
         setTimeout(() => {
-          console.log(this.geojsonfile, Object.keys(this.geojsonfile['features'][0]['properties']));
           this.areafeatures = Object.keys(this.geojsonfile['features'][0]['properties']);
         }, 0);
       }, 0); // fixes https://blog.angular-university.io/angular-debugging/
@@ -183,7 +182,6 @@ export class AdminComponent implements OnInit {
 
     
     if (this.dataintend == 'geodataupload') {
-      console.log("build geo")
       this.myDataUploadform = new FormData();
       this.geouploadinfo = {
         'client_id': this.api.REST_API_SERVER_CLIENTID,
@@ -193,8 +191,7 @@ export class AdminComponent implements OnInit {
         'levelidname': this.uploadareaid
       }
       this.myDataUploadform.append('geodata', new Blob([JSON.stringify(this.geojsonfile)], { type: 'application/geo+json' }));
-      this.myDataUploadform.append('geodatainfo', JSON.stringify(this.geouploadinfo));
-      console.log(this.geouploadinfo,this.geojsonfile);
+      this.myDataUploadform.append('geodatainfo', JSON.stringify(this.geouploadinfo));      
     }
 
     if (this.dataintend == 'dataupload') {
@@ -211,30 +208,26 @@ export class AdminComponent implements OnInit {
     this.uploaderror = null;
     if (this.dataintend == 'dataupload') {
       this.api.postTypeRequest('upload_data/?replacedata=' + this.replacedata, this.myDataUploadform).subscribe(data => {
-        console.log(data);
         this.uploadres = "success";
         setTimeout(() => {
           this.resetall();
         }, 1500);
       },
         error => {
-          console.log(error);
           this.uploadres = "error";
-          this.uploaderror = error;
+          this.uploaderror = error.error;
         })
     }
     if (this.dataintend == 'geodataupload') {
       this.api.postTypeRequest('upload_geodata/', this.myDataUploadform).subscribe(data => {
-        console.log(data);
         this.uploadres = "success";
         setTimeout(() => {
           this.resetall();
         }, 1500);
       },
         error => {
-          console.log(error);
           this.uploadres = "error";
-          this.uploaderror = error;
+          this.uploaderror = error.error.detail;
         })
       
     }
@@ -271,7 +264,6 @@ export class AdminComponent implements OnInit {
     test5 = this.api.getValues(this.api.filterArray(test5data, 'allforlevel', ''), 'allforlevel').length == 0;
 
     if (!test5) {
-      console.log(test5data, test5data.length, this.api.getValues(this.api.filterArray(test5data, 'allforlevel', ''), 'allforlevel').length)
       err.push("Reference Levels not specified")
     }
 

@@ -79,7 +79,7 @@ export class AuthService {
     } 
 
     public getUserDetails() { 
-        return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null; 
+        return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : false; 
     } 
      
     setDataInLocalStorage(variableName, data) { 
