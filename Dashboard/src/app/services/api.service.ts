@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders , HttpParams } from '@angular/common/http'; 
 import { map } from 'rxjs/operators'; 
 import { retry } from 'rxjs/operators';
+import * as chroma from "chroma-js";
 
  
 @Injectable({ 
@@ -12,6 +13,7 @@ export class ApiService {
  
   public REST_API_SERVER = "http://localhost:8000/" // "https://zidashboardapi.azurewebsites.net/"; 
   public REST_API_SERVER_CLIENTID = "test"; 
+  public primarycolor = "#e91e63";
 
   constructor(private httpClient: HttpClient) { } 
  
@@ -26,12 +28,8 @@ export class ApiService {
       return res; 
     })).pipe(retry(3)); ; 
   } 
- 
-  public  putTypeRequest(url, payload) { 
-    return this.httpClient.put(this.REST_API_SERVER+url, payload).pipe(map(res => { 
-      return res; 
-    })) 
-  }
+
+  
   
 // Specific Requests
 
@@ -102,4 +100,9 @@ public sortArray(array, key, order = "ascending") {
 public sumArray(array) {
   return array.reduce((a, b) => a + b, 0);
 }
+
+public chromajs(){
+  return chroma;
+}
+
 }

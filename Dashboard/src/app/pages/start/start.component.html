@@ -9,7 +9,7 @@
     </div>
 
 
-    <div *ngIf="this.data">
+    <div *ngIf="this.metadata.length>0">
         <h1>Auswahl</h1>
         <h3><strong>Regionen</strong></h3>
         <p>
@@ -60,10 +60,18 @@
             </mat-chip-list>
         </p>
     </div>
-    <div *ngIf="this.data">
+    <div *ngIf="this.data && this.mapdata" >
         <h1>Ergebnisse</h1>
+        <p *ngIf="(this.levelsettings['levelvalues']!==this.levelvalues[0]) && this.mapdata && this.data">
+            Karte
+            <app-map [containername]="'mapdiv'" [data]="this.data" [basemap]="this.mapdata" [bins]="5"
+            [id]="'RG_label'"
+            opacity=.8 Zoom=10 [center]="[50.938056, 6.956944]"
+            [colorscale]="this.colorsscheme" [percent]="true"
+            [feature]="this.levelsettings['outcomes']"></app-map>
+        </p>
         <p >
-            <app-table [(data)]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate" 
+            <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate" 
             [outcomes_numeric]="this.data_number"></app-table>
 
         </p>
