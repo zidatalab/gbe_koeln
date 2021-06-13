@@ -16,17 +16,18 @@ export class MapComponent implements OnInit {
   @Input() data: any;
   @Input() Outcome: String;
   @Input() Zoom: number;
-  @Input() basemap: any;
+  @Input() basemap: any; // geojson
   @Input() center: any;
   @Input() opacity: number;
-  @Input() feature; string;
+  @Input() feature: string; // name of outcome
   @Input() colorscale: any;
   @Input() cutofflist: any;
   @Input() customlabels: any;
   @Input() binmethod: string;
   @Input() bins: number;
-  @Input() id: string;
+  @Input() id: string; // feature id
   @Input() percent: boolean;
+  @Input() clicked: any; // bind click events
   legend: any;
   map: any;
   @Input() containername : string;
@@ -192,7 +193,7 @@ export class MapComponent implements OnInit {
         onEachFeature: (feature, layer) => (
           layer.on({
             mouseover: (e) => (this.highlightFeature(info, e)),
-            mouseout: (e) => (this.resetFeature(info, e)),
+            //mouseout: (e) => (this.resetFeature(info, e)),
             click: (e) => (this.zoomToFeature(mymap, e))
           })
         )
@@ -279,6 +280,7 @@ export class MapComponent implements OnInit {
   
   zoomToFeature(map, e) {
     map.fitBounds(e.target.getBounds());
+    this.clicked = e.target.feature.properties[this.id];
   }
 
   makescale(bins=5){
