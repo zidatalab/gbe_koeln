@@ -149,8 +149,8 @@ export class MapComponent implements OnInit {
       let thecolor = "grey";
       if (thevalue){thecolor=colors[0];}
       let result = {
-        "weight": 3,
-        "opacity": .1,
+        weight: 2,
+        dashArray: '',
         "color":thecolor,
         "fillOpacity":theopacity       
       };
@@ -190,7 +190,7 @@ export class MapComponent implements OnInit {
           })
         )
       });
-    featLayer.setStyle({weight:3});
+    featLayer.resetStyle();
     featLayer.addTo(mymap);
 
     // Add Legend to Map
@@ -215,7 +215,7 @@ export class MapComponent implements OnInit {
             labels[i];
         }
         else {
-          if (colors.length<3){
+          if (cutoffs.length>4){
           this._ldiv.innerHTML +=
             '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> ' +
             cutoffs[i].toLocaleString() + (cutoffs[i+1]  ? ' bis unter ' + cutoffs[i+1].toLocaleString() + '<br>' : '+');
