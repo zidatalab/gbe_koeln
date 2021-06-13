@@ -168,13 +168,20 @@ export class MapComponent implements OnInit {
     let info;
     info = L.control.layers();
     info.onAdd = function (map) {
-      this._div = L.DomUtil.create('div', 'maphoverinfo'); 
+      this._div = L.DomUtil.create('div'); 
       this.update();
       return this._div;
     };
     
     info.update = function (props) {
-      this._div.innerHTML = (props ? '<strong>Name: </strong>'+props[theid] : "") +   (props ? '<br><strong>Wert: </strong>' + props[propname].toLocaleString() : "")  ;  
+      
+      this._div.innerHTML = (props ? '<strong>Gebiet: </strong>'+props[theid] : "") +   (props ? '<br><strong>Wert: </strong>' + props[propname].toLocaleString() : "")  ;  
+     if (props){
+       L.DomUtil.addClass(this._div, 'maphoverinfo');
+     }
+     else {
+      L.DomUtil.removeClass(this._div, 'maphoverinfo');      
+     }
     };
 
     info.addTo(mymap);
