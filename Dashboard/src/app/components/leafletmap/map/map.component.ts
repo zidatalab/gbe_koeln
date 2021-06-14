@@ -133,9 +133,19 @@ export class MapComponent implements OnInit {
        item['___thevalue']=Math.round(item[this.feature]*1000)/10;
       }
     }
+    else {
+    for (let item of thedata){
+      item['___thevalue']=item[this.feature];
+     }
+    }
     for (let item of geojsonFeature.features){
-      let value  = this.api.filterArray(thedata,this.id,item.properties[this.id])[0]['___thevalue'];
-      item['properties'][propname]=value;
+      let value  = this.api.filterArray(thedata,this.id,item.properties[this.id]);
+      if (value.length>0){
+        item['properties'][propname]=value[0]['___thevalue'];
+      }
+      else {
+        item['properties'][propname]=null;
+      }
     }
     
     
@@ -178,7 +188,7 @@ export class MapComponent implements OnInit {
     
     info.update = function (props) {
       
-      this._div.innerHTML = (props ? '<strong>Gebiet: </strong>'+props[theid] : "") +   (props ? '<br><strong>Wert: </strong>' + props[propname].toLocaleString() : "")  ;  
+      this._div.innerHTML = (props ? '<strong>Gebiet: </strong>'+props[theid] : "") +   (props && props[propname] ? '<br><strong>Wert: </strong>' + props[propname].toLocaleString() : "")  ;  
      if (props){
        L.DomUtil.addClass(this._div, 'maphoverinfo');
      }

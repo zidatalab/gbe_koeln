@@ -85,9 +85,8 @@ export class StartComponent implements OnInit {
       else {
         this.metadataok = false;
       }  
-      console.log("check2",this.levelid,this.level,this.levelsettings)    ;
-    }, 250);
-    console.log("check1",this.levelid,this.level,this.levelsettings)    ;
+      
+    }, 750);
 
   }
 

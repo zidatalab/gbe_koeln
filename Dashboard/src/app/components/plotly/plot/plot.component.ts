@@ -19,6 +19,7 @@ export class PlotComponent implements OnInit {
   @Input() custommargins: any;
   @Input() linewidth: number;
   @Input() showlegend: boolean;
+  @Input() sort: boolean;
   @Input() percent: boolean;
   @Input() basecolor = "";
   @Input() colorscheme = [];
@@ -151,7 +152,10 @@ export class PlotComponent implements OnInit {
     for (let item of this.data){
       plotdata.push(item);
     }
-    plotdata=this.api.sortArray(plotdata,this.outcomes[0]);
+    if (this.sort){
+      plotdata=this.api.sortArray(plotdata,this.outcomes[0]);
+    }
+    
     
     let outcomes = this.outcomes;
     if (this.colorby) {

@@ -42,7 +42,8 @@ export class AppComponent {
            
       }
       );    
-      setTimeout(()=>{this.autorefreshdata();},1500);
+      // Refresh Token every 8 Minutes after init.
+      setInterval(()=> {this._auth.refreshToken()},1000*60*8);
   }
 
   public autorefreshdata(){    
