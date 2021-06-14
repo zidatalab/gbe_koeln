@@ -32,6 +32,7 @@ export class StartComponent implements OnInit {
   data_number: any;
   geojson_available: any;
   colorsscheme: any;
+  levelid:string;
 
   
 
@@ -61,14 +62,15 @@ export class StartComponent implements OnInit {
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
     this.geojson_available = this.api.getmetadata("geodata");
-
+    if(this.metadata){this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];}
     setTimeout(() => {
       if ((!this.metadata == false) && (!this.sortdata == false)) {
         if (this.metadata.length > 0) {
           this.level = this.api.filterArray(this.metadata, "type", "level")[0]["varname"];
+          this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
           this.levelvalues = this.api.filterArray(this.sortdata, "varname", this.level)[0]["values"];
           if (this.levelvalues) {
-            this.levelsettings["levelvalues"] = 'Bezirke' //this.levelvalues[0]
+            this.levelsettings["levelvalues"] = this.levelvalues[0]
               ;
           }
           this.subgroups = ["Keine"].concat(this.api.getValues(this.api.filterArray(this.metadata, "type", "group"), "varname"));
@@ -82,8 +84,10 @@ export class StartComponent implements OnInit {
       }
       else {
         this.metadataok = false;
-      }
-    }, 1);
+      }  
+      console.log("check2",this.levelid,this.level,this.levelsettings)    ;
+    }, 250);
+    console.log("check1",this.levelid,this.level,this.levelsettings)    ;
 
   }
 
@@ -124,7 +128,7 @@ export class StartComponent implements OnInit {
       if (index > -1) {
         this.datakeys.splice(index, 1);
       }
-      setTimeout(() => { this.data = data["data"] }, 0);
+      setTimeout(() => { this.data = data["data"] 
       if (outcomeinfo == 'rate') {
         this.data_number = [];
         this.data_rate = [(this.levelsettings["outcomes"])];
@@ -133,6 +137,9 @@ export class StartComponent implements OnInit {
         this.data_number = [(this.levelsettings["outcomes"])];
         this.data_rate = [];
       };
+    }, 0);
+      
+      
       if ((this.mapdatafor !== this.levelsettings['levelvalues']) && (this.levelsettings['levelvalues'] !== this.levelvalues[0]) && (this.geojson_available.indexOf(this.levelsettings['levelvalues']) >= 0)) {
         this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname=' + this.levelsettings['levelvalues']).subscribe(
           data => {
@@ -142,7 +149,7 @@ export class StartComponent implements OnInit {
       }
     });
 
-
+ 
   }
 
 

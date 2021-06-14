@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, PLATFORM_INITIALIZER } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-plot',
@@ -18,6 +19,7 @@ export class PlotComponent implements OnInit {
   @Input() custommargins: any;
   @Input() linewidth: number;
   @Input() showlegend: boolean;
+  @Input() percent: boolean;
   @Input() basecolor = "";
   @Input() colorscheme = [];
   @Input() annotations = [];
@@ -32,7 +34,7 @@ export class PlotComponent implements OnInit {
   fontsize = ".85rem";
   fontcolor= "black";
 
-  constructor() { }
+  constructor(private api:ApiService) { }
   plotlayout: any;
   plotdata: any;
   mainconfig: any;
@@ -41,8 +43,8 @@ export class PlotComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.linewidth) { this.linewidth = 2 };
-    if (this.basecolor=="") { this.basecolor="#004c8c";};
-    if (this.colorscheme.length==0) { this.colorscheme = ["#2196f3", "#196bad", "#113c5f", "#357947","#4caf50","#81b784","#bdbf4f","#adaf4c", "#8c8e3b"]; }
+    if (this.basecolor=="") { this.basecolor=this.api.primarycolor};   
+    if (this.colorscheme.length==0){this.colorscheme=[this.basecolor];}
     this.make_plot();
   }
 
@@ -71,11 +73,14 @@ export class PlotComponent implements OnInit {
         xaxis: { fixedrange: false, type: 'category', automargin: false },
         yaxis: { fixedrange: true, showgrid: false, title: '', 
         automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
-        autosize: false, padding: 0,
+        autosize: true, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
         annotations: this.annotations
       };
+      if (this.percent){
+        this.plotlayout.yaxis.tickformat = ',.0%';
+      }
     }
 
     if (this.plottype == "stackedbar") {
@@ -83,12 +88,13 @@ export class PlotComponent implements OnInit {
       this.plotlayout = {
         barmode: "stack",
         xaxis: { fixedrange: false, showgrid: false, type: 'category', automargin: false},
-        yaxis: { fixedrange: true, title: '', automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
-        autosize: false, padding: 0,
+        yaxis: { fixedrange: true, title: '',  autosize: true, automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
+        padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
         annotations: this.annotations
       };
+    
     }
 
     if (this.plottype == "tsline" || this.plottype == "lines" || this.plottype == "area" || this.plottype == "stackedarea") {
@@ -106,7 +112,7 @@ export class PlotComponent implements OnInit {
           ticksuffix:" ",
           nticks:this.n_yticks
         },
-        autosize: false, padding: 0,
+        autosize: true, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       };
@@ -117,7 +123,7 @@ export class PlotComponent implements OnInit {
       this.plotlayout = {
         xaxis: { fixedrange: true, showgrid: false, title: '', automargin: true, nticks:this.n_yticks },
         yaxis: { fixedrange: false, type: 'category', automargin: true, rangemode: 'tozero' ,ticksuffix:" "},
-        autosize: false, padding: 0,
+        autosize: true, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
         annotations: this.annotations
@@ -141,10 +147,16 @@ export class PlotComponent implements OnInit {
       color: this.fontcolor
     };
 
-    let plotdata = this.data;
+    let plotdata = []
+    for (let item of this.data){
+      plotdata.push(item);
+    }
+    plotdata=this.api.sortArray(plotdata,this.outcomes[0]);
+    
     let outcomes = this.outcomes;
     if (this.colorby) {
-      outcomes = this.getuniqueValues(plotdata, this.colorby);
+      outcomes = this.api.getuniqueValues(plotdata, this.colorby);
+      this.colorscheme=this.api.makescale(outcomes.length);
       plotdata = this.make_colorbyvalues();
     }
   
@@ -154,14 +166,14 @@ export class PlotComponent implements OnInit {
   make_colorbyvalues() {
     let newdata = [];
     let inputdata = this.data;
-    let thecolorvalues = this.getuniqueValues(inputdata, this.colorby).sort();
-    let thexvalues = this.getuniqueValues(inputdata, this.xvalue);
+    let thecolorvalues = this.api.getuniqueValues(inputdata, this.colorby).sort();
+    let thexvalues = this.api.getuniqueValues(inputdata, this.xvalue);
     let theoutcome = this.outcomes[0];
     for (let xvalue of thexvalues) {
       let topush = {};
       topush[this.xvalue] = xvalue;
       for (let tocolor of thecolorvalues) {
-        let datapoint = this.filterArray(this.filterArray(inputdata, this.colorby, tocolor), this.xvalue, xvalue)[0];
+        let datapoint = this.api.filterArray(this.api.filterArray(inputdata, this.colorby, tocolor), this.xvalue, xvalue)[0];
         if (datapoint) {
           topush[tocolor] = datapoint[theoutcome];
         }
@@ -191,14 +203,14 @@ export class PlotComponent implements OnInit {
   }
 
   make_plotdata(source = [], xaxis = "", ylist = [], type = "bar", colors = this.colorscheme) {
-    let xdata = this.getValues(source, xaxis)
+    let xdata = this.api.getValues(source, xaxis)
     let list = []
     let i = 0
     for (let name in ylist) {
-
-      let trace = this.make_trace(xdata, this.getValues(source, ylist[i]), ylist[i], type = type);
+      let theydata = this.api.getValues(source, ylist[i]);
+      let trace = this.make_trace(xdata, theydata  , ylist[i], type = type);
       if (type == "hbar") {
-        trace = this.make_trace(this.getValues(source, ylist[i]), xdata, ylist[i], type = "bar")
+        trace = this.make_trace(this.api.getValues(source, ylist[i]), xdata, ylist[i], type = "bar")
         trace["orientation"] = "h"
       }
       if (type == "bar" || type == "bar" || type == "scatter") {
@@ -220,34 +232,7 @@ export class PlotComponent implements OnInit {
       i = i + 1
     }
     return list
-  }
-
-
-
-  getValues(array, key) {
-    let values = [];
-    for (let item of array) {
-      values.push(item[key]);
-    }
-    return values;
-  }
-
-  getuniqueValues(array, key) {
-    let items = this.getValues(array, key);
-    return [...new Set(items)];
-  }
-
-  filterArray(array, key, value) {
-    let i = 0
-    let result = []
-    for (let item of array) {
-      if (item[key] == value) { result.push(item) };
-      i = i + 1
-    }
-    return result
-  }
-
-
-
-
+  } 
+ 
+ 
 }

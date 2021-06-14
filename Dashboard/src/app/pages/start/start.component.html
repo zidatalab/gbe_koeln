@@ -60,20 +60,30 @@
             </mat-chip-list>
         </p>
     </div>
-    <div *ngIf="this.data && this.mapdata" >
+    <div *ngIf="this.data" >
         <h1>Ergebnisse</h1>
-        <p *ngIf="(this.levelsettings['levelvalues']!==this.levelvalues[0]) && this.mapdata && this.data">
+        <p *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
             Karte
             <app-map [containername]="'mapdiv'" [data]="this.data" [basemap]="this.mapdata" [bins]="5"
-            [id]="'RG_label'"
-            opacity=.8 Zoom=10 [center]="[50.938056, 6.956944]"
+            [id]="this.levelid"
+            opacity=.8 Zoom=10
             [colorscale]="this.colorsscheme" [percent]="true"
             [feature]="this.levelsettings['outcomes']"></app-map>
         </p>
-        <p >
-            <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate" 
-            [outcomes_numeric]="this.data_number"></app-table>
+        <ng-container *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.data ">
+            <h2>Rangfolge der Regionen</h2>
+            <app-plot [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
+            [xvalue]="this.levelid"  [percent]="true" [sort]="true"
+            [outcomes]="[this.levelsettings['outcomes']]" 
+            [colorscheme]="[this.api.makescale(3)[1]]"
+            plottype="bar"></app-plot>
+        </ng-container>
+    </div>
+    <div *ngIf="this.data">
+    <p >
+        <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate"            
+        [outcomes_numeric]="this.data_number"></app-table>
 
-        </p>
+    </p>
     </div>
 </div>

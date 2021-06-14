@@ -4,7 +4,6 @@ import { map } from 'rxjs/operators';
 import { retry } from 'rxjs/operators';
 import * as chroma from "chroma-js";
 
- 
 @Injectable({ 
   providedIn: 'root' 
 }) 
@@ -101,8 +100,11 @@ public sumArray(array) {
   return array.reduce((a, b) => a + b, 0);
 }
 
-public chromajs(){
-  return chroma;
+public getuniqueValues(array, key) {
+  let items = this.getValues(array, key);
+  return [...new Set(items)];
 }
 
+public makescale(bins=5){
+  return chroma.scale([chroma(this.primarycolor).set('hsl.h', -120),this.primarycolor]).colors(bins); }
 }

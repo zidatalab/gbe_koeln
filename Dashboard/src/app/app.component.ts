@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component , OnInit} from '@angular/core';
+import { Router } from '@angular/router';
 import { ApiService } from './services/api.service';
 import { AuthService } from './services/auth.service';
 
@@ -19,28 +20,32 @@ export class AppComponent {
 
   constructor(
     private _auth : AuthService,
-    private _api : ApiService    
+    private _api : ApiService    ,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this._auth.currentUser.subscribe(data => {
       if (data){
+        console.log('new user');
         this.currentuser = data;
         this.loginstatus = true;
-        this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];                
+        this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];      
+        setTimeout(()=>{this.autorefreshdata();},0);    
       }
       else {
+        console.log('new user');
         this.loginstatus = false;
         this.adminstatus = false;
+        setTimeout(()=>{this.autorefreshdata();},0);
       };
            
       }
-      );
-    this.autorefreshdata();
-    // Refresh User and Datainfo every 10 Minutes    
+      );    
+      setTimeout(()=>{this.autorefreshdata();},1500);
   }
 
-  autorefreshdata(){    
+  public autorefreshdata(){    
     this.updatemetadata().subscribe(
       data => {
         this.setmetadata("metadata",data["data"]);
@@ -53,9 +58,10 @@ export class AppComponent {
 
   logout(){
     this._auth.logout();
+    this.autorefreshdata();
     this.loginstatus = false;
     this.adminstatus = false;   
-    this.autorefreshdata();
+    setTimeout(()=> {this.router.navigate(['/'])},1500)
       };
     
     

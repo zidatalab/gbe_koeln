@@ -119,6 +119,7 @@ export class MapComponent implements OnInit {
         attribution: this.attributions[theprovider]
       });
     tiles.addTo(mymap);
+    mymap.attributionControl.setPrefix('<a href="https://www.zidatasciencelab.de"><strong>Zi</strong> Data Science Lab</a>');
     tiles.getContainer().className += ' custombgmap'; 
     const geojsonFeature: FeatureCollection = Object.assign(this.basemap);
     let colors = this.colorscale;
@@ -153,7 +154,8 @@ export class MapComponent implements OnInit {
         weight: 2,
         dashArray: '',
         "color":thecolor,
-        "fillOpacity":theopacity       
+        "fillOpacity":theopacity   ,
+        "Opacity":theopacity  
       };
       for (let colorcode of colors) {
         if (thevalue > cutoffs[i]) {
@@ -193,7 +195,7 @@ export class MapComponent implements OnInit {
         onEachFeature: (feature, layer) => (
           layer.on({
             mouseover: (e) => (this.highlightFeature(info, e)),
-            //mouseout: (e) => (this.resetFeature(info, e)),
+            mouseout: (e) => (this.resetFeature(info, e)),
             click: (e) => (this.zoomToFeature(mymap, e))
           })
         )
@@ -249,7 +251,7 @@ export class MapComponent implements OnInit {
     const layer = e.target;
     layer.setStyle({
       opacity: 1,
-      fillOpacity: this.opacity*1.1
+      fillOpacity: this.opacity*1.2
     });
     info.update(layer.feature.properties);
   }
@@ -284,7 +286,6 @@ export class MapComponent implements OnInit {
   }
 
   makescale(bins=5){
-
    return chroma.scale([chroma(this.api.primarycolor).set('hsl.h', -120),this.api.primarycolor]).colors(bins);
   }
 
