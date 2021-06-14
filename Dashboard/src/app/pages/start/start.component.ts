@@ -48,7 +48,7 @@ export class StartComponent implements OnInit {
         if (this.metadataok) {
           this.querydata()
         };
-      }, 150);
+      }, 750);
     }
 
   }
