@@ -1,5 +1,37 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem">
-    <h1>Geschützte Informationen</h1>
-    <p>Keine</p>
+    <div>
+    <h1>Interne Tools</h1>
+    <mat-chip-list>
+        <mat-chip *ngFor="let action of this.actions" color="primary" [selected]="this.action==this.intend" (click)="this.intend=action">{{action}}</mat-chip>
+    </mat-chip-list>
+    </div>
+    <div *ngIf="this.intend=='Regionen beschreiben'">
+       <div>
+        <h2>Regionen</h2>
+        <mat-chip-list>
+            <ng-container *ngFor="let item of this.levelvalues">
+            <mat-chip 
+                 (click)="this.newlevel(item)" 
+                [selected]="this.currentlevel==item" color="primary">
+                {{item}}
+            </mat-chip>
+        </ng-container>
+        </mat-chip-list>
+       </div>
+       <div *ngIf="this.mapdata">
+        <h1>Region: {{this.currentregion}}</h1>
+           <app-map 
+           [containername]="'mapdiv'" [basemap]="this.mapdata" 
+            [id]="this.levelid"
+            opacity=.8 Zoom=10  selectmap="true" (clicked)="changeregion($event)"></app-map>
+       </div>
+     
+    </div>
+    <div *ngIf="this.intend=='Analysen'">
+        <h2>Analysen</h2>
+    </div>
+    <div *ngIf="this.intend=='Daten exportieren'">
+        <h2>Daten</h2>
+    </div>
 </div>
 

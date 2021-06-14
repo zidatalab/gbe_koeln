@@ -48,7 +48,6 @@ export class AuthService {
       }
  
     logintasks(user){
-        console.log(user);
         this.setDataInLocalStorage('refresh_token', user.refresh_token);
         this.setDataInLocalStorage('access_token', user.access_token);
         this.storeUserDetails(user.user);

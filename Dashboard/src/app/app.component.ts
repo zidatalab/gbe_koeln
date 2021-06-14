@@ -27,14 +27,12 @@ export class AppComponent {
   ngOnInit() {
     this._auth.currentUser.subscribe(data => {
       if (data){
-        console.log('new user');
         this.currentuser = data;
         this.loginstatus = true;
         this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];      
         setTimeout(()=>{this.autorefreshdata();},0);    
       }
       else {
-        console.log('new user');
         this.loginstatus = false;
         this.adminstatus = false;
         setTimeout(()=>{this.autorefreshdata();},0);

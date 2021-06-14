@@ -1,10 +1,11 @@
-import { Component, OnInit, Input,  Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, Output, Renderer2, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
 import { icon, Marker } from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { FeatureCollection } from 'geojson';
 import { ApiService } from 'src/app/services/api.service';
 import * as chroma from "chroma-js";
+import { resourceUsage } from 'process';
 
 @Component({
   selector: 'app-map',
@@ -13,7 +14,7 @@ import * as chroma from "chroma-js";
 
 })
 export class MapComponent implements OnInit {
-  @Input() data: any;
+  @Input() data = [];
   @Input() Outcome: String;
   @Input() Zoom: number;
   @Input() basemap: any; // geojson
@@ -24,74 +25,115 @@ export class MapComponent implements OnInit {
   @Input() cutofflist: any;
   @Input() customlabels: any;
   @Input() binmethod: string;
+  @Input() selectmap: boolean;
   @Input() bins: number;
   @Input() id: string; // feature id
   @Input() percent: boolean;
-  @Input() clicked: any; // bind click events
+  @Output() clicked = new EventEmitter<string>();
+
+  clickedvalue: string;
   legend: any;
   map: any;
-  @Input() containername : string;
+  @Input() containername: string;
   useprovider = 0;
   providers = ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png']
-  attributions =['Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  '©OpenStreetMap, ©CartoDB'];
-  constructor(private http: HttpClient, private renderer:Renderer2, private api: ApiService) { }
+    'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png']
+  attributions = ['Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    '©OpenStreetMap, ©CartoDB'];
+  constructor(private http: HttpClient, private renderer: Renderer2, private api: ApiService) { }
   ngOnInit(): void {
     // Init vars
     this.resetprops();
+    this.clickedvalue = "";
   }
   ngAfterViewInit(): void {
     // Import Map data
-    if (this.checkallok()){
-      this.initMap(this.containername);                     
+    if (this.checkallok()) {
+      this.initMap(this.containername);
     }
   }
 
 
   ngOnChanges(changes: any) {
     // On any change replace the map-container
-    if ((changes.data || changes.basemap) && this.checkallok() ){     
-      this.resetprops();   
-      this.initMap(this.containername);                           
-    };
-    
+    if (!this.selectmap) {
+      if ((changes.data || changes.basemap) && this.checkallok()) {
+        this.resetprops();
+        this.initMap(this.containername);
+      };
+    }
+    else {
+      if ((changes.basemap) && this.checkallok()) {
+        this.resetprops();
+        this.initMap(this.containername);
+      };
     }
 
-  resetprops(){
-    if (!this.containername){this.containername="mapdiv"+Math.round(Math.random()*1000).toString()+"_"+Math.round(Math.random()*1000).toString();};
-    if (!this.Zoom) { this.Zoom = 5; };
-    if (!this.center) { this.center = this.getcenter();};// [51.948, 10.265]; };
-    if (!this.opacity) { this.opacity = .1; };
-    if (!this.customlabels) { this.customlabels = []; };       
-    if (!this.binmethod){this.binmethod="equalint"}; 
+
   }
 
-  checkallok(){
-    let res = this.data && this.basemap;
-    if (res){
-      res = this.data.length>0 && this.basemap.features;
+  resetprops() {
+    if (!this.containername) { this.containername = "mapdiv" + Math.round(Math.random() * 1000).toString() + "_" + Math.round(Math.random() * 1000).toString(); };
+    if (!this.Zoom) { this.Zoom = 5; };
+    if (!this.center) { this.center = this.getcenter(); };// [51.948, 10.265]; };
+    if (!this.opacity) { this.opacity = .1; };
+    if (!this.customlabels) { this.customlabels = []; };
+    if (!this.binmethod) { this.binmethod = "equalint" };
+  }
+
+  checkallok() {
+    let res;
+    if (!this.selectmap) {
+      res = this.data && this.basemap;
+      if (res) {
+        res = this.data.length > 0 && this.basemap.features;
+      }
+
     }
+    else {
+      res = this.basemap;
+      if (res) {
+        res = this.basemap.features;
+      }
+
+    }
+
     return res;
   }
-  preparedom(divid){
-    if(document.getElementById(divid))
-      {document.getElementById(divid).remove()};
-      let mapcontainer = this.renderer.createElement("div");
-      this.renderer.setProperty(mapcontainer, 'id', divid);
-      this.renderer.addClass(mapcontainer,"mapdiv");
-      this.renderer.appendChild(document.getElementById("map-frame"), mapcontainer);   
+  preparedom(divid) {
+    if (document.getElementById(divid)) { document.getElementById(divid).remove() };
+    let mapcontainer = this.renderer.createElement("div");
+    this.renderer.setProperty(mapcontainer, 'id', divid);
+    this.renderer.addClass(mapcontainer, "mapdiv");
+    this.renderer.appendChild(document.getElementById("map-frame"), mapcontainer);
     return true;
   }
 
   initMap(divid): void {
+    // Init
     let mymap;
-    this.preparedom(divid);
-    mymap = L.map(divid,       { center: this.center, zoom: this.Zoom }
-      );
-      
+    let colors = this.colorscale;
+    let cutoffs = this.cutofflist;
+    let thedata;
+    if (this.data) {
+      thedata = Object.assign(this.data);
+    }
+    let propname = this.feature;
+    let theid = this.id;
+    let theopacity = this.opacity;
+    let basestyle = {
+      weight: 2,
+      dashArray: '',
+      "color": "grey",
+      "fillOpacity": theopacity,
+      "Opacity": theopacity
+    };
 
-   
+    // Prepare dom
+    this.preparedom(divid);
+
+    // Load Map
+    mymap = L.map(divid, { center: this.center, zoom: this.Zoom });
 
     // Fix Icons see https://stackoverflow.com/questions/41144319/leaflet-marker-not-found-production-env
     const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -109,9 +151,7 @@ export class MapComponent implements OnInit {
     });
     Marker.prototype.options.icon = iconDefault;
 
-
-    
-    // Openstreetmap Tiles
+    // Load Tiles
     let theprovider = this.useprovider;
     const tiles = L.tileLayer(this.providers[theprovider],
       {
@@ -120,139 +160,159 @@ export class MapComponent implements OnInit {
       });
     tiles.addTo(mymap);
     mymap.attributionControl.setPrefix('<a href="https://www.zidatasciencelab.de"><strong>Zi</strong> Data Science Lab</a>');
-    tiles.getContainer().className += ' custombgmap'; 
-    const geojsonFeature: FeatureCollection = Object.assign(this.basemap);
-    let colors = this.colorscale;
-    let cutoffs = this.cutofflist;
-    const thedata = Object.assign(this.data);
-    let propname = this.feature;
-    let theid = this.id;
-    let theopacity = this.opacity;
-    if (this.percent){
-      for (let item of thedata){
-       item['___thevalue']=Math.round(item[this.feature]*1000)/10;
-      }
-    }
-    else {
-    for (let item of thedata){
-      item['___thevalue']=item[this.feature];
-     }
-    }
-    for (let item of geojsonFeature.features){
-      let value  = this.api.filterArray(thedata,this.id,item.properties[this.id]);
-      if (value.length>0){
-        item['properties'][propname]=value[0]['___thevalue'];
+    tiles.getContainer().className += ' custombgmap';
+
+    // Chloropleth Map
+    if (!this.selectmap) {
+
+      // Layer
+      const geojsonFeature: FeatureCollection = Object.assign(this.basemap);
+      if (this.percent) {
+        for (let item of thedata) {
+          item['___thevalue'] = Math.round(item[this.feature] * 1000) / 10;
+        }
       }
       else {
-        item['properties'][propname]=null;
+        for (let item of thedata) {
+          item['___thevalue'] = item[this.feature];
+        }
       }
-    }
-    
-    
-    if (!cutoffs) {
-      cutoffs= this.makecutoffs(this.api.getValues(thedata,'___thevalue'),this.binmethod,this.bins);          
-     };
-    if (colors.length<cutoffs.length){
-      colors = this.makescale(cutoffs.length)
-    }
-    let basestyle = {
-      weight: 2,
-      dashArray: '',
-      "color":"grey",
-      "fillOpacity":theopacity   ,
-      "Opacity":theopacity  
-    };
-    let myStyle = function (feature) {
-      let thevalue = feature.properties[propname];
-      let i = 0;
-      let result = basestyle;
-      let thecolor=colors[0];
-      for (let colorcode of colors) {
-        if (thevalue > cutoffs[i]) {
-          thecolor = colorcode;
-        };
-        i = i + 1;
-      }
-      if (thevalue!=null){result['color']= thecolor;};
-      return result
-    };
-    // Infobox
-    let info;
-    info = L.control.layers();
-    info.onAdd = function (map) {
-      this._div = L.DomUtil.create('div'); 
-      this.update();
-      return this._div;
-    };
-    
-    info.update = function (props) {
-      
-      this._div.innerHTML = (props ? '<strong>Gebiet: </strong>'+props[theid] : "") +   (props && props[propname] ? '<br><strong>Wert: </strong>' + props[propname].toLocaleString() : "")  ;  
-     if (props){
-       L.DomUtil.addClass(this._div, 'maphoverinfo');
-     }
-     else {
-      L.DomUtil.removeClass(this._div, 'maphoverinfo');      
-     }
-    };
-
-    info.addTo(mymap);
-    // Add Features/Polygons to Map
-    const featLayer = L.geoJSON(geojsonFeature,
-      {
-        style: myStyle,
-        onEachFeature: (feature, layer) => (
-          layer.on({
-            mouseover: (e) => (this.highlightFeature(info, e)),
-            mouseout: (e) => (this.resetFeature(info, e)),
-            click: (e) => (this.zoomToFeature(mymap, e))
-          })
-        )
-      });
-    featLayer.resetStyle();
-    featLayer.addTo(mymap);
-
-    // Add Legend to Map
-    let labels 
-    if (this.customlabels){labels=this.customlabels;};
-
-    let legend ;
-    legend = L.control.layers({}, {}, { position: 'topright' });
-
-    legend.onAdd = function(map){
-
-      this._ldiv = L.DomUtil.create('div', 'customlegend');
-      this._ldiv.innerHTML = '<p><strong>' + propname + '</strong></p>';
-      if (this.percent==true){
-        this._ldiv.innerHTML += '<p><em>Anteil in %</em></p>';
-      }
-      if (cutoffs){
-      for (var i = 0; i < cutoffs.length; i++) {
-        if (labels.length == cutoffs.length) {
-          this._ldiv.innerHTML +=
-            '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;</i> ' +
-            labels[i];
+      for (let item of geojsonFeature.features) {
+        let value = this.api.filterArray(thedata, this.id, item.properties[this.id]);
+        if (value.length > 0) {
+          item['properties'][propname] = value[0]['___thevalue'];
         }
         else {
-          if (cutoffs.length>4){
-          this._ldiv.innerHTML +=
-            '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> ' +
-            cutoffs[i].toLocaleString() + (cutoffs[i+1]  ? ' bis unter ' + cutoffs[i+1].toLocaleString() + '<br>' : '+');
-          }
-          else {
-            this._ldiv.innerHTML +=
-            '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;</i> ' +
-            (cutoffs[i+1] ? 'bis '+cutoffs[i+1].toLocaleString() +"&nbsp;" : cutoffs[i].toLocaleString()+'+');
-          }
+          item['properties'][propname] = null;
         }
       }
+
+
+      if (!cutoffs) {
+        cutoffs = this.makecutoffs(this.api.getValues(thedata, '___thevalue'), this.binmethod, this.bins);
+      };
+      if (colors.length < cutoffs.length) {
+        colors = this.makescale(cutoffs.length)
+      }
+
+      let myStyle = function (feature) {
+        let thevalue = feature.properties[propname];
+        let i = 0;
+        let result = basestyle;
+        let thecolor = colors[0];
+        for (let colorcode of colors) {
+          if (thevalue > cutoffs[i]) {
+            thecolor = colorcode;
+          };
+          i = i + 1;
+        }
+        if (thevalue != null) { result['color'] = thecolor; };
+        return result
+      };
+      // Infobox
+      let info;
+      info = L.control.layers();
+      info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div');
+        this.update();
+        return this._div;
+      };
+
+      info.update = function (props) {
+
+        this._div.innerHTML = (props ? '<strong>Gebiet: </strong>' + props[theid] : "") + (props && props[propname] ? '<br><strong>Wert: </strong>' + props[propname].toLocaleString() : "");
+        if (props) {
+          L.DomUtil.addClass(this._div, 'maphoverinfo');
+        }
+        else {
+          L.DomUtil.removeClass(this._div, 'maphoverinfo');
+        }
+      };
+
+      info.addTo(mymap);
+
+      // Add Features/Polygons to Map
+      const featLayer = L.geoJSON(geojsonFeature,
+        {
+          style: myStyle,
+          onEachFeature: (feature, layer) => (
+            layer.on({
+              mouseover: (e) => (this.highlightFeature(info, e)),
+              mouseout: (e) => (this.resetFeature(info, e)),
+              click: (e) => (this.zoomToFeature(mymap, e))
+            })
+          )
+        });
+      featLayer.resetStyle();
+      featLayer.addTo(mymap);
+
+      // Add Legend to Map
+      let labels
+      if (this.customlabels) { labels = this.customlabels; };
+
+      let legend;
+      legend = L.control.layers({}, {}, { position: 'topright' });
+
+      legend.onAdd = function (map) {
+
+        this._ldiv = L.DomUtil.create('div', 'customlegend');
+        this._ldiv.innerHTML = '<p><strong>' + propname + '</strong></p>';
+        if (this.percent == true) {
+          this._ldiv.innerHTML += '<p><em>Anteil in %</em></p>';
+        }
+        if (cutoffs) {
+          for (var i = 0; i < cutoffs.length; i++) {
+            if (labels.length == cutoffs.length) {
+              this._ldiv.innerHTML +=
+                '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;</i> ' +
+                labels[i];
+            }
+            else {
+              if (cutoffs.length > 4) {
+                this._ldiv.innerHTML +=
+                  '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> ' +
+                  cutoffs[i].toLocaleString() + (cutoffs[i + 1] ? ' bis unter ' + cutoffs[i + 1].toLocaleString() + '<br>' : '+');
+              }
+              else {
+                this._ldiv.innerHTML +=
+                  '<i style="background-color:' + colors[i] + ';">&nbsp;&nbsp;&nbsp;</i> ' +
+                  (cutoffs[i + 1] ? 'bis ' + cutoffs[i + 1].toLocaleString() + "&nbsp;" : cutoffs[i].toLocaleString() + '+');
+              }
+            }
+          }
+        }
+
+        return this._ldiv;
+      };
+
+      legend.addTo(mymap);
     }
+    else {
+      // Layer
+      const geojsonFeature: FeatureCollection = Object.assign(this.basemap);
+      colors = this.makescale(2);
+      let myStyle = function (feature) {
+        let res = basestyle;
+        let thecolor= "grey";
+        if (feature.properties['___clicked']) {
+          thecolor = colors[1];
+        }
+        res['color']=thecolor;
+        return res;
+      }
 
-      return this._ldiv;
-    };
+      const featLayer = L.geoJSON(geojsonFeature,
+        {
+          style: myStyle,
+          onEachFeature: (feature, layer) => (
+            layer.on({
+              click: (e) => (this.selectarea(mymap, e))
+            })
+          )
+        });
+      featLayer.addTo(mymap);
 
-    legend.addTo(mymap);
-
+    }
 
   };
 
@@ -260,7 +320,7 @@ export class MapComponent implements OnInit {
     const layer = e.target;
     layer.setStyle({
       opacity: 1,
-      fillOpacity: this.opacity*1.2
+      fillOpacity: this.opacity * 1.2
     });
     info.update(layer.feature.properties);
   }
@@ -277,42 +337,64 @@ export class MapComponent implements OnInit {
     let result = [];
     let minv = Math.min(...array);
     let maxv = Math.max(...array);
-    let steps = Math.round((maxv - minv)/bins);
+    let steps = Math.round((maxv - minv) / bins);
     let i = 0;
-      while (i < bins) {
-        result.push((i + 1) * steps + minv);
-        i = i+1;
-      }
+    while (i < bins) {
+      result.push((i + 1) * steps + minv);
+      i = i + 1;
+    }
     return result;
 
   }
 
-  
-  
+
+  newclick(e){
+    let res = [];
+    for (let item of this.basemap.features){
+      if (item.properties[this.id]==e){
+        item.properties['___clicked']=true;
+      }
+      else {
+        item.properties['___clicked']=false;
+      }
+      res.push(item);
+    }
+    this.basemap['features']=res;
+    this.initMap(this.containername);
+  }
+
   zoomToFeature(map, e) {
     map.fitBounds(e.target.getBounds());
-    this.clicked = e.target.feature.properties[this.id];
+    this.clicked.emit(e.target.feature.properties[this.id]);
+    this.clickedvalue = e.target.feature.properties[this.id];
   }
 
-  makescale(bins=5){
-   return chroma.scale([chroma(this.api.primarycolor).set('hsl.h', -120),this.api.primarycolor]).colors(bins);
+  selectarea(map, e) {
+    map.fitBounds(e.target.getBounds());
+    this.clicked.emit(e.target.feature.properties[this.id]);
+    this.clickedvalue = e.target.feature.properties[this.id];
+    this.newclick(e.target.feature.properties[this.id]);
   }
 
-  getcenter(){
+  makescale(bins = 5) {
+    return chroma.scale([chroma(this.api.primarycolor).set('hsl.h', -120), this.api.primarycolor]).colors(bins);
+  }
+
+  getcenter() {
     let features = this.basemap.features;
-    let coords = {'a':[],'b':[]};
-    for (let item of features){
-      for (let area of item.geometry.coordinates){
-        for (let subarea of area){
-        coords['a'].push(subarea[0])
-        coords['b'].push(subarea[1])
+    let coords = { 'a': [], 'b': [] };
+    for (let item of features) {
+      for (let area of item.geometry.coordinates) {
+        for (let subarea of area) {
+          coords['a'].push(subarea[0])
+          coords['b'].push(subarea[1])
         }
       }
     }
-    let a = coords['a'].reduce((pv, cv) => pv + cv, 0)/coords['a'].length;
-    let b = coords['b'].reduce((pv, cv) => pv + cv, 0)/coords['b'].length;
-  
-    return [b,a]
+    let a = coords['a'].reduce((pv, cv) => pv + cv, 0) / coords['a'].length;
+    let b = coords['b'].reduce((pv, cv) => pv + cv, 0) / coords['b'].length;
+
+    return [b, a]
   }
 
 

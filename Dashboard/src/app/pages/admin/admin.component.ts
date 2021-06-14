@@ -269,7 +269,6 @@ export class AdminComponent implements OnInit {
 
 
     this.datacheck = err;
-    console.log(this.metadatafile);
   }
 
   addusernow() {
