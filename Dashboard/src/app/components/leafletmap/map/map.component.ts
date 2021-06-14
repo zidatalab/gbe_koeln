@@ -155,26 +155,25 @@ export class MapComponent implements OnInit {
     if (colors.length<cutoffs.length){
       colors = this.makescale(cutoffs.length)
     }
+    let basestyle = {
+      weight: 2,
+      dashArray: '',
+      "color":"grey",
+      "fillOpacity":theopacity   ,
+      "Opacity":theopacity  
+    };
     let myStyle = function (feature) {
       let thevalue = feature.properties[propname];
       let i = 0;
-      let thecolor = "grey";
-      if (thevalue){thecolor=colors[0];}
-      let result = {
-        weight: 2,
-        dashArray: '',
-        "color":thecolor,
-        "fillOpacity":theopacity   ,
-        "Opacity":theopacity  
-      };
+      let result = basestyle;
+      let thecolor=colors[0];
       for (let colorcode of colors) {
         if (thevalue > cutoffs[i]) {
           thecolor = colorcode;
         };
         i = i + 1;
       }
-      
-      result['color']= thecolor;
+      if (thevalue!=null){result['color']= thecolor;};
       return result
     };
     // Infobox

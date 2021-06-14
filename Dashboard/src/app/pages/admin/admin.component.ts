@@ -244,7 +244,7 @@ export class AdminComponent implements OnInit {
     for (let item of this.metadatafile) {
 
       if (item.topic == "ordering" && ['levelid', 'level'].indexOf(item.type) >= 0) { test1counter = test1counter + 1; }
-      if (item.topic == "subgroups" && item.type !== 'group') { test2 = false; }
+      if (item.topic == "subgroups" && item.type !== 'group') { item.type = 'group'; }
       if (item.topic == "outcomes" && ['rate', 'number'].indexOf(item.type) > 0) { test3 = false; }
       if (item.topic == "demography" && ['rate', 'number'].indexOf(item.type) > 0) { test4 = false; }
     }
@@ -269,6 +269,7 @@ export class AdminComponent implements OnInit {
 
 
     this.datacheck = err;
+    console.log(this.metadatafile);
   }
 
   addusernow() {

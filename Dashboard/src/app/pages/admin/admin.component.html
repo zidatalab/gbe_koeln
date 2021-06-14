@@ -271,6 +271,13 @@
                                         {{option}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
+                            <mat-form-field appearance="outline" *ngIf="row.type=='level'">
+                                <mat-label>Öffentliche Raumebenen</mat-label>
+                                <mat-select [(value)]="row.publiclevels" (selectionChange)="this.checkmetadata()" multiple>
+                                    <mat-option *ngFor="let option of this.getrefvalues(row.varname)" [value]="option">
+                                        {{option}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </ng-container>
                         <ng-container *ngIf="['ordering','subgroups'].indexOf(row.topic)<0">
 
