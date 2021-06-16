@@ -1,4 +1,9 @@
+<ng-container *ngIf="!(this.basemap)">
+  <mat-spinner color="primary"></mat-spinner>
+</ng-container>
+<ng-container *ngIf="(this.basemap)">
 <div class="map-container">
     <div id="map-frame" class="map-frame">
     </div>    
   </div>
+</ng-container>

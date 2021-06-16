@@ -1,6 +1,11 @@
-<div>
-<plotly-plot 
-[data]="this.plotdata" [useResizeHandler]="true"
-[layout]="this.plotlayout" [config]="this.mainconfig"
+
+<ng-container *ngIf="!(this.plotdata && this.mainconfig && this.plotlayout)">
+    <mat-spinner color="primary"></mat-spinner>
+</ng-container>
+<ng-container *ngIf="this.plotdata && this.mainconfig && this.plotlayout">
+<plotly-plot fxFlex=100 [useResizeHandler]="true" 
+[(data)]="this.plotdata" [(divId)]="this.divid" 
+[(layout)]="this.plotlayout" [(config)]="this.mainconfig"
 ></plotly-plot>  
-</div>
+</ng-container>
+

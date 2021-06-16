@@ -286,6 +286,10 @@ color: white;
   color: darkgrey !important;
 }
 
+.mobileheading {
+  font-size: 20px!important;
+}
+
 .lightgreycolor {
   color: grey !important;
 }
@@ -358,4 +362,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .custombgmap {
   filter:grayscale(100%);
+}
+
+.minsize {
+  min-height: 500px;    
 }

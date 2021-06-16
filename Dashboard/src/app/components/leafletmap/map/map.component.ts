@@ -74,7 +74,7 @@ export class MapComponent implements OnInit {
 
   resetprops() {
     if (!this.containername) { this.containername = "mapdiv" + Math.round(Math.random() * 1000).toString() + "_" + Math.round(Math.random() * 1000).toString(); };
-    if (!this.Zoom) { this.Zoom = 5; };
+    if (!this.Zoom) { this.Zoom = 4; };
     if (!this.center) { this.center = this.getcenter(); };// [51.948, 10.265]; };
     if (!this.opacity) { this.opacity = .1; };
     if (!this.customlabels) { this.customlabels = []; };
@@ -306,11 +306,35 @@ export class MapComponent implements OnInit {
           style: myStyle,
           onEachFeature: (feature, layer) => (
             layer.on({
+              mouseover: (e) => (this.highlightFeature(info, e)),
+              mouseout: (e) => (this.resetFeature(info, e)),
               click: (e) => (this.selectarea(mymap, e))
             })
           )
         });
       featLayer.addTo(mymap);
+
+      // Infobox
+      let info;
+      info = L.control.layers();
+      info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div');
+        this.update();
+        return this._div;
+      };
+
+      info.update = function (props) {
+
+        this._div.innerHTML = (props ? '<strong>Gebiet: </strong>' + props[theid] : "");
+        if (props) {
+          L.DomUtil.addClass(this._div, 'maphoverinfo');
+        }
+        else {
+          L.DomUtil.removeClass(this._div, 'maphoverinfo');
+        }
+      };
+
+      info.addTo(mymap);
 
     }
 

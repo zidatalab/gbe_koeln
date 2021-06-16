@@ -21,6 +21,7 @@ export class PlotComponent implements OnInit {
   @Input() showlegend: boolean;
   @Input() sort: boolean;
   @Input() percent: boolean;
+  @Input() percentx: boolean;
   @Input() basecolor = "";
   @Input() colorscheme = [];
   @Input() annotations = [];
@@ -30,7 +31,9 @@ export class PlotComponent implements OnInit {
   @Input() plotcaption = "";
   @Input() n_yticks = 8;
   @Input() xtickformat = "";
-  
+  @Input() id = "";
+  @Input() divid = "";
+
   fontfamily = "Lato, sans-serif";
   fontsize = ".85rem";
   fontcolor= "black";
@@ -43,6 +46,7 @@ export class PlotComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if (this.divid){this.divid= "plotdiv" + Math.round(Math.random() * 1000).toString() + "_" + Math.round(Math.random() * 1000).toString();}
     if (!this.linewidth) { this.linewidth = 2 };
     if (this.basecolor=="") { this.basecolor=this.api.primarycolor};   
     if (this.colorscheme.length==0){this.colorscheme=[this.basecolor];}
@@ -52,7 +56,8 @@ export class PlotComponent implements OnInit {
   
 
   ngOnChanges(changes: any) {
-    this.make_plot();
+    //console.log(changes);
+    setTimeout(()=>{this.make_plot()},0);
   }
 
 
@@ -84,6 +89,21 @@ export class PlotComponent implements OnInit {
       }
     }
 
+    if (this.plottype == "violin") {
+      this.plotlytype = "violin";
+      this.plotlayout = {
+        xaxis: { fixedrange: false, type: 'category', automargin: false },
+        yaxis: {  zeroline: false , automargin: true, rangemode: 'tozero',ticksuffix:" " },
+        autosize: true, padding: 0,
+        legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
+        margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
+        annotations: this.annotations
+      };
+      if (this.percent){
+        this.plotlayout.yaxis.tickformat = ',.0%';
+      }
+    }
+
     if (this.plottype == "stackedbar") {
       this.plotlytype = "bar";
       this.plotlayout = {
@@ -98,10 +118,10 @@ export class PlotComponent implements OnInit {
     
     }
 
-    if (this.plottype == "tsline" || this.plottype == "lines" || this.plottype == "area" || this.plottype == "stackedarea") {
+    if (this.plottype == "tsline" || this.plottype == "lines" || this.plottype == "area" || this.plottype == "stackedarea" || this.plottype == 'scatter') {
       this.plotlytype = "lines";
       this.plotlayout = {
-        xaxis: { fixedrange: false, showgrid: false, automargin: false },
+        xaxis: { fixedrange: false, showgrid: false, automargin: false ,zeroline: false},
         yaxis: {
           fixedrange: true, title: '', automargin: true, rangemode: 'tozero',
           gridcolor: "lightgrey",
@@ -111,12 +131,18 @@ export class PlotComponent implements OnInit {
           zerolinewidth: 2,
           annotations: this.annotations,
           ticksuffix:" ",
-          nticks:this.n_yticks
+          nticks:this.n_yticks          
         },
         autosize: true, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
         margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       };
+      if (this.percent){
+        this.plotlayout.yaxis.tickformat = ',.0%';
+      }
+      if (this.percentx){
+        this.plotlayout.xaxis.tickformat = ',.0%';
+      }
     }
 
     if (this.plottype == "hbar") {
@@ -165,6 +191,8 @@ export class PlotComponent implements OnInit {
     }
   
    this.plotdata = this.make_plotdata(plotdata, this.xvalue, outcomes, this.plotlytype);    
+   // DEBUG
+   
   }
 
   make_colorbyvalues() {
@@ -190,7 +218,7 @@ export class PlotComponent implements OnInit {
 
 
 
-  make_trace(xdata = [], ydata = [], name: string, type = "") {
+  make_trace(xdata, ydata = [], name: string, type = "") {
     let trace = {
       x: xdata,
       y: ydata,
@@ -220,9 +248,10 @@ export class PlotComponent implements OnInit {
       if (type == "bar" || type == "bar" || type == "scatter") {
         trace["marker"] = {
           color: colors[i]
-        }
-
-      }
+        }     }
+       
+        
+      
       if (type == "lines") {
         trace["line"] = {
           color: colors[i],
@@ -232,6 +261,37 @@ export class PlotComponent implements OnInit {
       if (this.plottype == "area") {
         trace["fill"] = "tozeroy";
       }
+      if (this.plottype == "violin") {
+        trace = this.make_trace(name, theydata  , ylist[i], type = type);
+        trace['x']=name;
+        trace["line"] = {
+          color: colors[i],
+          width: this.linewidth
+        }
+      }
+      if (this.plottype == "scatter") {
+        trace['mode']='markers';
+        trace["marker"] = {
+          color: colors[i],
+          size: this.linewidth*5
+        }
+        if (this.id!=""){
+          trace["text"] =  this.api.getValues(source, this.id);   
+          trace["textfont"]={family: this.fontfamily}; 
+          if (trace['x'].length<50){
+            trace['mode']='markers+text';    
+            trace['textposition']= 'bottom center';
+          }  
+          else {
+            trace['mode']='markers';    
+          }
+
+
+          
+        }
+        
+        }
+
       list.push(trace)
       i = i + 1
     }

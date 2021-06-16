@@ -1,37 +1,232 @@
-<div class="container" fxLayout="column" fxLayoutGap="1rem">
+<div class="container" fxLayout="column" fxLayoutGap="30px">
     <div>
-    <h1>Interne Tools</h1>
-    <mat-chip-list>
-        <mat-chip *ngFor="let action of this.actions" color="primary" [selected]="this.action==this.intend" (click)="this.intend=action">{{action}}</mat-chip>
-    </mat-chip-list>
+        <h1 ngClass.lt-sm="mobileheading">Interne Tools</h1>
+        <mat-chip-list>
+            <mat-chip *ngFor="let action of this.actions" color="primary" [selected]="this.action==this.intend"
+                (click)="this.intend=action">{{action}}</mat-chip>
+        </mat-chip-list>
     </div>
     <div *ngIf="this.intend=='Regionen beschreiben'">
-       <div>
-        <h2>Regionen</h2>
-        <mat-chip-list>
-            <ng-container *ngFor="let item of this.levelvalues">
-            <mat-chip 
-                 (click)="this.newlevel(item)" 
-                [selected]="this.currentlevel==item" color="primary">
-                {{item}}
-            </mat-chip>
-        </ng-container>
-        </mat-chip-list>
-       </div>
-       <div *ngIf="this.mapdata">
-        <h1>Region: {{this.currentregion}}</h1>
-           <app-map 
-           [containername]="'mapdiv'" [basemap]="this.mapdata" 
-            [id]="this.levelid"
-            opacity=.8 Zoom=10  selectmap="true" (clicked)="changeregion($event)"></app-map>
-       </div>
-     
-    </div>
-    <div *ngIf="this.intend=='Analysen'">
-        <h2>Analysen</h2>
-    </div>
-    <div *ngIf="this.intend=='Daten exportieren'">
-        <h2>Daten</h2>
-    </div>
-</div>
+        <div>
+            <mat-chip-list>
+                <ng-container *ngFor="let item of this.levelvalues">
+                    <mat-chip (click)="this.newlevel(item)" [selected]="this.currentlevel==item" color="primary">
+                        {{item}}
+                    </mat-chip>
+                </ng-container>
+            </mat-chip-list>
+        </div>
+        <div *ngIf="this.mapdata" fxLayoutGap="15px">
+            <div class="add-margin">
+                <h3 *ngIf="!this.currentregion">Bitte wählen Sie eine Region</h3>
+            </div>
+            <div>
+                <app-map [containername]="'mapdiv'" [basemap]="this.mapdata" [id]="this.levelid" opacity=.8 Zoom=9
+                    selectmap="true" (clicked)="changeregion($event)"></app-map>
+            </div>
+            <div *ngIf="this.regiondata && this.overalldata">
+                <div class="add-margin">
+                    <h1 *ngIf="this.currentregion">{{this.currentregion}}</h1>
+                </div>
+                <h2>Sozialindikatoren</h2>
+                <div class="add-margin" class="greycolor">
+                    <div class="add-margin" fxFlexAlign="start" fxLayout="row wrap" fxLayoutGap="10px">
+                        <div fxFlex=60>Merkmal</div>
+                        <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                            <div fxFlex=50 fxFlexAlign="start start">
+                                Ausprägung
+                            </div>
+                            <div fxFlex>
+                                Vergleich mit Durchschnitt
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-margin">
+                    <ng-container *ngFor="let item of this.metadata">
+                        <div *ngIf="item.topic=='demography'" fxFlexAlign="start" fxLayout="row wrap"
+                            fxLayoutGap="10px">
+                            <div fxFlex=60><strong>{{item.varname}}</strong></div>
+                            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                                <div fxFlex=50 fxFlexAlign="start start">
+                                    <span class="primarycolor" *ngIf="item.type=='rate'">{{this.regiondata[item.varname]
+                                        | percent }}</span>
+                                    <span class="primarycolor"
+                                        *ngIf="item.type!=='rate'">{{this.regiondata[item.varname] | number }}</span>
+                                </div>
+                                <div fxFlex>
+                                    <span class="accentcolor"
+                                        *ngIf="this.regiondata[item.varname]<((1/1.5)*this.overalldata[item.varname])">
+                                        <mat-icon>remove_circle</mat-icon>
+                                    </span>
+                                    <span class="accentcolor"
+                                        *ngIf="this.regiondata[item.varname]<((1/2.5)*this.overalldata[item.varname])">
+                                        <mat-icon>remove_circle</mat-icon>
+                                    </span>
+                                    <span class="primarycolor"
+                                        *ngIf="this.regiondata[item.varname]>=(1.5*this.overalldata[item.varname])">
+                                        <mat-icon>add_circle</mat-icon>
+                                    </span>
+                                    <span class="primarycolor"
+                                        *ngIf="this.regiondata[item.varname]>=(2.5*this.overalldata[item.varname])">
+                                        <mat-icon>add_circle</mat-icon>
+                                    </span>
+                                </div>
+                            </div>
 
+                        </div>
+                    </ng-container>
+
+                </div>
+                <h2>Gesundheitsindikatoren</h2>
+                <div class="add-margin" class="greycolor">
+                    <div class="add-margin" fxFlexAlign="start" fxLayout="row wrap" fxLayoutGap="10px">
+                        <div fxFlex=60>Merkmal</div>
+                        <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                            <div fxFlex=50 fxFlexAlign="start start">
+                                Ausprägung
+                            </div>
+                            <div fxFlex>
+                                Vergleich mit Durchschnitt
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-margin">
+
+                    <ng-container *ngFor="let item of this.metadata">
+                        <div *ngIf="item.topic=='outcomes'" fxFlexAlign="start" fxLayout="row wrap" fxLayoutGap="10px">
+                            <div fxFlex=60><strong>{{item.varname}}</strong></div>
+                            <div fxFlex fxLayout="row" fxLayoutGap="10px">
+                                <div fxFlex=50 fxFlexAlign="start start">
+                                    <span class="primarycolor" *ngIf="item.type=='rate'">{{this.regiondata[item.varname]
+                                        | percent }}</span>
+                                    <span class="primarycolor"
+                                        *ngIf="item.type!=='rate'">{{this.regiondata[item.varname] | number }}</span>
+                                </div>
+                                <div fxFlex>
+                                    <span class="accentcolor"
+                                        *ngIf="this.regiondata[item.varname]<((1/1.5)*this.overalldata[item.varname])">
+                                        <mat-icon>remove_circle</mat-icon>
+                                    </span>
+                                    <span class="accentcolor"
+                                        *ngIf="this.regiondata[item.varname]<((1/2.5)*this.overalldata[item.varname])">
+                                        <mat-icon>remove_circle</mat-icon>
+                                    </span>
+                                    <span class="primarycolor"
+                                        *ngIf="this.regiondata[item.varname]>=(1.5*this.overalldata[item.varname])">
+                                        <mat-icon>add_circle</mat-icon>
+                                    </span>
+                                    <span class="primarycolor"
+                                        *ngIf="this.regiondata[item.varname]>=(2.5*this.overalldata[item.varname])">
+                                        <mat-icon>add_circle</mat-icon>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div *ngIf="this.intend=='Analysen'" fxLayout="column" fxLayoutGap="15px">
+        <div>
+            <mat-chip-list>
+                <ng-container *ngFor="let item of this.levelvalues">
+                    <mat-chip (click)="this.currentlevel=item;this.getregionandata();"
+                        [selected]="this.currentlevel==item" color="primary">
+                        {{item}}
+                    </mat-chip>
+                </ng-container>
+            </mat-chip-list>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="space-between">
+            <div fxFlex=45 fxFlex.lt-md=100>
+                <h4><strong>Gesundheitsindikator</strong>:</h4>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Variablenauswahl</mat-label>
+                    <mat-select [(value)]="this.outcome" (selectionChange)="this.getregionandata()">
+                        <mat-option value="">Keine Auswahl</mat-option><br>
+                        <ng-container *ngFor="let item of this.outcomes">
+                            <mat-option [value]="item.varname"><strong>{{item.varname}}</strong></mat-option><br>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="this.determinant && !this.outcome">Bitte wählen Sie ein Outcome aus</mat-error>
+            </div>
+            <div fxFlex=45 fxFlex.lt-md=100>
+                <h4><strong>Erklärende Variable</strong>:</h4>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Variablenauswahl</mat-label>
+                    <mat-select [(value)]="this.determinant" (selectionChange)="this.getregionandata()">
+                        <mat-option value="">Keine Auswahl</mat-option><br>
+                        <ng-container *ngFor="let item of this.outcomes">
+                            <ng-container *ngIf="item.varname!=this.outcome">
+                                <mat-option [value]="item.varname">{{item.varname}}</mat-option><br>
+                            </ng-container>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="!this.determinant && this.outcome">Bitte wählen Sie eine erklärende Variable aus
+                </mat-error>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="space-between">
+            <div fxLayout="row wrap">
+                <div fxFlex=100>
+                <h3>Werteverteilungen</h3>
+                </div>
+                <div class="minsize" *ngIf="this.andata" fxFlex=45>
+                    <app-plot [data]="this.andata" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
+                        [xvalue]="[this.outcome]" [outcomes]="[this.outcome]" [percent]="true"
+                        [colorscheme]="[this.api.makescale(3)[2]]" plottype="violin"></app-plot>
+                </div>
+                <div class="minsize" *ngIf="this.andata" fxFlex=45>
+                    <app-plot [data]="this.andata" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
+                        [xvalue]="[this.determinant]" [outcomes]="[this.determinant]" [percent]="true"
+                        [colorscheme]="[this.api.makescale(3)[1]]" plottype="violin"></app-plot>
+                </div>
+            </div>
+            <div class="minsize" *ngIf="this.andata" fxFlex=100 fxFlex.lt-md=100>
+                <h3>Allgemeiner Zusammenhang</h3>
+                <app-plot [(data)]="this.andata" [xvalue]="this.determinant" [id]="this.levelid"
+                    [outcomes]="[this.outcome]" [percent]="true" [percentx]="true"
+                    [colorscheme]="[this.api.makescale(3)[2]]" plottype="scatter"></app-plot>
+            </div>
+            <div>
+                <h2>Zusammenhangsanalyse</h2>
+                <h3>Kontrollvariablen</h3>
+                <mat-chip-list>
+                    <ng-container *ngFor="let item of this.outcomes">
+                        <ng-container *ngIf="[this.determinant,this.outcome].indexOf(item.varname)<0 ">
+                            <mat-chip *ngIf="this.controls.indexOf(item.varname)<0 " color="primary" [selected]="false"
+                                (click)="this.controls.push(item.varname);this.getregresults();">
+                                {{item.varname}}
+                            </mat-chip>
+                            <mat-chip *ngIf="this.controls.indexOf(item.varname)>=0 " color="primary" [selected]="true"
+                                (click)="this.removeoutcome(item.varname);this.getregresults();">
+                                {{item.varname}}
+                            </mat-chip>
+                        </ng-container>
+                    </ng-container>
+                </mat-chip-list>
+            </div>
+            <div>
+                <h3>Vorhergesagte Werte</h3>
+                <div class="minsize">
+                    <app-plot [data]="this.regressiondata['data']"
+                    [xvalue]="[this.determinant]" [outcomes]="['base','controlled']" [percent]="true"
+                    [colorscheme]="this.api.makescale(2)" 
+                    plottype="lines"></app-plot>
+                </div>
+                <div>
+
+                </div>
+            </div>
+        </div>
+        <div *ngIf="this.intend=='Daten exportieren'">
+            <h2>Daten</h2>
+        </div>
+    </div>

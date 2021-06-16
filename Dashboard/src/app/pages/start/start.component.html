@@ -66,20 +66,22 @@
             Karte
             <app-map [containername]="'mapdiv'" [data]="this.data" [basemap]="this.mapdata" [bins]="5"
             [id]="this.levelid"
-            opacity=.8 Zoom=10
+            opacity=.8 Zoom=9
             [colorscale]="this.colorsscheme" [percent]="true"
             [feature]="this.levelsettings['outcomes']"></app-map>
         </p>
         <ng-container *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.data ">
+            <div class="minheight">
             <h2>Rangfolge der Regionen</h2>
-            <app-plot [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
+            <app-plot *ngIf="this.data.length<200" [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
             [xvalue]="this.levelid"  [percent]="true" [sort]="true"
             [outcomes]="[this.levelsettings['outcomes']]" 
             [colorscheme]="[this.api.makescale(3)[2]]"
             plottype="bar"></app-plot>
+            </div>
         </ng-container>
     </div>
-    <div *ngIf="this.data">
+    <div class="minheight" *ngIf="this.data">
     <p >
         <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate"            
         [outcomes_numeric]="this.data_number"></app-table>
