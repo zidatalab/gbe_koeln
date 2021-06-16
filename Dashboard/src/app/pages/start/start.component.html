@@ -1,12 +1,19 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem" fxLayoutAllign="space-around">
-    <div *ngIf="this.currentuser">
-        <h1>Herzlich Willkommen <span> {{this.currentuser.anrede?this.currentuser.anrede+" "+this.currentuser.lastname:"" }}</span></h1>        
-        <p>Sie sind angemeldet und haben Zugriff auf alle verfügbaren Informationen.</p>
+    <div>
+        <p *ngIf="this.currentuser" class="mat-caption right">
+            Angemeldet als <span> {{this.currentuser.anrede?this.currentuser.anrede+"
+                "+this.currentuser.lastname:"" }}</span></p>
+        <div class="brandingpicture" [ngClass]="{'smallheader': this.currentuser}">
+            <h1>Kleinräumige GBE der Stadt Köln</h1>
+        </div>
+        <p *ngIf="!this.currentuser">
+            Dieses Dashboard ist ein Informationsportal zur gesundheitlichen Lage der Bevölkerung Kölns. Bitte melden
+            Sie sich an, um Zugriff auf die enthaltenen Informationen zu erhalten.</p>
+        <p *ngIf="this.metadata.length==0">
+            Es sind keine Daten im System, bitte wenden Sie sich an einen Administrator.
+        </p>
     </div>
-    <div *ngIf="!this.currentuser">
-        <h1>Dashboard</h1>
-        <p>Dieses Dashboard ist ein Informationsportal zur Information zu einem wichtigen Thema. Nicht alle Informationen stehen für die Öffentlichkeit zur Verfügung. Berechtigte Benutzer*innen haben die Möglichkeit sich anzumelden, um Zugriff auf erweiterte Funktionen zu erhalten.</p>
-    </div>
+
 
 
     <div *ngIf="this.metadata.length>0">
@@ -17,7 +24,9 @@
                 <mat-chip (click)="this.setlevel('levelvalues',item);" *ngFor="let item of this.levelvalues"
                     [selected]="(this.levelsettings['levelvalues']==item)" color="primary"
                     [disabled]="this.levelsettings['subgroups']!='Keine'">
-                    {{item}}<span *ngIf="this.geojson_available.indexOf(item)>=0"><mat-icon class="primarycolor flagicon">map</mat-icon></span>
+                    {{item}}<span *ngIf="this.geojson_available.indexOf(item)>=0">
+                        <mat-icon class="primarycolor flagicon">map</mat-icon>
+                    </span>
                 </mat-chip>
             </mat-chip-list>
         </p>
@@ -60,32 +69,30 @@
             </mat-chip-list>
         </p>
     </div>
-    <div *ngIf="this.data" >
+    <div *ngIf="this.data">
         <h1>Ergebnisse</h1>
-        <p *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
+        <p
+            *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
             Karte
             <app-map [containername]="'mapdiv'" [data]="this.data" [basemap]="this.mapdata" [bins]="5"
-            [id]="this.levelid"
-            opacity=.8 Zoom=9
-            [colorscale]="this.colorsscheme" [percent]="true"
-            [feature]="this.levelsettings['outcomes']"></app-map>
+                [id]="this.levelid" opacity=.8 Zoom=9 [colorscale]="this.colorsscheme" [percent]="true"
+                [feature]="this.levelsettings['outcomes']"></app-map>
         </p>
         <ng-container *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.data ">
             <div class="minheight">
-            <h2>Rangfolge der Regionen</h2>
-            <app-plot *ngIf="this.data.length<200" [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
-            [xvalue]="this.levelid"  [percent]="true" [sort]="true"
-            [outcomes]="[this.levelsettings['outcomes']]" 
-            [colorscheme]="[this.api.makescale(3)[2]]"
-            plottype="bar"></app-plot>
+                <h2>Rangfolge der Regionen</h2>
+                <app-plot *ngIf="this.data.length<200" [(data)]="this.data"
+                    [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }" [xvalue]="this.levelid" [percent]="true"
+                    [sort]="true" [outcomes]="[this.levelsettings['outcomes']]"
+                    [colorscheme]="[this.api.makescale(3)[2]]" plottype="bar"></app-plot>
             </div>
         </ng-container>
     </div>
     <div class="minheight" *ngIf="this.data">
-    <p >
-        <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate"            
-        [outcomes_numeric]="this.data_number"></app-table>
+        <p>
+            <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate"
+                [outcomes_numeric]="this.data_number"></app-table>
 
-    </p>
+        </p>
     </div>
 </div>

@@ -10,10 +10,12 @@ import * as chroma from "chroma-js";
 export class ApiService { 
  
  
-  public REST_API_SERVER = "http://localhost:8000/" // "https://zidashboardapi.azurewebsites.net/"; 
-  public REST_API_SERVER_CLIENTID = "test"; 
-  public primarycolor = "#e91e63";
-
+  public REST_API_SERVER = "https://zidashboardapi.azurewebsites.net/"; 
+  public REST_API_SERVER_CLIENTID = "2021_06_gbe_koeln"; 
+  public primarycolor = "e1141c"; // "#e91e63";
+  public accentcolor = "3714e1";
+  public warncolor = "e1149b";
+  
   constructor(private httpClient: HttpClient) { } 
  
   public  getTypeRequest(url) { 
