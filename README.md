@@ -12,5 +12,5 @@ First launch only: `npm install`
 
 Pro build for github pages
 
-1. `ng build  --base-href "/gbe_koeln/"`
+1. `ng build  --base-href "/gbe_koeln/" --configuration production --aot true"`
 2. `cp docs/index.html docs/404.html`
