@@ -64,10 +64,10 @@ export class AdminComponent implements OnInit {
       let index = 0;
       for (let varname of varnames) {
         index = index + 1;
-        let topush = { 'varname': varname, 'topic': "", 'description': "", "allforlevel": '', public: false }
+        let topush = { 'varname': varname, 'topic': "", 'description': "", "allforlevel": '',  "publiclevels": [] , "public" : false }
         if (index == 1) {
           topush["topic"] = "ordering";
-          topush["type"] = "level";
+          topush["type"] = "level";         
         }
         if (index == 2) {
           topush["topic"] = "ordering";
@@ -241,6 +241,7 @@ export class AdminComponent implements OnInit {
     let test3 = true;
     let test4 = true;
     let test5 = true;
+    let test6 = true;
     for (let item of this.metadatafile) {
 
       if (item.topic == "ordering" && ['levelid', 'level'].indexOf(item.type) >= 0) { test1counter = test1counter + 1; }
@@ -267,9 +268,14 @@ export class AdminComponent implements OnInit {
       err.push("Reference Levels not specified")
     }
 
+    let test6data = this.api.filterArray(this.metadatafile, 'type', 'level')[0];
+    test6 = ((test6data['publiclevels'].length == 0) || !test6data['public']) || ((test6data['publiclevels'].length >0) && test6data['public'])
+    if (!test6) {
+      err.push("No public levels not for public level var specified")
+    }
 
     this.datacheck = err;
-
+    console.log(test6data);
   }
 
   addusernow() {

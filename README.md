@@ -12,5 +12,5 @@ First launch only: `npm install`
 
 Pro build for github pages
 
-1. `ng build --prod --base-href "/barebone_public_dashboard/"`
+1. `ng build  --base-href "/gbe_koeln/"`
 2. `cp docs/index.html docs/404.html`
