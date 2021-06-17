@@ -30,7 +30,7 @@
 
               <div>
 
-                <a mat-icon-button (click)="drawer.toggle()" href="/">
+                <a mat-icon-button (click)="drawer.toggle()" routerLink="/">
                   <mat-icon class="icon">home</mat-icon>
                   <span>Startseite</span>
                 </a>
@@ -38,7 +38,7 @@
               </div>
               <div *ngIf="this.loginoption && !this.loginstatus" >
 
-                <a mat-icon-button (click)="drawer.toggle()" href="/login">
+                <a mat-icon-button (click)="drawer.toggle()" routerLink="/login">
                   <mat-icon class="icon">login</mat-icon>
                   <span>Anmelden</span>
                 </a>
@@ -46,7 +46,7 @@
               </div>
               <div *ngIf="this.loginstatus">
 
-                <a mat-icon-button (click)="drawer.toggle();" href="/private">
+                <a mat-icon-button (click)="drawer.toggle();" routerLink="/private">
                   <mat-icon class="icon">lock_open</mat-icon>
                   <span>Interne Tools</span>
                 </a>
@@ -54,7 +54,7 @@
               </div>
               <div *ngIf="this.loginstatus">
 
-                <a mat-icon-button (click)="drawer.toggle();" href="/profile">
+                <a mat-icon-button (click)="drawer.toggle();" routerLink="/profile">
                   <mat-icon class="icon">account_box</mat-icon>
                   <span>Benutzerprofil</span>
                 </a>
@@ -62,7 +62,7 @@
               </div>
               <div *ngIf="this.adminstatus">
 
-                <a mat-icon-button (click)="drawer.toggle();" href="/admin">
+                <a mat-icon-button (click)="drawer.toggle();" routerLink="/admin">
                   <mat-icon class="icon">admin_panel_settings</mat-icon>
                   <span>Administration</span>
                 </a>
@@ -71,7 +71,7 @@
               
               <div *ngIf="this.loginstatus">
 
-                <a mat-icon-button (click)="drawer.toggle();logout();" href="/">
+                <a mat-icon-button (click)="drawer.toggle();logout();" routerLink="/">
                   <mat-icon class="icon">logout</mat-icon>
                   <span>Ausloggen</span>
                 </a>
