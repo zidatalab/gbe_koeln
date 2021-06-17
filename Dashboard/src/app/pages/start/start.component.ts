@@ -62,7 +62,11 @@ export class StartComponent implements OnInit {
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
     this.geojson_available = this.api.getmetadata("geodata");
-    if(this.metadata){this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];}
+    if(this.metadata){
+      if (this.metadata.length>0){
+        this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
+      }      
+    }
     setTimeout(() => {
       if ((!this.metadata == false) && (!this.sortdata == false)) {
         if (this.metadata.length > 0) {

@@ -16,7 +16,8 @@
 
 
 
-    <div *ngIf="this.metadata.length>0">
+    <div *ngIf="this.metadata">
+        <ng-container *ngIf="this.metadata.length>0" >
         <h1>Auswahl</h1>
         <h3><strong>Regionen</strong></h3>
         <p>
@@ -68,6 +69,7 @@
                 </mat-chip-list>
             </mat-chip-list>
         </p>
+    </ng-container>
     </div>
     <div *ngIf="this.data">
         <h1>Ergebnisse</h1>
