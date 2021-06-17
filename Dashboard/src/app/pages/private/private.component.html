@@ -132,7 +132,7 @@
 
     </div>
     <div *ngIf="this.intend=='Analysen'" fxLayout="column" fxLayoutGap="15px">
-        <div>
+        <div *ngIf="this.levelvalues">
             <mat-chip-list>
                 <ng-container *ngFor="let item of this.levelvalues">
                     <mat-chip (click)="this.currentlevel=item;this.getregionandata();"
@@ -142,7 +142,7 @@
                 </ng-container>
             </mat-chip-list>
         </div>
-        <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="space-between">
+        <div *ngIf="this.outcomes && this.currentlevel" fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="space-between">
             <div fxFlex=45 fxFlex.lt-md=100>
                 <h4><strong>Gesundheitsindikator</strong>:</h4>
                 <mat-form-field appearance="outline" class="full-width">
@@ -173,7 +173,7 @@
                 </mat-error>
             </div>
         </div>
-        <div fxLayout="column" fxLayoutAlign="space-between">
+        <div *ngIf="this.andata" fxLayout="column" fxLayoutAlign="space-between">
             <div fxLayout="row wrap">
                 <div fxFlex=100>
                 <h3>Werteverteilungen</h3>
@@ -195,7 +195,7 @@
                     [outcomes]="[this.outcome]" [percent]="true" [percentx]="true"
                     [colorscheme]="[this.api.makescale(3)[2]]" plottype="scatter"></app-plot>
             </div>
-            <div>
+            <div  >
                 <h2>Zusammenhangsanalyse</h2>
                 <h3>Kontrollvariablen</h3>
                 <mat-chip-list>
