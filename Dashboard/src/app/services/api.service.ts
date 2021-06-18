@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'; 
 import { HttpClient, HttpHeaders , HttpParams } from '@angular/common/http'; 
 import { map } from 'rxjs/operators'; 
-import { retry } from 'rxjs/operators';
+import { retry,timeout } from 'rxjs/operators';
 import * as chroma from "chroma-js";
 
 @Injectable({ 
@@ -21,13 +21,13 @@ export class ApiService {
   public  getTypeRequest(url) { 
     return this.httpClient.get(this.REST_API_SERVER+url).pipe(map(res => { 
       return res; 
-    })).pipe(retry(5)); 
+    })).pipe(timeout(1500),retry(5)); 
   } 
  
   public  postTypeRequest(url, payload) { 
     return this.httpClient.post(this.REST_API_SERVER+url, payload).pipe(map(res => { 
       return res; 
-    })).pipe(retry(3)); ; 
+    })).pipe(timeout(1500),retry(3)); ; 
   } 
 
   
