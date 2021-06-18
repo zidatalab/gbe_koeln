@@ -30,7 +30,8 @@ export class AppComponent {
         this.currentuser = data;
         this.loginstatus = true;
         this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];      
-        setTimeout(()=>{this.autorefreshdata();},0);    
+        this._auth.refreshToken();
+        setTimeout(()=>{this.autorefreshdata();},1000);    
       }
       else {
         this.loginstatus = false;
@@ -39,9 +40,7 @@ export class AppComponent {
       };
            
       }
-      );    
-      // Refresh Token every 8 Minutes after init.
-      setInterval(()=> {this._auth.refreshToken()},1000*60*8);
+      );         
   }
 
   public autorefreshdata(){    
@@ -50,8 +49,14 @@ export class AppComponent {
         this.setmetadata("metadata",data["data"]);
       });
     this.getsortdata().subscribe(data => {
-        this.setmetadata("sortdata",data["datalevels"]);     
-        this.setmetadata("geodata",this._api.getValues(data["geodata"],'_id'));        
+        this.setmetadata("sortdata",data["datalevels"]);  
+        if (data["geodata"]){
+          this.setmetadata("geodata",this._api.getValues(data["geodata"],'_id'));        
+        }
+        else {
+          this.setmetadata("geodata",[]); 
+        }
+        
       });
   }
 

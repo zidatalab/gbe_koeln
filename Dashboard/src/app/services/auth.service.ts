@@ -60,10 +60,7 @@ export class AuthService {
     }
     
     refreshToken(){
-        let httpOptions = {
-            headers: new HttpHeaders({ 'Authorization': 'bearer '+this.getRefreshToken() })
-          };
-        return this.http.get(this._api.REST_API_SERVER+'login/refresh',httpOptions).subscribe(
+        return this.http.post(this._api.REST_API_SERVER+'login/refresh/',{refresh:true}).subscribe(
             data=>{
                 let result :any = data;
                 this.setDataInLocalStorage('access_token',result.access_token);

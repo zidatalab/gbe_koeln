@@ -79,6 +79,7 @@
             <app-map [containername]="'mapdiv'" [data]="this.data" [basemap]="this.mapdata" [bins]="5"
                 [id]="this.levelid" opacity=.8 Zoom=9 [colorscale]="this.colorsscheme" [percent]="true"
                 [feature]="this.levelsettings['outcomes']"></app-map>
+            
         </p>
         <ng-container *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.data ">
             <div class="minheight">

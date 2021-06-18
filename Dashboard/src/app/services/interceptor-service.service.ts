@@ -32,6 +32,15 @@ export class InterceptorService {
 
       });
     }
+    if (request.url.includes(this.apiurl) && request.url.includes("login/refresh") && this._auth.getUserDetails()) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${this._auth.getRefreshToken()}`
+        }
+
+      });
+    }
+
 
 
     return next.handle(request).pipe(

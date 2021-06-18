@@ -40,8 +40,11 @@ export class LoginComponent implements OnInit {
   login(){
     this.login_pending = true;
     this._auth.login(this.form.value).subscribe(data => {
-      this.loggedin=true; 
-      this.router.navigate(['/']);    
+      setTimeout(()=>{
+        this.loggedin=true; 
+        this.router.navigate(['/']);
+      },750);    
+      
     },error => {
       this.loginerror = true;
     });

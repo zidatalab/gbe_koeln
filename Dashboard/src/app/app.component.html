@@ -7,14 +7,22 @@
       </button>
       <!-- <span>{{this.title}}</span> -->
       <span class="example-spacer"></span>
+      <div fxShow="true" fxHide.lt-sm="true">  
       <img src="./assets/branding/logo_koeln.png"
-      class="brandinglogo">
+      class="brandinglogo" >
       <a href="https://www.zi.de">
         <img src="https://ziwebstorage.blob.core.windows.net/appradar/assets/logo_zi_small_transparent.png"
-          class="brandinglogo">
-       
+          class="brandinglogo">       
       </a>
-
+      </div>
+      <div fxShow="false" fxShow.lt-sm="true">  
+        <img src="./assets/branding/logo_koeln.png"
+        class="brandinglogotiny" >
+        <a href="https://www.zi.de">
+          <img src="https://ziwebstorage.blob.core.windows.net/appradar/assets/logo_zi_small_transparent.png"
+            class="brandinglogotiny">       
+        </a>
+        </div>
     </mat-toolbar>
     <main>
       <section class="mat-typography">

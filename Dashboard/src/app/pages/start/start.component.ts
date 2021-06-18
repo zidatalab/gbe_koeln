@@ -14,11 +14,11 @@ export class StartComponent implements OnInit {
 
 
   constructor(private api: ApiService, private auth: AuthService) { }
-  metadata: any;
+  metadata=[];
   metadataok: boolean;
   mapdata: any;
   mapdatafor: string;
-  sortdata: any;
+  sortdata=[];
   level: any;
   levelvalues: any;
   subgroups: any;
@@ -55,13 +55,16 @@ export class StartComponent implements OnInit {
 
   setlevel(level, value) {
     this.levelsettings[level] = value;
+    this.mapdata=false;
     this.querydata();
   }
 
   updatemetadata() {
+    if (this.api.getmetadata("metadata")){
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
     this.geojson_available = this.api.getmetadata("geodata");
+    }
     if(this.metadata){
       if (this.metadata.length>0){
         this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
@@ -148,6 +151,9 @@ export class StartComponent implements OnInit {
           data => {
             this.mapdata = data;
             this.mapdatafor = this.levelsettings['levelvalues'];
+          },
+          error => {
+            this.mapdata=null;
           });
       }
     });

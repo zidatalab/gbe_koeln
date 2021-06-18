@@ -31,6 +31,7 @@ export class MapComponent implements OnInit {
   @Input() percent: boolean;
   @Output() clicked = new EventEmitter<string>();
 
+  mapok:boolean;
   clickedvalue: string;
   legend: any;
   map: any;
@@ -112,6 +113,7 @@ export class MapComponent implements OnInit {
   initMap(divid): void {
     // Init
     let mymap;
+    this.mapok = false;
     let colors = this.colorscale;
     let cutoffs = this.cutofflist;
     let thedata;
@@ -337,6 +339,7 @@ export class MapComponent implements OnInit {
       info.addTo(mymap);
 
     }
+    this.mapok=true;
 
   };
 

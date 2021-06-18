@@ -5,16 +5,16 @@
                 <h1>Login</h1>
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>E-Mail</mat-label>
-                    <input matInput type="email" placeholder="Email" name="email" formControlName='username' required>
+                    <input matInput type="email" placeholder="Email" name="email" formControlName='username' autocomplete="true" required>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Kennwort</mat-label>
-                    <input matInput type="password" name="current-password" formControlName='password' required>
+                    <input matInput type="password" name="current-password" formControlName='password' required autocomplete="true">
                 </mat-form-field>
 
                 <div *ngIf="!this.login_pending" fxLayout="row" fxLayoutGap="1rem" fxLayoutAlign="space-between">
                     <div>
-                        <button mat-raised-button color="primary" type='submit' [disabled]='!this.form.valid'>
+                        <button mat-raised-button color="primary" type='submit' [disabled]='!this.form.valid' >
                             Login
                         </button>
                     </div>
