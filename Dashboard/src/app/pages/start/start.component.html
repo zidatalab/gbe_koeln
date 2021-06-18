@@ -9,7 +9,10 @@
         <p *ngIf="!this.currentuser">
             Dieses Dashboard ist ein internes Informationsportal zur gesundheitlichen Lage der Bevölkerung Kölns. Bitte melden
             Sie sich an, um Zugriff auf die enthaltenen Informationen zu erhalten.</p>
-        <p *ngIf="this.metadata.length==0">
+        <p *ngIf="this.metadata.length==0 && !this.currentuser">
+            Es sind aktuell keine öffentlichen Informationen auf diesem Portal verfügbar.
+        </p>
+        <p *ngIf="this.metadata.length==0 && this.currentuser">
             Es sind keine Daten im System, bitte wenden Sie sich an einen Administrator.
         </p>
     </div>
@@ -71,7 +74,7 @@
         </p>
     </ng-container>
     </div>
-    <div *ngIf="this.data">
+    <div *ngIf="this.data.length>0">
         <h1>Ergebnisse</h1>
         <p
             *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
@@ -90,12 +93,13 @@
                     [colorscheme]="[this.api.makescale(3)[2]]" plottype="bar"></app-plot>
             </div>
         </ng-container>
+        <div class="minheight" *ngIf="this.data">
+            <p>
+                <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate"
+                    [outcomes_numeric]="this.data_number"></app-table>
+    
+            </p>
+        </div>
     </div>
-    <div class="minheight" *ngIf="this.data">
-        <p>
-            <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate"
-                [outcomes_numeric]="this.data_number"></app-table>
-
-        </p>
-    </div>
+   
 </div>

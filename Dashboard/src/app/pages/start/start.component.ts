@@ -39,16 +39,19 @@ export class StartComponent implements OnInit {
   ngOnInit(): void {
     this.colorsscheme = ["#e91e63"];
     this.mapdatafor = "";
+    this.data=[];
+    this.mapdata=[];
+    this.updatemetadata();
     this.auth.currentUser.subscribe(data => { this.currentuser = data; });
     if (this.metadataok) { this.querydata() }
     // Wait if no metadata and try again. Fixes logout behaviour
     else {
-      this.updatemetadata();
       setTimeout(() => {
+        this.updatemetadata();
         if (this.metadataok) {
           this.querydata()
         };
-      }, 750);
+      }, 1500);
     }
 
   }
