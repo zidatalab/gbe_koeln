@@ -294,9 +294,10 @@ export class AdminComponent implements OnInit {
     let test8 = true
     let test8problems = [];
     for (let tocheckvar of test8tocheck){
-      test8 = test8 && this.api.getValues(this.datafilearray,tocheckvar).filter(x => x!=null).length==test8datalen
-      if (this.api.getValues(this.datafilearray,tocheckvar).filter(x => x!=null).length!==test8datalen){
-        test8problems.push(tocheckvar);
+      let newlength = this.api.getValues(this.datafilearray,tocheckvar).filter(x => x!=null).filter(x => x!="").length+1
+      test8 = test8 && (newlength==test8datalen)
+      if (newlength!==test8datalen){
+        test8problems.push(" "+tocheckvar+" (n="+Math.abs( newlength-test8datalen)+")");
       }
     }
     if (!test8) {
