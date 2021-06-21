@@ -62,7 +62,7 @@ export class PrivateComponent implements OnInit {
     this.outcomes=this.api.filterArray(this.metadata,"topic","outcomes");
     this.determinants=this.api.filterArray(this.metadata,"topic","demography");
     this.levelvalues = this.api.filterArray(this.sortdata, "varname", this.level)[0]["values"].filter(x => this.geojson_available.includes(x));;
-    this.currentlevel=this.levelvalues[this.levelvalues.length-1];
+    this.currentlevel=this.levelvalues[0];
     this.newlevel(this.currentlevel);
     this.currentregion="";
   }
