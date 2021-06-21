@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-
+import { version } from 'src/../package.json';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -35,10 +35,13 @@ export class AdminComponent implements OnInit {
   areavalues: any;
   currentuser: any;
   allmetadata: any;
+  datafilearray:any;
+  backenddoc:any;
   uploadarea: string;
   uploadareaid: string;
   topicoptions = ['ordering', 'subgroups', 'demography', 'outcomes']
   typeoptions = ['level', 'levelid', 'group', 'rate', 'number']
+  appversion:string = version;
   ngOnInit(): void {
     this.currentuser = this.auth.getUserDetails();
     this.updateuserlist();
@@ -48,7 +51,9 @@ export class AdminComponent implements OnInit {
     let currentmetadata = this.api.filterArray(this.allmetadata, 'type', 'level')[0];
 
     setTimeout(() => { this.areavalues = this.api.filterArray(this.api.getmetadata("sortdata"), 'varname', currentmetadata["varname"])[0]['values']; }, 0);
-
+    this.api.getTypeRequest('openapi.json').subscribe(
+      data=>{this.backenddoc=data;console.log(this.backenddoc['info']['version'])});
+    
   }
 
   //File upload function
@@ -59,12 +64,14 @@ export class AdminComponent implements OnInit {
     reader.readAsText(file);
     reader.onload = (e) => {
       this.datafile = reader.result;
+      this.datafilearray = this.csvToDataArray(this.datafile);
+      console.log(this.datafilearray );
       let varnames = this.datafile.split('\n').map(data => data.split(','))[0];
       let newmetadata = [];
       let index = 0;
       for (let varname of varnames) {
         index = index + 1;
-        let topush = { 'varname': varname, 'topic': "", 'description': "", "allforlevel": '',  "publiclevels": [] , "public" : false }
+        let topush = { 'varname': varname.replace(/(\r\n|\n|\r)/gm, ""), 'topic': "", 'description': "", "allforlevel": '',  "publiclevels": [] , "public" : false }
         if (index == 1) {
           topush["topic"] = "ordering";
           topush["type"] = "level";         
@@ -82,6 +89,7 @@ export class AdminComponent implements OnInit {
         newmetadata.push(topush);
 
       }
+      console.log(newmetadata);
       this.metadone = false;
       setTimeout(() => {
         this.metadatafile = newmetadata;
@@ -207,7 +215,7 @@ export class AdminComponent implements OnInit {
     this.uploadres = "pending";
     this.uploaderror = null;
     if (this.dataintend == 'dataupload') {
-      this.api.postTypeRequest('upload_data/?replacedata=' + this.replacedata, this.myDataUploadform).subscribe(data => {
+      this.api.postTypeRequestnotimeout('upload_data/?replacedata=' + this.replacedata, this.myDataUploadform).subscribe(data => {
         this.uploadres = "success";
         setTimeout(() => {
           this.resetall();
@@ -219,7 +227,7 @@ export class AdminComponent implements OnInit {
         })
     }
     if (this.dataintend == 'geodataupload') {
-      this.api.postTypeRequest('upload_geodata/', this.myDataUploadform).subscribe(data => {
+      this.api.postTypeRequestnotimeout('upload_geodata/', this.myDataUploadform).subscribe(data => {
         this.uploadres = "success";
         setTimeout(() => {
           this.resetall();
@@ -274,8 +282,27 @@ export class AdminComponent implements OnInit {
       err.push("No public levels not for public level var specified")
     }
 
-    this.datacheck = err;
-    console.log(test6data);
+    let test7 = this.metadatafile.length == this.api.getValues(this.metadatafile,"varname").length
+    if (!test7) {
+      err.push("Lengths not matching, data cols:"+this.api.getValues(this.metadatafile,"varname").length+", meta vars:"+this.metadatafile.length)
+    }
+
+    // Check if no null values in topics==ordering or topics==subgroups
+    let test8tocheck = this.api.getValues(this.api.filterArray(this.metadatafile,"topic","ordering"),"varname").concat(
+      this.api.getValues(this.api.filterArray(this.metadatafile,"topic","subgroups"),"varname"));
+    let test8datalen = this.datafilearray.length;
+    let test8 = true
+    let test8problems = [];
+    for (let tocheckvar of test8tocheck){
+      test8 = test8 && this.api.getValues(this.datafilearray,tocheckvar).filter(x => x!=null).length==test8datalen
+      if (this.api.getValues(this.datafilearray,tocheckvar).filter(x => x!=null).length!==test8datalen){
+        test8problems.push(tocheckvar);
+      }
+    }
+    if (!test8) {
+      err.push("Missings in Ordering or Subgroup vars: "+test8problems.toString())
+    }
+    this.datacheck = err;   
   }
 
   addusernow() {
@@ -353,5 +380,21 @@ export class AdminComponent implements OnInit {
     const blob = new Blob([csvContent], { type: 'text/csv' });
     return blob;
   }
+
+  csvToDataArray(str, delimiter = ",") {
+    const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
+    const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+    const arr = rows.map(function (row) {
+      const values = row.split(delimiter);
+      const el = headers.reduce(function (object, header, index) {
+        object[header] = values[index];
+        return object;
+      }, {});
+      return el;
+    });
+    return arr;
+  }
+
+ 
 
 }

@@ -10,7 +10,7 @@ import * as chroma from "chroma-js";
 export class ApiService { 
  
  
-  public REST_API_SERVER = "https://zidashboardapi.azurewebsites.net/";//"https://zidashboardapi.azurewebsites.net/";  //"http://localhost:8000/" //
+  public REST_API_SERVER = "http://localhost:8000/" ;// "https://zidashboardapi.azurewebsites.net/";  "http://localhost:8000/" //
   public REST_API_SERVER_CLIENTID = "2021_06_gbe_koeln"; 
   public primarycolor = "e1141c"; // "#e91e63";
   public accentcolor = "3714e1";
@@ -21,7 +21,7 @@ export class ApiService {
   public  getTypeRequest(url) { 
     return this.httpClient.get(this.REST_API_SERVER+url).pipe(map(res => { 
       return res; 
-    })).pipe(timeout(1500),retry(5)); 
+    })).pipe(timeout(3500),retry(5)); 
   } 
  
   public  postTypeRequest(url, payload) { 
@@ -30,6 +30,17 @@ export class ApiService {
     })).pipe(timeout(1500),retry(3)); ; 
   } 
 
+  public  getTypeRequestnotimeout(url) { 
+    return this.httpClient.get(this.REST_API_SERVER+url).pipe(map(res => { 
+      return res; 
+    })).pipe(retry(1)); 
+  } 
+ 
+  public  postTypeRequestnotimeout(url, payload) { 
+    return this.httpClient.post(this.REST_API_SERVER+url, payload).pipe(map(res => { 
+      return res; 
+    })).pipe(retry(1)); ; 
+  } 
   
   
 // Specific Requests

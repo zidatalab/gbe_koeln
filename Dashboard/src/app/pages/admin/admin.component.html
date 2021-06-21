@@ -1,5 +1,6 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem">
     <h1 ngClass.lt-sm="mobileheading">Administration</h1>
+    <p class="mat-caption greycolor"> Frontend Version: {{this.appversion}}, Backend Version: {{this.backenddoc['info']['version']}}</p>
     <div *ngIf="!this.adduser && !this.adddata">
         <h2>Nutzerliste</h2>
         <mat-list>
@@ -151,7 +152,6 @@
                         </span></h3>
                 </div>
                 <div *ngIf="!this.geojsonfile" fxFlex.lt-md=100 fxFlex=50 fxLayout="column">
-
                     <div fxFlex=100>
                         <mat-form-field appearance="outline" *ngIf="true">
                             <mat-label>Gebiet für Geodatendatei festlegen</mat-label>
@@ -170,17 +170,18 @@
                             (click)="dataInput.click()">Daten
                             Auswählen</button>
                     </div>
-                    Uploadinfo: {{this.geouploadinfo | json}}
+                   
                 </div>
                 <div *ngIf="this.geojsonfile" fxLayout="column" fxLayoutGap="10px">
                     <div fxFlex=100>
                         <h3><strong>2. GEOJSON beschreiben</strong> <span *ngIf="this.geodatafile">
                                 <mat-icon color="primary">check_circle</mat-icon>
-                            </span></h3>
+                            </span></h3>                            
                     </div>
                     <div fxFlex=100>
+                        <p>Die Datei hat {{this.geojsonfile['features'].length | number}} Regionen.</p>
                         <mat-form-field appearance="outline" *ngIf="true">
-                            <mat-label>Wie lautet die Bezeichngung Regionen im geojson?</mat-label>
+                            <mat-label>Wie lautet die Bezeichnung Regionen im geojson?</mat-label>
                             <mat-select [(value)]="this.uploadareaid">
                                 <mat-option *ngFor="let option of this.areafeatures" [value]="option">{{option}}
                                 </mat-option>
@@ -356,4 +357,5 @@
             </mat-card>
         </div>
     </div>
+   
 </div>
