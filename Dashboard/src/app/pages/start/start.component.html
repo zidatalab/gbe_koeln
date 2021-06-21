@@ -76,15 +76,15 @@
     </div>
     <div *ngIf="this.data.length>0">
         <h1>Ergebnisse</h1>
-        <p
+        <div style="min-height: 450px;"
             *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
-            Karte
-            <app-map [containername]="'mapdiv'" [data]="this.data" [basemap]="this.mapdata" [bins]="5"
+            <app-map *ngIf="this.mapdata['features'].length>0 && this.data.length>0" [containername]="'mapdiv'" [data]="this.data" [basemap]="this.mapdata" [bins]="5"
                 [id]="this.levelid" opacity=.8 Zoom=9 [colorscale]="this.colorsscheme" [percent]="true"
                 [feature]="this.levelsettings['outcomes']"></app-map>
             
-        </p>
-        <ng-container *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.data ">
+            
+    </div>
+        <ng-container *ngIf="this.levelsettings['levelvalues']!==this.levelvalues[0] && this.data ">
             <div class="minheight">
                 <h2>Rangfolge der Regionen</h2>
                 <app-plot *ngIf="this.data.length<200" [(data)]="this.data"

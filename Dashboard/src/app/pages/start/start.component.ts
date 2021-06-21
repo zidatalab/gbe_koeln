@@ -58,7 +58,6 @@ export class StartComponent implements OnInit {
 
   setlevel(level, value) {
     this.levelsettings[level] = value;
-    this.mapdata=false;
     this.querydata();
   }
 
