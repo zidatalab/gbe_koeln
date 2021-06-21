@@ -56,6 +56,13 @@ export class StartComponent implements OnInit {
 
   }
 
+  ngOnDestroy(){
+    this.data=[];
+    this.mapdata=[];
+    
+    }
+
+
   setlevel(level, value) {
     this.levelsettings[level] = value;
     this.querydata();

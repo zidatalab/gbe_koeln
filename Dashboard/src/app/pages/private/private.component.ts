@@ -47,6 +47,14 @@ export class PrivateComponent implements OnInit {
     setTimeout(()=>{this.getregionandata();},750);
   }
 
+  ngOnDestroy(){
+    this.regiondata={};
+    this.regressiondata=[];
+    this.mapdata=[];
+    this.overalldata={};
+    }
+
+
   updatesortinfo(){
     this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
     this.level = this.api.filterArray(this.metadata, "type", "level")[0]["varname"];

@@ -56,6 +56,13 @@ export class AdminComponent implements OnInit {
     
   }
 
+  ngOnDestroy(){
+    this.datafile = [];
+    this.metadatafile = [];
+    this.datafilearray = [];
+    
+    }
+
   //File upload function
   changeListener(event) {
     let files = event.target.files;
