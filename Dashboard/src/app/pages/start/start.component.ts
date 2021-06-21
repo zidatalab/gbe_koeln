@@ -132,11 +132,13 @@ export class StartComponent implements OnInit {
     }
     this.api.postTypeRequest('get_data/', query).subscribe(data => {
       this.datakeys = Object.keys(data["data"][0]);
+      this.data = data["data"] ;
+      console.log('n:',this.data.length);
       const index = this.datakeys.indexOf(this.level);
       if (index > -1) {
         this.datakeys.splice(index, 1);
       }
-      setTimeout(() => { this.data = data["data"] 
+      setTimeout(() => { 
       if (outcomeinfo == 'rate') {
         this.data_number = [];
         this.data_rate = [(this.levelsettings["outcomes"])];

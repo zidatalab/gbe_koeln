@@ -30,7 +30,6 @@ export class AppComponent {
         this.currentuser = data;
         this.loginstatus = true;
         this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];      
-        this._auth.refreshToken();
         setTimeout(()=>{this.autorefreshdata();},1000);    
       }
       else {

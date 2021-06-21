@@ -7,7 +7,8 @@
             <h1>Kleinräumige GBE der Stadt Köln</h1>
         </div>
         <p *ngIf="!this.currentuser">
-            Dieses Dashboard ist ein internes Informationsportal zur gesundheitlichen Lage der Bevölkerung Kölns. Bitte melden
+            Dieses Dashboard ist ein internes Informationsportal zur gesundheitlichen Lage der Bevölkerung Kölns. Bitte
+            melden
             Sie sich an, um Zugriff auf die enthaltenen Informationen zu erhalten.</p>
         <p *ngIf="this.metadata.length==0 && !this.currentuser">
             Es sind aktuell keine öffentlichen Informationen auf diesem Portal verfügbar.
@@ -20,86 +21,84 @@
 
 
     <div *ngIf="this.metadata">
-        <ng-container *ngIf="this.metadata.length>0" >
-        <h1>Auswahl</h1>
-        <h3><strong>Regionen</strong></h3>
-        <p>
-            <mat-chip-list>
-                <mat-chip (click)="this.setlevel('levelvalues',item);" *ngFor="let item of this.levelvalues"
-                    [selected]="(this.levelsettings['levelvalues']==item)" color="primary"
-                    [disabled]="this.levelsettings['subgroups']!='Keine'">
-                    {{item}}<span *ngIf="this.geojson_available.indexOf(item)>=0">
-                        <mat-icon class="primarycolor flagicon">map</mat-icon>
-                    </span>
-                </mat-chip>
-            </mat-chip-list>
-        </p>
-        <ng-container>
-            <h3><strong>Subgruppen</strong></h3>
+        <ng-container *ngIf="this.metadata.length>0">
+            <h1>Auswahl</h1>
+            <h3><strong>Regionen</strong></h3>
+            <p>
+                <mat-chip-list>
+                    <mat-chip (click)="this.setlevel('levelvalues',item);" *ngFor="let item of this.levelvalues"
+                        [selected]="(this.levelsettings['levelvalues']==item)" color="primary"
+                        [disabled]="this.levelsettings['subgroups']!='Keine'">
+                        {{item}}<span *ngIf="this.geojson_available.indexOf(item)>=0">
+                            <mat-icon class="primarycolor flagicon">map</mat-icon>
+                        </span>
+                    </mat-chip>
+                </mat-chip-list>
+            </p>
+            <ng-container>
+                <h3><strong>Subgruppen</strong></h3>
+                <p>
+                    <mat-chip-list>
+                        <mat-chip-list>
+                            <ng-container *ngFor="let item of this.subgroups">
+                                <mat-chip (click)="this.setlevel('subgroups',item);"
+                                    [disabled]="this.levelsettings['levelvalues']!==this.levelvalues[0]"
+                                    [selected]="(this.levelsettings['subgroups']==item)" color="primary">
+                                    {{item}}
+                                </mat-chip>
+                            </ng-container>
+                        </mat-chip-list>
+                    </mat-chip-list>
+                </p>
+            </ng-container>
+            <h3><strong>Outcomes</strong></h3>
             <p>
                 <mat-chip-list>
                     <mat-chip-list>
-                        <ng-container *ngFor="let item of this.subgroups">
-                            <mat-chip (click)="this.setlevel('subgroups',item);"
-                                [disabled]="this.levelsettings['levelvalues']!==this.levelvalues[0]"
-                                [selected]="(this.levelsettings['subgroups']==item)" color="primary">
-                                {{item}}
-                            </mat-chip>
-                        </ng-container>
+                        <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes"
+                            [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                            {{item}}
+                        </mat-chip>
+                    </mat-chip-list>
+                </mat-chip-list>
+            </p>
+            <h3><strong>Determinanten</strong></h3>
+            <p>
+                <mat-chip-list>
+                    <mat-chip-list>
+                        <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.determinants"
+                            [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                            {{item}}
+                        </mat-chip>
                     </mat-chip-list>
                 </mat-chip-list>
             </p>
         </ng-container>
-        <h3><strong>Outcomes</strong></h3>
-        <p>
-            <mat-chip-list>
-                <mat-chip-list>
-                    <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes"
-                        [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                        {{item}}
-                    </mat-chip>
-                </mat-chip-list>
-            </mat-chip-list>
-        </p>
-        <h3><strong>Determinanten</strong></h3>
-        <p>
-            <mat-chip-list>
-                <mat-chip-list>
-                    <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.determinants"
-                        [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                        {{item}}
-                    </mat-chip>
-                </mat-chip-list>
-            </mat-chip-list>
-        </p>
-    </ng-container>
     </div>
-    <div *ngIf="this.data.length>0">
+    <div *ngIf="this.data.length>0" fxLayout="column">
         <h1>Ergebnisse</h1>
-        <div style="min-height: 450px;"
-            *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
-            <app-map *ngIf="this.mapdata['features'].length>0 && this.data.length>0" [containername]="'mapdiv'" [data]="this.data" [basemap]="this.mapdata" [bins]="5"
-                [id]="this.levelid" opacity=.8 Zoom=9 [colorscale]="this.colorsscheme" [percent]="true"
-                [feature]="this.levelsettings['outcomes']"></app-map>
-            
-            
-    </div>
-        <ng-container *ngIf="this.levelsettings['levelvalues']!==this.levelvalues[0] && this.data ">
-            <div class="minheight">
+        <div class="minheight"
+            *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid && false">
+            <app-map *ngIf="this.mapdata['features'].length>0 && this.data.length>0" [containername]="'mapdiv'"
+                [data]="this.data" [basemap]="this.mapdata" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=9
+                [colorscale]="this.colorsscheme" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>
+
+
+        </div>
+        <div class="minheight" *ngIf="this.levelsettings['levelvalues']!==this.levelvalues[0] && this.data.length<100 ">
+            <div c>
                 <h2>Rangfolge der Regionen</h2>
-                <app-plot *ngIf="this.data.length<200" [(data)]="this.data"
-                    [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }" [xvalue]="this.levelid" [percent]="true"
-                    [sort]="true" [outcomes]="[this.levelsettings['outcomes']]"
+                <app-plot [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }" [xvalue]="this.levelid"
+                    [percent]="true" [sort]="true" [outcomes]="[this.levelsettings['outcomes']]"
                     [colorscheme]="[this.api.makescale(3)[2]]" plottype="bar"></app-plot>
             </div>
-        </ng-container>
+        </div>
         <div class="minheight" *ngIf="this.data">
-            <p>
+            
                 <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate"
                     [outcomes_numeric]="this.data_number"></app-table>
-    
-            </p>
+            
         </div>
     </div>
-   
+
 </div>
