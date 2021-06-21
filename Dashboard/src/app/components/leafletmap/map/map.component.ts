@@ -42,6 +42,8 @@ export class MapComponent implements OnInit {
   attributions = ['Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     '©OpenStreetMap, ©CartoDB'];
   constructor(private http: HttpClient, private renderer: Renderer2, private api: ApiService) { }
+  
+  
   ngOnInit(): void {
     // Init vars
     this.resetprops();
@@ -54,6 +56,7 @@ export class MapComponent implements OnInit {
     }
   }
 
+  
 
   ngOnChanges(changes: any) {
     // On any change replace the map-container
@@ -72,6 +75,12 @@ export class MapComponent implements OnInit {
 
 
   }
+
+  ngOnDestroy(){
+    this.map = null;
+    
+    }
+
 
   resetprops() {
     if (!this.containername) { this.containername = "mapdiv" + Math.round(Math.random() * 1000).toString() + "_" + Math.round(Math.random() * 1000).toString(); };

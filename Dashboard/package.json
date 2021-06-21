@@ -1,6 +1,6 @@
 {
   "name": "GBE Koeln",
-  "version": "0.9.6",
+  "version": "0.9.61",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

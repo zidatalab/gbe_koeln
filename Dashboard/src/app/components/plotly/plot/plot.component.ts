@@ -84,7 +84,7 @@ export class PlotComponent implements OnInit {
         annotations: this.annotations
       };
       if (this.percent){
-        this.plotlayout.yaxis.tickformat = ',.0%';
+        this.plotlayout.yaxis.tickformat = ',.1%';
       }
     }
 
@@ -99,7 +99,7 @@ export class PlotComponent implements OnInit {
         annotations: this.annotations
       };
       if (this.percent){
-        this.plotlayout.yaxis.tickformat = ',.0%';
+        this.plotlayout.yaxis.tickformat = ',.1%';
       }
     }
 
@@ -137,10 +137,10 @@ export class PlotComponent implements OnInit {
         margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       };
       if (this.percent){
-        this.plotlayout.yaxis.tickformat = ',.0%';
+        this.plotlayout.yaxis.tickformat = ',.1%';
       }
       if (this.percentx){
-        this.plotlayout.xaxis.tickformat = ',.0%';
+        this.plotlayout.xaxis.tickformat = ',.1%';
       }
     }
 

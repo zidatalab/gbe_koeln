@@ -162,7 +162,7 @@
                     <mat-label>Variablenauswahl</mat-label>
                     <mat-select [(value)]="this.determinant" (selectionChange)="this.getregionandata()">
                         <mat-option value="">Keine Auswahl</mat-option><br>
-                        <ng-container *ngFor="let item of this.outcomes">
+                        <ng-container *ngFor="let item of this.outcomes.concat(this.determinants)">
                             <ng-container *ngIf="item.varname!=this.outcome">
                                 <mat-option [value]="item.varname">{{item.varname}}</mat-option><br>
                             </ng-container>
@@ -199,7 +199,7 @@
                 <h2>Zusammenhangsanalyse</h2>
                 <h3>Kontrollvariablen</h3>
                 <mat-chip-list>
-                    <ng-container *ngFor="let item of this.outcomes">
+                    <ng-container *ngFor="let item of this.outcomes.concat(this.determinants)">
                         <ng-container *ngIf="[this.determinant,this.outcome].indexOf(item.varname)<0 ">
                             <mat-chip *ngIf="this.controls.indexOf(item.varname)<0 " color="primary" [selected]="false"
                                 (click)="this.controls.push(item.varname);this.getregresults();">
