@@ -56,7 +56,6 @@ export class PlotComponent implements OnInit {
   
 
   ngOnChanges(changes: any) {
-    //console.log(changes);
     setTimeout(()=>{this.make_plot()},0);
   }
 

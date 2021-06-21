@@ -52,7 +52,7 @@ export class AdminComponent implements OnInit {
 
     setTimeout(() => { this.areavalues = this.api.filterArray(this.api.getmetadata("sortdata"), 'varname', currentmetadata["varname"])[0]['values']; }, 0);
     this.api.getTypeRequest('openapi.json').subscribe(
-      data=>{this.backenddoc=data;console.log(this.backenddoc['info']['version'])});
+      data=>{this.backenddoc=data;});
     
   }
 
@@ -64,9 +64,17 @@ export class AdminComponent implements OnInit {
     reader.readAsText(file);
     reader.onload = (e) => {
       this.datafile = reader.result;
-      this.datafilearray = this.csvToDataArray(this.datafile);
-      console.log(this.datafilearray );
+      let datalines = this.datafile.split('\n');
       let varnames = this.datafile.split('\n').map(data => data.split(','))[0];
+      let newvarnames = [];
+      for (let thevar of varnames){
+        let topush = thevar.replace('.',"_");
+        newvarnames.push(topush);
+      }
+      datalines.shift();
+      this.datafile = [newvarnames.join(',')].concat(datalines).join('\n');
+      varnames = newvarnames;
+      this.datafilearray = this.csvToDataArray(this.datafile);
       let newmetadata = [];
       let index = 0;
       for (let varname of varnames) {
@@ -89,7 +97,6 @@ export class AdminComponent implements OnInit {
         newmetadata.push(topush);
 
       }
-      console.log(newmetadata);
       this.metadone = false;
       setTimeout(() => {
         this.metadatafile = newmetadata;
@@ -254,8 +261,8 @@ export class AdminComponent implements OnInit {
 
       if (item.topic == "ordering" && ['levelid', 'level'].indexOf(item.type) >= 0) { test1counter = test1counter + 1; }
       if (item.topic == "subgroups" && item.type !== 'group') { item.type = 'group'; }
-      if (item.topic == "outcomes" && ['rate', 'number'].indexOf(item.type) > 0) { test3 = false; }
-      if (item.topic == "demography" && ['rate', 'number'].indexOf(item.type) > 0) { test4 = false; }
+      if (item.topic == "outcomes" && ['rate', 'number'].indexOf(item.type) < 0) { test3 = false; }
+      if (item.topic == "demography" && ['rate', 'number'].indexOf(item.type) < 0) { test4 = false; }
     }
     if (test1counter !== 2) {
       err.push("Level, and levelid missing or not labelled as topic.")

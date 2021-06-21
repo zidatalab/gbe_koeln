@@ -33,7 +33,7 @@ export class StartComponent implements OnInit {
   geojson_available: any;
   colorsscheme: any;
   levelid:string;
-
+  datakeystable:any;
   
 
   ngOnInit(): void {
@@ -132,8 +132,8 @@ export class StartComponent implements OnInit {
     }
     this.api.postTypeRequest('get_data/', query).subscribe(data => {
       this.datakeys = Object.keys(data["data"][0]);
+      this.datakeystable = Object.keys(data["data"][0]);
       this.data = data["data"] ;
-      console.log('n:',this.data.length);
       const index = this.datakeys.indexOf(this.level);
       if (index > -1) {
         this.datakeys.splice(index, 1);
