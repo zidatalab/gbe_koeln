@@ -48,10 +48,11 @@ export class PrivateComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    this.regiondata={};
-    this.regressiondata=[];
-    this.mapdata=[];
-    this.overalldata={};
+    this.regiondata=null;
+    this.andata=null;
+    this.regressiondata=null;
+    this.mapdata=null;
+    this.overalldata=null;
     }
 
 
@@ -122,12 +123,13 @@ export class PrivateComponent implements OnInit {
       };
       query["groupinfo"][this.level] = this.currentlevel;
       query["showfields"]=[this.outcome,this.determinant];
+      this.andata=null;
       this.api.postTypeRequest('get_data/', query).subscribe(data => 
-        {let res = data;this.andata=res['data'];});
-        this.getregresults(); 
+        {let res = data;this.andata=res['data'];});       
      }
   }
   getregresults(){
+    if (this.outcome && this.determinant){
     let anquery ={
       "client_id": this.api.REST_API_SERVER_CLIENTID,
       "groupinfo": {},
@@ -136,10 +138,11 @@ export class PrivateComponent implements OnInit {
        "controls": this.controls
      };
      anquery["groupinfo"][this.level] = this.currentlevel;
+     this.regressiondata=null;
      this.api.postTypeRequest('analytics/regression/', anquery).subscribe(data => 
        {let res = data;this.regressiondata=res;
         //console.log(this.regressiondata);
       }); 
-   
+    };
   }
 }

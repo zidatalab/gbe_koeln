@@ -23,6 +23,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor-service.service';
 import { PrivateComponent } from './pages/private/private.component';
 import { AdminComponent } from './pages/admin/admin.component' 
+import { ReplacePipe } from './services/replace_pipe';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -39,7 +40,8 @@ registerLocaleData(locales, 'de');
     LoginComponent,
     ProfileComponent,
     PrivateComponent,
-    AdminComponent
+    AdminComponent,
+    ReplacePipe
     
   ],
   imports: [

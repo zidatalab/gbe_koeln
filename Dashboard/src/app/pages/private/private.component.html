@@ -46,7 +46,7 @@
                     <ng-container *ngFor="let item of this.metadata">
                         <div *ngIf="item.topic=='demography'" fxFlexAlign="start" fxLayout="row wrap"
                             fxLayoutGap="10px">
-                            <div fxFlex=60><strong>{{item.varname}}</strong></div>
+                            <div fxFlex=60><strong>{{item.varname  | replace : '[_]' : '.'}}</strong></div>
                             <div fxFlex fxLayout="row" fxLayoutGap="10px">
                                 <div fxFlex=50 fxFlexAlign="start start">
                                     <span class="primarycolor" *ngIf="item.type=='rate'">{{this.regiondata[item.varname]
@@ -95,8 +95,8 @@
                 <div class="add-margin">
 
                     <ng-container *ngFor="let item of this.metadata">
-                        <div *ngIf="item.topic=='outcomes'" fxFlexAlign="start" fxLayout="row wrap" fxLayoutGap="10px">
-                            <div fxFlex=60><strong>{{item.varname}}</strong></div>
+                        <div *ngIf="item.topic=='outcomes'" fxFlexAlign="start" fxLayout="row wrap" fxLayoutGap="15px">
+                            <div fxFlex=60><strong>{{item.varname  | replace : '[_]' : '.'}}</strong></div>
                             <div fxFlex fxLayout="row" fxLayoutGap="10px">
                                 <div fxFlex=50 fxFlexAlign="start start">
                                     <span class="primarycolor" *ngIf="item.type=='rate'">{{this.regiondata[item.varname]
@@ -135,9 +135,9 @@
         <div *ngIf="this.levelvalues">
             <mat-chip-list>
                 <ng-container *ngFor="let item of this.levelvalues">
-                    <mat-chip (click)="this.currentlevel=item;this.getregionandata();"
+                    <mat-chip (click)="this.currentlevel=item;this.getregionandata();this.getregresults();"
                         [selected]="this.currentlevel==item" color="primary">
-                        {{item}}
+                        {{item  | replace : '[_]' : '.'}}
                     </mat-chip>
                 </ng-container>
             </mat-chip-list>
@@ -147,10 +147,10 @@
                 <h4><strong>Gesundheitsindikator</strong>:</h4>
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Variablenauswahl</mat-label>
-                    <mat-select [(value)]="this.outcome" (selectionChange)="this.getregionandata()">
+                    <mat-select [(value)]="this.outcome" (selectionChange)="this.getregionandata();this.getregresults();">
                         <mat-option value="">Keine Auswahl</mat-option><br>
                         <ng-container *ngFor="let item of this.outcomes">
-                            <mat-option [value]="item.varname"><strong>{{item.varname}}</strong></mat-option><br>
+                            <mat-option [value]="item.varname"><strong>{{item.varname  | replace : '[_]' : '.'}}</strong></mat-option><br>
                         </ng-container>
                     </mat-select>
                 </mat-form-field>
@@ -160,11 +160,11 @@
                 <h4><strong>Erklärende Variable</strong>:</h4>
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Variablenauswahl</mat-label>
-                    <mat-select [(value)]="this.determinant" (selectionChange)="this.getregionandata()">
+                    <mat-select [(value)]="this.determinant" (selectionChange)="this.getregionandata();this.getregresults();">
                         <mat-option value="">Keine Auswahl</mat-option><br>
                         <ng-container *ngFor="let item of this.outcomes.concat(this.determinants)">
                             <ng-container *ngIf="item.varname!=this.outcome">
-                                <mat-option [value]="item.varname">{{item.varname}}</mat-option><br>
+                                <mat-option [value]="item.varname">{{item.varname  | replace : '[_]' : '.'}}</mat-option><br>
                             </ng-container>
                         </ng-container>
                     </mat-select>
@@ -174,7 +174,7 @@
             </div>
         </div>
         <div *ngIf="this.andata" fxLayout="column" fxLayoutAlign="space-between">
-            <div fxLayout="row wrap">
+            <div fxLayout="row wrap" *ngIf="this.andata">
                 <div fxFlex=100>
                 <h3>Werteverteilungen</h3>
                 </div>
@@ -190,39 +190,75 @@
                 </div>
             </div>
             <div class="minsize" *ngIf="this.andata" fxFlex=100 fxFlex.lt-md=100>
-                <h3>Allgemeiner Zusammenhang</h3>
+                <h3>Streudiagramm</h3>
                 <app-plot [(data)]="this.andata" [xvalue]="this.determinant" [id]="this.levelid"
                     [outcomes]="[this.outcome]" [percent]="true" [percentx]="true"
+                    [xtitle]="this.determinant" [ytitle]="this.outcome+'<br>'" 
                     [colorscheme]="[this.api.makescale(3)[2]]" plottype="scatter"></app-plot>
             </div>
-            <div  >
+            <div  *ngIf="this.andata">
                 <h2>Zusammenhangsanalyse</h2>
-                <h3>Kontrollvariablen</h3>
                 <mat-chip-list>
                     <ng-container *ngFor="let item of this.outcomes.concat(this.determinants)">
                         <ng-container *ngIf="[this.determinant,this.outcome].indexOf(item.varname)<0 ">
                             <mat-chip *ngIf="this.controls.indexOf(item.varname)<0 " color="primary" [selected]="false"
                                 (click)="this.controls.push(item.varname);this.getregresults();">
-                                {{item.varname}}
+                                {{item.varname  | replace : '[_]' : '.'}}
                             </mat-chip>
                             <mat-chip *ngIf="this.controls.indexOf(item.varname)>=0 " color="primary" [selected]="true"
                                 (click)="this.removeoutcome(item.varname);this.getregresults();">
-                                {{item.varname}}
+                                {{item.varname  | replace : '[_]' : '.'}}
                             </mat-chip>
                         </ng-container>
                     </ng-container>
                 </mat-chip-list>
             </div>
-            <div>
-                <h3>Vorhergesagte Werte</h3>
-                <div class="minsize">
+            <div class="add-margin" *ngIf="this.andata && this.regressiondata">
+                <h3>Ergenisse der Zusammenhangsanalyse</h3>
+                <div class="minsize" *ngIf="this.regressiondata['data']">
                     <app-plot [data]="this.regressiondata['data']"
                     [xvalue]="[this.determinant]" [outcomes]="['base','controlled']" [percent]="true"
-                    [colorscheme]="this.api.makescale(2)" 
+                    [colorscheme]="this.api.makescale(2)" [outcomelabels]="['allgemeiner Zusammenhang','mit Kontrollvariablen']" 
+                    [xtitle]="this.determinant" [ytitle]="this.outcome+'<br>'" 
                     plottype="lines"></app-plot>
                 </div>
-                <div>
+                <div class="add-margin" *ngIf="this.regressiondata.params">
+                    <mat-card style="max-width: 450px;">
+                    <h2>Modellzusammenfassung</h2>
+                    <div class="add-margin">
+                    <h3>Parameter</h3>
+                    <div  fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between">
+                        <div fxFlex=60>
+                            Variable
+                        </div>
+                        <div fxFlex=15>
+                            Effekt
+                        </div>
+                        <div fxFlex=15>
+                            P-Wert
+                        </div>
+                    </div>
+                    <ng-container *ngFor="let theparam of [this.determinant].concat(this.controls)">
+                        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between">
+                            <div fxFlex=60>
+                                <strong>{{theparam}}</strong>
+                            </div>
+                            <div fxFlex=15>
+                                <span class="primarycolor"><strong>{{this.regressiondata.params[theparam] |  number: '1.3-3'}}</strong></span>
+                            </div>
+                            <div fxFlex=15>
+                                <span *ngIf="this.regressiondata.pvalues[theparam]<.05"><strong>{{this.regressiondata.pvalues[theparam] |  number: '1.3-3' }}</strong></span>
+                                <span *ngIf="this.regressiondata.pvalues[theparam]>=.05">{{this.regressiondata.pvalues[theparam] |  number: '1.3-3' }}</span>
+                            </div>
+                        </div>
 
+                    </ng-container>
+                    </div>
+                    <div class="add-margin">
+                    <p>Modellgüte R<sup>2</sup>: <span class="primarycolor"><strong>{{this.regressiondata.r2 | percent}}</strong></span></p>
+                    <p>Beobachtungen: n=<span class="primarycolor"><strong>{{this.regressiondata.data.length | number}}</strong></span></p>
+                    </div>
+                    </mat-card>
                 </div>
             </div>
         </div>

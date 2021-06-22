@@ -57,7 +57,7 @@
                     <mat-chip-list>
                         <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes"
                             [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                            {{item}}
+                            {{item | replace : '[_]' : '.'  }}
                         </mat-chip>
                     </mat-chip-list>
                 </mat-chip-list>
@@ -78,7 +78,7 @@
     <div *ngIf="this.data.length>0" fxLayout="column">
         <h1>Ergebnisse</h1>
         <div class="minheight"
-            *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
+            *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid && false">
             <app-map *ngIf="this.mapdata['features'].length>0 && this.data.length>0" [containername]="'mapdiv'"
                 [data]="this.data" [basemap]="this.mapdata" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=9
                 [colorscale]="this.colorsscheme" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>

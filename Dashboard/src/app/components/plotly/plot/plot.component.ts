@@ -11,7 +11,7 @@ export class PlotComponent implements OnInit {
   @Input() xvalue: string;
   @Input() colorby: string;
   @Input() outcomes: any;
-  @Input() outcomelabels: any;
+  @Input() outcomelabels = [];
   @Input() plottype: String; // ["bar","hbar","tsline"]; 
   @Input() customdata: any;
   @Input() customconfig: any;
@@ -31,6 +31,8 @@ export class PlotComponent implements OnInit {
   @Input() plotcaption = "";
   @Input() n_yticks = 8;
   @Input() xtickformat = "";
+  @Input() xtitle = "";
+  @Input() ytitle = "";
   @Input() id = "";
   @Input() divid = "";
 
@@ -134,7 +136,7 @@ export class PlotComponent implements OnInit {
         },
         autosize: true, padding: 0,
         legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
-        margin: { l: 0, r: 20, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
+        margin: { l: 0, r: 20, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       };
       if (this.percent){
         this.plotlayout.yaxis.tickformat = ',.1%';
@@ -172,6 +174,27 @@ export class PlotComponent implements OnInit {
       size: this.fontsize,
       color: this.fontcolor
     };
+    
+    if (this.xtitle!==""){
+      this.plotlayout['xaxis']['title']=this.xtitle;
+      this.plotlayout['xaxis']['titlefont']=
+      {
+        family: this.fontfamily,
+        size: this.fontsize,
+        color: this.fontcolor
+      };
+
+    }
+    if (this.ytitle!==""){
+      this.plotlayout['yaxis']['title']=this.ytitle;
+      this.plotlayout['yaxis']['titlefont']=
+      {
+        family: this.fontfamily,
+        size: this.fontsize,
+        color: this.fontcolor
+      };
+
+    }
 
     let plotdata = []
     for (let item of this.data){
@@ -239,7 +262,11 @@ export class PlotComponent implements OnInit {
     let i = 0
     for (let name in ylist) {
       let theydata = this.api.getValues(source, ylist[i]);
-      let trace = this.make_trace(xdata, theydata  , ylist[i], type = type);
+      let tracename = ylist[i];
+      if (this.outcomelabels.length == ylist.length){
+        tracename = this.outcomelabels[i];
+      }
+      let trace = this.make_trace(xdata, theydata  ,tracename, type = type);
       if (type == "hbar") {
         trace = this.make_trace(this.api.getValues(source, ylist[i]), xdata, ylist[i], type = "bar")
         trace["orientation"] = "h"
@@ -254,7 +281,11 @@ export class PlotComponent implements OnInit {
       if (type == "lines") {
         trace["line"] = {
           color: colors[i],
-          width: this.linewidth
+          width: this.linewidth*2          
+        }
+        trace["marker"] = {
+          color: colors[i],
+          size: this.linewidth*5
         }
       }
       if (this.plottype == "area") {
