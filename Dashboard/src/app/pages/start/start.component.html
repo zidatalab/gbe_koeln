@@ -52,7 +52,7 @@
                 </p>
             </ng-container>
             <h3><strong>Outcomes</strong></h3>
-            <p>
+            <p fxHide=true fxShow.gt-sm=true>
                 <mat-chip-list>
                     <mat-chip-list>
                         <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes"
@@ -61,6 +61,17 @@
                         </mat-chip>
                     </mat-chip-list>
                 </mat-chip-list>
+            </p>
+            <p fxHide=false fxShow.gt-sm=false>
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Outcome</mat-label>
+                    <mat-select [(value)]="this.levelsettings['outcomes']" (selectionChange)="this.setlevel('outcomes',this.levelsettings['outcomes']);">
+                        <mat-option value="">Keine Auswahl</mat-option><br>
+                        <ng-container *ngFor="let item of this.outcomes">
+                            <mat-option [value]="item"><strong> {{item | replace : '[_]' : '.'  }}</strong></mat-option><br>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
             </p>
             <h3><strong>Determinanten</strong></h3>
             <p>
