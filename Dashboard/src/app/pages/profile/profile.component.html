@@ -28,7 +28,7 @@
             </div>
             <div class="add-margin" style="max-width:400px;" fxLayout="row wrap" fxLayoutAlign="space-around" fxLayoutGap="1rem">
                 <div class="add-margin"><button mat-raised-button (click)="this.action='chpwd'" color="primary">Passwort ändern</button></div>
-                <div class="add-margin"><button mat-raised-button (click)="this.action='deleteaccount'" color="primary">Account löschen</button></div>
+                <div class="add-margin"><button mat-raised-button (click)="this.action='deleteaccount'" color="accent">Account löschen</button></div>
             </div>
             <div fxLayout="column" *ngIf="this.action=='chpwd'" style="max-width: 450px;">
                 <div ><h1>Passwort ändern</h1></div>

@@ -21,7 +21,7 @@
                 <h3 *ngIf="!this.currentregion">Bitte wählen Sie eine Region</h3>
             </div>
             <div>
-                <app-map [containername]="'mapdiv'" [basemap]="this.mapdata" [id]="this.levelid" opacity=.8 Zoom=9
+                <app-map [containername]="'mapdiv'" [basemap]="this.mapdata" [id]="this.levelid" opacity=.8 Zoom=10
                     selectmap="true" (clicked)="changeregion($event)"></app-map>
             </div>
             <div *ngIf="this.regiondata && this.overalldata">
