@@ -145,6 +145,7 @@ export class StartComponent implements OnInit {
       if (index > -1) {
         this.datakeys.splice(index, 1);
       }
+      // Remove unneeded fields
       setTimeout(() => { 
       if (outcomeinfo == 'rate') {
         this.data_number = [];

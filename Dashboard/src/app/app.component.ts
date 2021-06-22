@@ -31,13 +31,13 @@ export class AppComponent {
         this.loginstatus = true;
         this.adminstatus = this.currentuser["is_admin"] || this.currentuser["is_superadmin"];      
         setTimeout(()=>{this.autorefreshdata();},1000);    
+        setInterval(()=>{this._auth.refreshToken();},1000*60*5);
       }
       else {
         this.loginstatus = false;
         this.adminstatus = false;
         setTimeout(()=>{this.autorefreshdata();},0);
-      };
-           
+      };         
       }
       );         
   }
