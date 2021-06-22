@@ -145,6 +145,14 @@ export class StartComponent implements OnInit {
       if (index > -1) {
         this.datakeys.splice(index, 1);
       }
+      if (this.levelsettings['levelvalues']!=this.levelvalues[0]){
+        this.datakeys = [this.levelid,this.levelsettings["outcomes"]];
+      }
+      else {
+        this.datakeys = this.datakeys.filter(item => item!=this.levelid);
+      }
+
+      
       // Remove unneeded fields
       setTimeout(() => { 
       if (outcomeinfo == 'rate') {
