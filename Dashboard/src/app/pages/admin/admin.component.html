@@ -1,8 +1,29 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem">
     <h1 ngClass.lt-sm="mobileheading">Administration</h1>
     <p class="mat-caption greycolor"> Frontend Version: {{this.appversion}}, Backend Version: {{this.backenddoc['info']['version']}}</p>
+    <div *ngIf="!this.adduser && !this.adddata" fxLayout="row wrap" fxLayoutGap="1rem"
+        fxLayoutAlign="start space-between">
+        <div fxFlex=100>
+            <h2>Administrationsaufgaben</h2>
+            <p class="mat-caption greycolor">In diesem Bereich können Dashboard Administratoren ("Admin") und 
+                Zi-Administratoren ("Superadmin") Daten oder Nutzer*innen hinzufügen.</p>
+        </div>
+        <div>
+            <button mat-raised-button (click)="this.adduser=!this.adduser" color="primary">Nutzer hinzufügen</button>
+        </div>
+        <div fxShow.lt-md=false>
+            <button mat-raised-button (click)="this.adddata=!this.adddata" color="primary">Daten</button>
+        </div>
+
+    </div>
+    <div fxShow=false fxShow.lt-md=true>
+        <h4>Hinweis:</h4>
+        <p>Daten und Metadaten können nur auf großen Bildschirmen bearbeitet werden.</p>
+    </div>
+
     <div *ngIf="!this.adduser && !this.adddata">
         <h2>Nutzerliste</h2>
+        <p class="mat-caption greycolor">In diesem Bereich können Nutzerberechtigungen geändert werden.</p>
         <mat-list>
             <ng-container *ngFor="let user of this.users">
                 <mat-list-item>
@@ -56,23 +77,6 @@
         </mat-list>
     </div>
 
-    <div *ngIf="!this.adduser && !this.adddata" fxLayout="row wrap" fxLayoutGap="1rem"
-        fxLayoutAlign="start space-between">
-        <div fxFlex=100>
-            <h2>Aufgaben</h2>
-        </div>
-        <div>
-            <button mat-raised-button (click)="this.adduser=!this.adduser" color="primary">Nutzer hinzufügen</button>
-        </div>
-        <div fxShow.lt-md=false>
-            <button mat-raised-button (click)="this.adddata=!this.adddata" color="primary">Daten</button>
-        </div>
-
-    </div>
-    <div fxShow=false fxShow.lt-md=true>
-        <h4>Hinweis:</h4>
-        <p>Daten und Metadaten können nur auf großen Bildschirmen bearbeitet werden.</p>
-    </div>
     <div fxLayout="row wrap" *ngIf="this.adduser">
 
 
