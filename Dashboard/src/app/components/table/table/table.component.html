@@ -1,3 +1,10 @@
+<ng-container *ngIf="this.addfilter">
+  <mat-form-field appearance="outline" >
+    <mat-label>Suche</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Suche..." #input>
+  </mat-form-field>
+</ng-container>
+
 <mat-table [(dataSource)]="this.datasource" matSort class="mat-elevation-z0">
 
  <ng-container *ngFor="let thecol of displayedColumns">

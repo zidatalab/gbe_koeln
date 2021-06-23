@@ -106,7 +106,7 @@
         </div>
         <div class="minheight" *ngIf="this.data">
             
-                <app-table [data]="this.data" [columns]="this.datakeys" [outcomes_rate]="this.data_rate"
+                <app-table [data]="this.data" [columns]="this.datakeys" [addrank]="true" [outcomes_rate]="this.data_rate" [addfilter]="true"
                     [outcomes_numeric]="this.data_number"></app-table>
             
         </div>

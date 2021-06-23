@@ -15,6 +15,9 @@ export class TableComponent implements OnInit {
   @Input() outcomes_rate:any;
   @Input() newlabels:any;
   @Input() pagesizes:any;
+  @Input() addfilter:boolean;
+  @Input() addrank:boolean;
+
   datasource:any;
   displayedColumns:String[];
 
@@ -28,6 +31,9 @@ export class TableComponent implements OnInit {
   if (!this.pagesizes){this.pagesizes=[10, 50,100]};
   this.displayedColumns =  this.columns;
   this.datasource = new MatTableDataSource(this.data); 
+  if (this.addrank){
+
+  }
   }
 
   @ViewChild(MatSort) sort: MatSort;
@@ -44,6 +50,11 @@ export class TableComponent implements OnInit {
     this.datasource.sort = this.sort;
     this.datasource.paginator = this.paginator;   
 
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.datasource.filter = filterValue.trim().toLowerCase();
   }
 
 
