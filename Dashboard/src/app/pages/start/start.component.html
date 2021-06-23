@@ -90,7 +90,7 @@
         <h1>Ergebnisse</h1>
         <div class="minheight"
             *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
-            <mat-card>
+            <mat-card class="no-padding">
             <app-map *ngIf="this.mapdata['features'].length>0 && this.data.length>0" [containername]="'mapdiv'"
                 [data]="this.data" [basemap]="this.mapdata" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=10
                 [colorscale]="this.colorsscheme" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>
