@@ -48,7 +48,7 @@ export class PlotComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (this.divid){this.divid= "plotdiv" + Math.round(Math.random() * 1000).toString() + "_" + Math.round(Math.random() * 1000).toString();}
+    if (this.divid==""){this.divid= "plotdiv" + Math.round(Math.random() * 1000).toString() + "_" + Math.round(Math.random() * 1000).toString();}
     if (!this.linewidth) { this.linewidth = 2 };
     if (this.basecolor=="") { this.basecolor=this.api.primarycolor};   
     if (this.colorscheme.length==0){this.colorscheme=[this.basecolor];}
@@ -68,11 +68,10 @@ export class PlotComponent implements OnInit {
       scrollZoom: false,
       autosizable: true,
       locale: 'de',
-      doubleClick: 'reset+autosize',
+      doubleClick: 'reset',
       showAxisDragHandles: false,
       showAxisRangeEntryBoxes: false,
-      showTips: true,
-      responsive: true
+      showTips: true
     };
     if (this.plottype == "bar") {
       this.plotlytype = "bar";

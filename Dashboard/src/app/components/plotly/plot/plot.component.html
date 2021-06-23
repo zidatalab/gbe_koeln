@@ -3,9 +3,12 @@
     <mat-spinner color="primary"></mat-spinner>
 </ng-container>
 <ng-container *ngIf="this.plotdata && this.mainconfig && this.plotlayout">
-<plotly-plot fxFlex=100 [useResizeHandler]="true" 
-[(data)]="this.plotdata" [(divId)]="this.divid" 
-[(layout)]="this.plotlayout" [(config)]="this.mainconfig"
+    
+<plotly-plot class="plotlydiv"
+[data]="this.plotdata" [divId]="this.divid" [debug]="true"
+[layout]="this.plotlayout" [config]="this.mainconfig"
+[useResizeHandler]="true" [style]="{position: 'relative', width: '100%', height: '100%'}"
 ></plotly-plot>  
+
 </ng-container>
 

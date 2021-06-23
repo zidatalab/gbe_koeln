@@ -178,12 +178,13 @@ $custom-typography: mat.define-typography-config(
 
 
 html {
-  background-color: white;
+  background-color: white;  
 }
 
 body {
   margin: 0;    
   font-family: Lato, sans-serif;
+  
 }
 
 
@@ -194,7 +195,7 @@ body {
     margin: auto;
     padding: 1.2rem;
     display: flex;
-    padding-bottom: 5rem;
+    padding-bottom: 5rem;    
   }
   
  
@@ -364,9 +365,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   filter:grayscale(100%);
 }
 
-.minsize {
-  min-height: 500px;    
-}
+
 
 
   .mat-form-field-appearance-outline .mat-form-field-outline {
