@@ -15,6 +15,7 @@ export class StartComponent implements OnInit {
 
   constructor(private api: ApiService, private auth: AuthService) { }
   metadata=[];
+  progress:boolean;
   metadataok: boolean;
   mapdata: any;
   mapdatafor: string;
@@ -37,23 +38,26 @@ export class StartComponent implements OnInit {
   
 
   ngOnInit(): void {
+    this.progress=true;
     this.colorsscheme = ["#e91e63"];
     this.mapdatafor = "";
     this.data=[];
     this.mapdata=[];
     this.updatemetadata();
     this.auth.currentUser.subscribe(data => { this.currentuser = data; });
-    if (this.metadataok) { this.querydata() }
+    if (this.metadataok) { this.querydata();}
     // Wait if no metadata and try again. Fixes logout behaviour
     else {
       setTimeout(() => {
         this.updatemetadata();
         if (this.metadataok) {
           this.querydata()
+        }
+        else {
+          this.progress=false;
         };
       }, 1500);
-    }
-
+    }    
   }
 
   ngOnDestroy(){
@@ -76,13 +80,34 @@ export class StartComponent implements OnInit {
     }
     if(this.metadata){
       if (this.metadata.length>0){
-        this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
+        this.dometasettings();
       }      
     }
     setTimeout(() => {
       if ((!this.metadata == false) && (!this.sortdata == false)) {
         if (this.metadata.length > 0) {
-          this.level = this.api.filterArray(this.metadata, "type", "level")[0]["varname"];
+          this.dometasettings();
+        }
+      }
+      else {
+        this.metadataok = false;
+        this.progress=false;
+      }  
+      
+    }, 1500);    
+  }
+
+  thereisdata() {
+    let res = false
+    res = this.data
+    // if (res) {
+    //   res = (this.data.length > 0) && (this.metadata.length > 0);
+    // }
+    return res
+  }
+
+  dometasettings(){
+    this.level = this.api.filterArray(this.metadata, "type", "level")[0]["varname"];
           this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
           this.levelvalues = this.api.filterArray(this.sortdata, "varname", this.level)[0]["values"];
           if (this.levelvalues) {
@@ -95,26 +120,8 @@ export class StartComponent implements OnInit {
           this.determinants = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata, "topic", "demography"), "varname"), "varname");
           if (this.outcomes) { this.levelsettings["outcomes"] = this.outcomes[0]; }
           this.metadataok = true;
-        }
-
-      }
-      else {
-        this.metadataok = false;
-      }  
-      
-    }, 750);
-
+          this.progress=false;
   }
-
-  thereisdata() {
-    let res = false
-    res = this.data
-    // if (res) {
-    //   res = (this.data.length > 0) && (this.metadata.length > 0);
-    // }
-    return res
-  }
-
   thereismapdata() {
     let res = this.thereisdata() && this.mapdata
     return res
