@@ -24,5 +24,6 @@ jobs:
         npm install
         npm run build -- --base-href "/gbe_koeln/" --configuration production --aot true
         cp ../docs/index.html ../docs/404.html
-        ls -l ../docs/
-        cat ../docs/index.html       
+        git add * ../docs/*
+        git commit -m "update app"
+        git push
