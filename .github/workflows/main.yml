@@ -24,6 +24,8 @@ jobs:
         npm install
         npm run build -- --base-href "/gbe_koeln/" --configuration production --aot true
         cp ../docs/index.html ../docs/404.html
+        git config --global user.email "lekroll@gmail.com"
+        git config --global user.name "Lars Kroll"
         git add --force ../docs/*
         git commit -m "update app"
         git push
