@@ -1,6 +1,6 @@
 {
-  "name": "GBE Koeln",
-  "version": "0.9.73",
+  "name": "gbekoelndashboard",
+  "version": "0.9.8",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
