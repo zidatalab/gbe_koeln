@@ -1,0 +1,28 @@
+on:
+  release:
+    types: [created]
+  workflow_dispatch: 
+
+env:
+  NODE_VERSION: '14.x'                # set this to the node version to use
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: Install Packages and Build
+      run: |
+        # Build the project
+        cd Dashboard
+        npm install
+        ng build  --base-href "/gbe_koeln/" --configuration production --aot true
+        cp ../docs/index.html ../docs/404.html
+        ls -l ../docs/
+        
