@@ -22,7 +22,7 @@ jobs:
         # Build the project
         cd Dashboard
         npm install
-        ng build  --base-href "/gbe_koeln/" --configuration production --aot true
+        npm run build -- --base-href "/gbe_koeln/" --configuration production --aot true
         cp ../docs/index.html ../docs/404.html
         ls -l ../docs/
-        
+        cat ../docs/index.html       
