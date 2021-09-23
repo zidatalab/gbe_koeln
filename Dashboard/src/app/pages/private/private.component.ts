@@ -23,6 +23,7 @@ export class PrivateComponent implements OnInit {
   currentlevel:string;
   currentregion:string;
   mapdata:any;
+  mapdata_properties:any;
   regiondata:any;
   overalldata:any;
   andata:any;
@@ -62,16 +63,18 @@ export class PrivateComponent implements OnInit {
     this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
     this.outcomes=this.api.filterArray(this.metadata,"topic","outcomes");
     this.determinants=this.api.filterArray(this.metadata,"topic","demography");
-    this.levelvalues = this.api.filterArray(this.sortdata, "varname", this.level)[0]["values"].filter(x => this.geojson_available.includes(x));;
+    this.levelvalues = this.geojson_available; // this.api.filterArray(this.sortdata, "varname", this.level)[0]["values"].filter(x => this.geojson_available.includes(x));;
+    this.levelvalues = this.levelvalues.sort();
     this.currentlevel=this.levelvalues[0];
     this.newlevel(this.currentlevel);
     this.currentregion="";
   }
   newlevel(level){  
-    this.currentlevel=level;
+    this.currentlevel=level;    
     this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname=' + this.currentlevel).subscribe(
       data => {
         this.mapdata = data;
+        this.mapdata_properties=this.api.getValues(this.mapdata['features'],'properties');
       });
   }
 
@@ -89,16 +92,19 @@ export class PrivateComponent implements OnInit {
     // Overall
     let refquery = {
       "client_id": this.api.REST_API_SERVER_CLIENTID,
-      "groupinfo": {}
+      "groupinfo": {"level":"Gesamt"}
     };
-    for (let item of this.metadata){
+/*     for (let item of this.metadata){
       if (['ordering','subgroups'].indexOf(item.topic)>=0){
         refquery["groupinfo"][item.varname]=item.allforlevel;
       }       
-    }
+    } */
     query["groupinfo"][this.level] = this.currentlevel;
     query["groupinfo"][this.levelid] = this.currentregion;
-    
+    query["groupinfo"]['sg.Geschlecht'] = "Gesamt";
+    query["groupinfo"]['sg.Altersgruppe_ID'] = "0";
+    refquery["groupinfo"]['sg.Geschlecht'] = "Gesamt";
+    refquery["groupinfo"]['sg.Altersgruppe_ID'] = "0";
     this.api.postTypeRequest('get_data/', query).subscribe(data => {
       this.regiondata=data['data'][0];
       this.api.postTypeRequest('get_data/', refquery).subscribe(data => {
@@ -107,6 +113,7 @@ export class PrivateComponent implements OnInit {
       error => {});
     },
     error => {});
+    
     
     
   }

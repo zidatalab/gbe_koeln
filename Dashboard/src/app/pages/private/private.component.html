@@ -21,13 +21,23 @@
                 <h3 *ngIf="!this.currentregion">Bitte wählen Sie eine Region</h3>
             </div>
             <div>
-                <app-map [containername]="'mapdiv'" [basemap]="this.mapdata" [id]="this.levelid" opacity=.8 Zoom=10
+                <div> 
+                    <app-map [containername]="'mapdiv'" [basemap]="this.mapdata" [(id)]="this.levelid" opacity=.8 Zoom=10
                     selectmap="true" (clicked)="changeregion($event)"></app-map>
+                </div>
+                <div>
+                    <mat-form-field appearance="fill" class="full-width">
+                        <mat-label>Ihre Auswahl</mat-label>
+                        <mat-select [(value)]="this.currentregion" (selectionChange)="changeregion(this.currentregion);">
+                            <ng-container *ngFor="let item of this.mapdata_properties">
+                                <mat-option [(value)]="item.levelid"><strong>{{item.levelid}}</strong></mat-option><br>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>                    
+                </div>
+                
             </div>
             <div *ngIf="this.regiondata && this.overalldata">
-                <div class="add-margin">
-                    <h1 *ngIf="this.currentregion">{{this.currentregion}}</h1>
-                </div>
                 <h2>Sozialindikatoren</h2>
                 <div class="add-margin" class="greycolor">
                     <div class="add-margin" fxFlexAlign="start" fxLayout="row wrap" fxLayoutGap="10px">
