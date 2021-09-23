@@ -153,6 +153,9 @@ export class AdminComponent implements OnInit {
 
   getrefvalues(value) {
     let data = this.datafile.split(/\r|\n|\r/);
+    if (data.length>100){
+      data=data.slice(0,100);
+    }
     let dataarray = [];
     let index = this.api.getValues(this.metadatafile, "varname").indexOf(value);
     let i = 0;
@@ -160,7 +163,7 @@ export class AdminComponent implements OnInit {
       let topush = this.csvToArray(row)[0][index]
       if (i > 0 && dataarray.indexOf(topush) < 0) { dataarray.push(topush) }
       i = i + 1;
-    }
+    } 
 
     return dataarray;
   }

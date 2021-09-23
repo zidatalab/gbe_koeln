@@ -109,12 +109,13 @@ export class StartComponent implements OnInit {
   dometasettings(){
     this.level = this.api.filterArray(this.metadata, "type", "level")[0]["varname"];
           this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
-          this.levelvalues = this.api.filterArray(this.sortdata, "varname", this.level)[0]["values"];
+          this.levelvalues = ["Gesamt","Stadtbezirke","Stadtteile","Statistische Quartiere","Sozialräume",
+          "Umweltbelastungszonen Hitze","Umweltbelastungszonen Lärm","Umweltbelastungszonen Luft"];
           if (this.levelvalues) {
             this.levelsettings["levelvalues"] = this.levelvalues[0]
               ;
           }
-          this.subgroups = ["Keine"].concat(this.api.getValues(this.api.filterArray(this.metadata, "type", "group"), "varname"));
+          this.subgroups = ["Keine"].concat([]);
           if (this.subgroups) { this.levelsettings["subgroups"] = this.subgroups[0]; }
           this.outcomes = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata, "topic", "outcomes"), "varname"), "varname");
           this.determinants = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata, "topic", "demography"), "varname"), "varname");
@@ -135,15 +136,9 @@ export class StartComponent implements OnInit {
     };
     let outcomeinfo = this.api.filterArray(this.metadata, "varname", this.levelsettings["outcomes"])[0]['type'];
     query["groupinfo"][this.level] = this.levelsettings["levelvalues"];
+    query["groupinfo"]['sg.Geschlecht'] = "Gesamt";
+    query["groupinfo"]['sg.Altersgruppe_ID'] = "0";
     let i = 0
-    for (let group of this.subgroups) {
-      if (i > 0) {
-        if (this.levelsettings["subgroups"] != group && this.levelsettings["subgroups"] != this.subgroups[0]) {
-          query["groupinfo"][group] = this.api.filterArray(this.metadata, "varname", group)[0]["allforlevel"];
-        }
-      }
-      i++;
-    }
     this.api.postTypeRequest('get_data/', query).subscribe(data => {
       this.datakeys = Object.keys(data["data"][0]);
       this.datakeystable = Object.keys(data["data"][0]);

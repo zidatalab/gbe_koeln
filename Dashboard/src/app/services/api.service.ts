@@ -10,7 +10,7 @@ import * as chroma from "chroma-js";
 export class ApiService { 
  
  
-  public REST_API_SERVER =  "https://zidashboardapi.azurewebsites.net/";  //"http://localhost:8000/" ;// "https://zidashboardapi.azurewebsites.net/";  "http://localhost:8000/" //
+  public REST_API_SERVER =  "https://zidashboardapi.azurewebsites.net/";//"http://localhost:8000/" ; // 
   public REST_API_SERVER_CLIENTID = "2021_06_gbe_koeln"; 
   public primarycolor = "e1141c"; // "#e91e63";
   public accentcolor = "3714e1";
@@ -120,4 +120,15 @@ public getuniqueValues(array, key) {
 
 public makescale(bins=5){
   return chroma.scale([chroma(this.primarycolor).set('hsl.h', -120),this.primarycolor]).colors(bins); }
+
+  public shuffle(array) {
+    const a = array;
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
 }
+
