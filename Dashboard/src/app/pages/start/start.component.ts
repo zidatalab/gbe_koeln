@@ -24,6 +24,7 @@ export class StartComponent implements OnInit {
   levelvalues: any;
   subgroups: any;
   outcomes: any;
+  outcomeinfo: any;
   outcomes_m1q: any;
   outcomes_m2q: any;
   outcomes_util: any;
@@ -31,6 +32,8 @@ export class StartComponent implements OnInit {
   determinants: any;
   levelsettings = {};
   data: any;
+  data_overall: any;
+  data_age_sex: any;
   datakeys: any;
   currentuser: any;
   data_rate: any;
@@ -138,12 +141,15 @@ export class StartComponent implements OnInit {
   }
 
   querydata() {
+    this.data =[];
+    this.data_overall = "-";
+    this.data_age_sex=[];
     let query = {
       "client_id": this.api.REST_API_SERVER_CLIENTID,
       "groupinfo": {},
       "showfields": [this.levelsettings["outcomes"]]
     };
-    let outcomeinfo = this.api.filterArray(this.metadata, "varname", this.levelsettings["outcomes"])[0]['type'];
+    this.outcomeinfo = this.api.filterArray(this.metadata, "varname", this.levelsettings["outcomes"])[0];
     query["groupinfo"][this.level] = this.levelsettings["levelvalues"];
     query["groupinfo"]['sg.Geschlecht'] = "Gesamt";
     query["groupinfo"]['sg.Altersgruppe_ID'] = "0";
@@ -163,10 +169,29 @@ export class StartComponent implements OnInit {
         this.datakeys = this.datakeys.filter(item => item!=this.levelid);
       }
 
+      // Query Overall Data
+      const overallquery = query;
+      overallquery["groupinfo"]['level'] = "Gesamt";
+      this.api.postTypeRequest('get_data/', overallquery).subscribe(data => {
+        this.data_overall=data['data'][0][this.levelsettings["outcomes"]];
+        if (this.outcomeinfo['type']=="rate"){
+          this.data_overall = this.data_overall*100;
+        };
+      },error => {});
+
+      // Query Age/Sex
+      const agesexquery = query;
+      agesexquery["groupinfo"]['level'] = "Gesamt";
+      delete agesexquery["groupinfo"]['sg.Geschlecht'];
+      delete agesexquery["groupinfo"]['sg.Altersgruppe_ID'];
+      agesexquery["showfields"].concat(['sg']);
+
+      
+      this.api.postTypeRequest('get_data/', agesexquery).subscribe(data => {this.data_age_sex=data['data'];console.log(this.data_age_sex)},error => {});
       
       // Remove unneeded fields
       setTimeout(() => { 
-      if (outcomeinfo == 'rate') {
+      if (this.outcomeinfo['type'] == 'rate') {
         this.data_number = [];
         this.data_rate = [(this.levelsettings["outcomes"])];
       }

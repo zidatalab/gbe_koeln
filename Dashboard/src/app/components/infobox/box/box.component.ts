@@ -10,9 +10,10 @@ export class BoxComponent implements OnInit {
 @Input() value:number;
 @Input() title:string;
 @Input() description:string;
-@Input() colors:string[];
-@Input() cutoffs:string[];
-@Input() maincolor:string;
+@Input() colors:string[]=[];
+@Input() cutoffs:string[]=[];
+@Input() maincolor:string="black";
+@Input() textcolor:string="white";
 @Input() numberformat:string;
 @Input() maticon:string;
 @Input() textbehind:boolean;
@@ -24,8 +25,9 @@ export class BoxComponent implements OnInit {
   ngOnInit() {
     this.value= Number(this.value);
           if (!this.numberformat){this.numberformat='1.1-1';}
-          this.setcolor();
-        };    
+          this.setcolor();  
+        }; 
+         
     
    setcolor(){
      let color ="darkgreen";
@@ -43,6 +45,9 @@ export class BoxComponent implements OnInit {
       
      }
      this.itemcolor = color;
+
+  
+     
      
    }
     

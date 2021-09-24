@@ -106,10 +106,24 @@
         <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem">
             
             <div fxFlex=33>
-                <mat-card class="mat-elevation-z0" ><p>Prävalenz</p></mat-card>
+                
+                    <ng-container *ngIf="this.outcomeinfo['type']=='number'">
+                    <app-box [value]="this.data_overall" [maincolor]="'#D7191C'"                    
+                    [description]="this.outcomeinfo['varname']"></app-box>
+                    </ng-container>
+                    <ng-container *ngIf="this.outcomeinfo['type']=='rate'">
+                        <app-box [value]="this.data_overall" [title]="'%'" [maincolor]="'#D7191C'"
+                        [textbehind]="true"
+                        [description]="this.outcomeinfo['varname']"></app-box>
+                        </ng-container>
+                    
             </div>
             <div fxFlex >
-                <mat-card  class="mat-elevation-z0"><p>Indikatorbeschreibung</p></mat-card>
+                <mat-card  class="mat-elevation-z0" style="background-color: lightgray;">
+                    <h3><strong>Indikatorbeschreibung</strong></h3>
+                    <p *ngIf="!this.outcomeinfo['description']" class="mat-caption">Aktuell keine Beschreibung</p> 
+                    <p *ngIf="this.outcomeinfo['description']" class="mat-caption">{{this.outcomeinfo['description']}}</p> 
+                </mat-card>
             </div>
             <div fxFlex=100 >
                 <mat-card  
