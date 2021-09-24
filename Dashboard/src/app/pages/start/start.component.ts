@@ -24,6 +24,10 @@ export class StartComponent implements OnInit {
   levelvalues: any;
   subgroups: any;
   outcomes: any;
+  outcomes_m1q: any;
+  outcomes_m2q: any;
+  outcomes_util: any;
+  outcomeart :string = "M2Q";
   determinants: any;
   levelsettings = {};
   data: any;
@@ -117,6 +121,11 @@ export class StartComponent implements OnInit {
           this.subgroups = ["Keine"].concat([]);
           if (this.subgroups) { this.levelsettings["subgroups"] = this.subgroups[0]; }
           this.outcomes = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata, "topic", "outcomes"), "varname"), "varname");
+          this.outcomes_m1q = this.outcomes.filter(str => str.includes('M1Q'));
+          this.outcomes_m2q = this.outcomes.filter(str => str.includes('M2Q'));
+          this.outcomes_util = this.outcomes.filter(str => str.includes('Anteil'));
+
+
           this.determinants = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata, "topic", "demography"), "varname"), "varname");
           if (this.outcomes) { this.levelsettings["outcomes"] = this.outcomes[0]; }
           this.metadataok = true;

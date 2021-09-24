@@ -44,38 +44,59 @@
                 </p>
             </ng-container> -->
             <h1><strong>Indikatorauswahl</strong></h1>
-            <p fxHide=true fxShow.gt-sm=true>
-                <mat-chip-list>
-                    <mat-chip-list>
-                        <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes"
-                            [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                            {{item | replace : '[_]' : '.'  }}
-                        </mat-chip>
-                    </mat-chip-list>
-                </mat-chip-list>
-            </p>
-            <p fxHide=false fxShow.gt-sm=false>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Outcome</mat-label>
-                    <mat-select [(value)]="this.levelsettings['outcomes']" (selectionChange)="this.setlevel('outcomes',this.levelsettings['outcomes']);">
-                        <mat-option value="">Keine Auswahl</mat-option><br>
-                        <ng-container *ngFor="let item of this.outcomes">
-                            <mat-option [value]="item"><strong> {{item | replace : '[_]' : '.'  }}</strong></mat-option><br>
-                        </ng-container>
-                    </mat-select>
-                </mat-form-field>
-            </p>
-            <h3><strong>Determinanten</strong></h3>
+            <h3>Typ</h3>
             <p>
+            <mat-chip-list>
+                <mat-chip-list>
+                    <mat-chip (click)="this.outcomeart=item;" *ngFor="let item of ['Inanspruchnahme','M1Q','M2Q','Einflussfaktoren']"
+                        [selected]="this.outcomeart==item" color="primary">
+                        <span *ngIf="item=='M1Q'|| item=='M2Q'">Prävalenz </span>&nbsp; {{item}}</mat-chip>
+                </mat-chip-list>
+            </mat-chip-list>    
+            </p>       
+            <h3>Indikator</h3>
+            <p fxHide=true fxShow.gt-sm=true>
+                <ng-container *ngIf="this.outcomeart==='Inanspruchnahme'">
                 <mat-chip-list>
                     <mat-chip-list>
-                        <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.determinants"
+                        <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes_util"
                             [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                            {{item}}
+                            {{item.replace('Anteil Patienten mit','') | replace : '[_]' : '.'}}
                         </mat-chip>
                     </mat-chip-list>
                 </mat-chip-list>
-            </p>
+                </ng-container>
+                <ng-container *ngIf="this.outcomeart==='M1Q'">
+                    <mat-chip-list>
+                        <mat-chip-list>
+                            <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes_m1q"
+                                [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                                {{item.replace(' M1Q','').replace('Prävalenz von','').replace('Prävalenz der','')  | replace : '[_]' : '.'  }}
+                            </mat-chip>
+                        </mat-chip-list>
+                    </mat-chip-list>
+                    </ng-container>
+                    <ng-container *ngIf="this.outcomeart==='M2Q'">
+                        <mat-chip-list>
+                            <mat-chip-list>
+                                <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes_m2q"
+                                    [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                                    {{item.replace(' M2Q','').replace('Prävalenz von','').replace('Prävalenz der','')  | replace : '[_]' : '.'  }}
+                                </mat-chip>
+                            </mat-chip-list>
+                        </mat-chip-list>
+                        </ng-container>
+                <ng-container *ngIf="this.outcomeart==='Einflussfaktoren'">
+                    <mat-chip-list>
+                        <mat-chip-list>
+                            <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.determinants"
+                                [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                                {{item.replace(' M2Q','').replace('Prävalenz von','').replace('Prävalenz der','')  | replace : '[_]' : '.'  }}
+                            </mat-chip>
+                        </mat-chip-list>
+                    </mat-chip-list>
+                    </ng-container>
+            </p>            
         </ng-container>
     </div>
     <div *ngIf="this.data.length>0" fxLayout="column">
@@ -121,7 +142,7 @@
             <mat-card class="no-padding">
             <app-map *ngIf="this.mapdata['features'].length>0 && this.data.length>0" [containername]="'mapdiv'"
                 [data]="this.data" [basemap]="this.mapdata" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=10
-                [colorscale]="this.colorsscheme" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>
+                [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>
             </mat-card>
 
         </div>
@@ -130,7 +151,7 @@
                 <h2>Rangfolge der Regionen</h2>
                 <app-plot [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }" [xvalue]="this.levelid"
                     [percent]="true" [sort]="true" [outcomes]="[this.levelsettings['outcomes']]"
-                    [colorscheme]="[this.api.makescale(3)[2]]" plottype="bar"></app-plot>
+                    [colorscheme]="['#D7191C','#fdae61','#ffffbf','#abd9e9','#2c7bb6']" plottype="bar"></app-plot>
                 </mat-card>
         </div>
         <div class="minheight" *ngIf="this.data">
