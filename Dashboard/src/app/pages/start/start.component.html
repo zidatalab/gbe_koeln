@@ -27,27 +27,14 @@
             <mat-progress></mat-progress>
         </ng-container>
          <ng-container *ngIf="this.metadata.length>0 && this.levelvalues.length>0">
-            <h1>Auswahl</h1>
-            <h3><strong>Regionen</strong></h3>
-            <p>
-                <mat-chip-list>
-                    <mat-chip (click)="this.setlevel('levelvalues',item);" *ngFor="let item of this.levelvalues"
-                        [selected]="(this.levelsettings['levelvalues']==item)" color="primary"
-                        [disabled]="this.levelsettings['subgroups']!='Keine'">
-                        {{item}}<span *ngIf="this.geojson_available.indexOf(item)>=0">
-                            <mat-icon class="primarycolor flagicon">map</mat-icon>
-                        </span>
-                    </mat-chip>
-                </mat-chip-list>
-            </p>
-            <ng-container>
+            <!-- <ng-container>
                 <h3><strong>Subgruppen</strong></h3>
                 <p>
                     <mat-chip-list>
                         <mat-chip-list>
                             <ng-container *ngFor="let item of this.subgroups">
                                 <mat-chip (click)="this.setlevel('subgroups',item);"
-                                    [disabled]="this.levelsettings['levelvalues']!==this.levelvalues[0]"
+                                    [disabled]="this.levelsettings['levelvalues']!=='Gesamt'"
                                     [selected]="(this.levelsettings['subgroups']==item)" color="primary">
                                     {{item}}
                                 </mat-chip>
@@ -55,8 +42,8 @@
                         </mat-chip-list>
                     </mat-chip-list>
                 </p>
-            </ng-container>
-            <h3><strong>Outcomes</strong></h3>
+            </ng-container> -->
+            <h1><strong>Indikatorauswahl</strong></h1>
             <p fxHide=true fxShow.gt-sm=true>
                 <mat-chip-list>
                     <mat-chip-list>
@@ -92,7 +79,43 @@
         </ng-container>
     </div>
     <div *ngIf="this.data.length>0" fxLayout="column">
+        
         <h1>Ergebnisse</h1>
+        <h2><strong>Allgemeine Informationen</strong></h2>
+        <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem">
+            
+            <div fxFlex=33>
+                <mat-card class="mat-elevation-z0" ><p>Prävalenz</p></mat-card>
+            </div>
+            <div fxFlex >
+                <mat-card  class="mat-elevation-z0"><p>Indikatorbeschreibung</p></mat-card>
+            </div>
+            <div fxFlex=100 >
+                <mat-card  
+                class="mat-elevation-z0"><p>Alter und Geschlecht</p></mat-card>
+            </div>
+
+
+        </div>
+        
+        <div>
+        <h2><strong>Regionale Unterschiede</strong></h2>
+        <h3><strong>Raumeinheit</strong></h3>
+            <p>
+                <mat-chip-list>
+                    <mat-chip (click)="this.setlevel('levelvalues',item);" *ngFor="let item of this.levelvalues"
+                        [selected]="(this.levelsettings['levelvalues']==item)" color="primary"
+                        [disabled]="this.levelsettings['subgroups']!='Keine'">
+                        {{item}}<span *ngIf="this.geojson_available.indexOf(item)>=0">
+                            <mat-icon class="primarycolor flagicon">map</mat-icon>
+                        </span>
+                    </mat-chip>
+                </mat-chip-list>
+            </p>
+        <h3><strong>Subgruppenauswahl</strong></h3>
+        <p>
+            Auswahl von Geschlecht, Altersgruppe und Alter
+        </p>
         <div class="minheight"
             *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
             <mat-card class="no-padding">
@@ -102,7 +125,7 @@
             </mat-card>
 
         </div>
-        <div class="minheight" *ngIf="this.levelsettings['levelvalues']!==this.levelvalues[0] && this.data.length<100 ">
+        <div class="minheight" *ngIf="this.levelsettings['levelvalues']!=='Gesamt' && this.data.length<100 ">
             <mat-card>
                 <h2>Rangfolge der Regionen</h2>
                 <app-plot [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }" [xvalue]="this.levelid"
@@ -112,10 +135,12 @@
         </div>
         <div class="minheight" *ngIf="this.data">
             <mat-card>
+                <h2>Regionssuche</h2>
                 <app-table [data]="this.data" [columns]="this.datakeys" [addrank]="true" [outcomes_rate]="this.data_rate" [addfilter]="true"
                     [outcomes_numeric]="this.data_number"></app-table>
                 </mat-card>
         </div>
+    </div>
     </div>
 
 </div>

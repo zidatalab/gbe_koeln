@@ -109,11 +109,10 @@ export class StartComponent implements OnInit {
   dometasettings(){
     this.level = this.api.filterArray(this.metadata, "type", "level")[0]["varname"];
           this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
-          this.levelvalues = ["Gesamt","Stadtbezirke","Stadtteile","Statistische Quartiere","Sozialräume",
+          this.levelvalues = ["Stadtbezirke","Stadtteile","Statistische Quartiere","Sozialräume",
           "Umweltbelastungszonen Hitze","Umweltbelastungszonen Lärm","Umweltbelastungszonen Luft"];
           if (this.levelvalues) {
-            this.levelsettings["levelvalues"] = this.levelvalues[0]
-              ;
+            this.levelsettings["levelvalues"] ="Stadtbezirke"  ;
           }
           this.subgroups = ["Keine"].concat([]);
           if (this.subgroups) { this.levelsettings["subgroups"] = this.subgroups[0]; }
@@ -121,7 +120,8 @@ export class StartComponent implements OnInit {
           this.determinants = this.api.getValues(this.api.sortArray(this.api.filterArray(this.metadata, "topic", "demography"), "varname"), "varname");
           if (this.outcomes) { this.levelsettings["outcomes"] = this.outcomes[0]; }
           this.metadataok = true;
-          this.progress=false;
+          this.progress=false;          
+
   }
   thereismapdata() {
     let res = this.thereisdata() && this.mapdata
@@ -147,7 +147,7 @@ export class StartComponent implements OnInit {
       if (index > -1) {
         this.datakeys.splice(index, 1);
       }
-      if (this.levelsettings['levelvalues']!=this.levelvalues[0]){
+      if (this.levelsettings['levelvalues']!="Gesamt"){
         this.datakeys = [this.levelid,this.levelsettings["outcomes"]];
       }
       else {
@@ -168,7 +168,7 @@ export class StartComponent implements OnInit {
     }, 0);
       
       
-      if ((this.mapdatafor !== this.levelsettings['levelvalues']) && (this.levelsettings['levelvalues'] !== this.levelvalues[0]) && (this.geojson_available.indexOf(this.levelsettings['levelvalues']) >= 0)) {
+      if ((this.mapdatafor !== this.levelsettings['levelvalues']) && (this.levelsettings['levelvalues'] !== 'Gesamt') && (this.geojson_available.indexOf(this.levelsettings['levelvalues']) >= 0)) {
         this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname=' + this.levelsettings['levelvalues']).subscribe(
           data => {
             this.mapdata = data;
