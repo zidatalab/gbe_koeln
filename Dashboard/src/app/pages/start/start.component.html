@@ -125,9 +125,19 @@
                     <p *ngIf="this.outcomeinfo['description']" class="mat-caption">{{this.outcomeinfo['description']}}</p> 
                 </mat-card>
             </div>
-            <div fxFlex=100 >
-                <mat-card  
-                class="mat-elevation-z0"><p>Alter und Geschlecht</p></mat-card>
+            <div fxFlex=100 *ngIf="this.data_age_sex">
+                <mat-card *ngIf="this.data_age_sex.length>0">
+                    <h2>Alters- und Geschlechtsunterschiede</h2>
+                    <app-plot
+                    [data]="this.data_age_sex"
+                    [outcomes]="[this.outcomeinfo['varname']]"
+                    [xvalue]="'sg.Altersgruppe'"
+                    [percent]="true"
+                    [colorby]="'sg.Geschlecht'"
+                    plottype="bar"
+                    [colorscheme]="['#D7191C','#2c7bb6']"
+                    ></app-plot>
+                </mat-card>
             </div>
 
 
@@ -152,10 +162,10 @@
             Auswahl von Geschlecht, Altersgruppe und Alter
         </p>
         <div class="minheight"
-            *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata && this.data && this.levelid">
-            <mat-card class="no-padding">
+            *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata['features'] && this.data && this.levelid">
+            <mat-card class="no-padding">            
             <app-map *ngIf="this.mapdata['features'].length>0 && this.data.length>0" [containername]="'mapdiv'"
-                [data]="this.data" [basemap]="this.mapdata" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=10
+                [data]="this.data" [containername]="'map_koeln_startseite'" [basemap]="this.mapdata" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=10
                 [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>
             </mat-card>
 

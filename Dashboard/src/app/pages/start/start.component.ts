@@ -180,14 +180,15 @@ export class StartComponent implements OnInit {
       },error => {});
 
       // Query Age/Sex
-      const agesexquery = query;
+      let agesexquery = query;
       agesexquery["groupinfo"]['level'] = "Gesamt";
-      delete agesexquery["groupinfo"]['sg.Geschlecht'];
-      delete agesexquery["groupinfo"]['sg.Altersgruppe_ID'];
-      agesexquery["showfields"].concat(['sg']);
-
-      
-      this.api.postTypeRequest('get_data/', agesexquery).subscribe(data => {this.data_age_sex=data['data'];console.log(this.data_age_sex)},error => {});
+      agesexquery["groupinfo"]['sg.Geschlecht']={"$ne":"Gesamt"};
+      agesexquery["groupinfo"]['sg.Altersgruppe_ID']="1";
+      agesexquery["showfields"].push('sg.Geschlecht');
+      agesexquery["showfields"].push('sg.Altersgruppe_ID');            
+      this.api.postTypeRequest('get_data/', agesexquery).subscribe(data => {
+        this.data_age_sex=this.extractsg(data['data']);
+        console.log(this.data_age_sex);},error => {});
       
       // Remove unneeded fields
       setTimeout(() => { 
@@ -216,6 +217,19 @@ export class StartComponent implements OnInit {
 
  
   }
+
+  extractsg(array){
+    let keys = Object.keys(array[0]['sg']);
+    for (const item of array){
+      const sg = item['sg'];            
+      for (let key of keys){
+        item['sg.'+key]=sg[key];            
+      }
+      delete item['sg'];            
+    }
+    return array;
+
+  };
 
 
 

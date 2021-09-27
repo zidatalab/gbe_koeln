@@ -29,13 +29,12 @@ export class MapComponent implements OnInit {
   @Input() bins: number;
   @Input() id: string; // feature id
   @Input() percent: boolean;
+  @Input() containername: string;
   @Output() clicked = new EventEmitter<string>();
-
   mapok:boolean;
   clickedvalue: string;
   legend: any;
   map: any;
-  @Input() containername: string;
   useprovider = 0;
   providers = ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png']
@@ -52,7 +51,7 @@ export class MapComponent implements OnInit {
   ngAfterViewInit(): void {
     // Import Map data
     if (this.checkallok()) {
-      this.initMap(this.containername);
+      setTimeout(()=>{ this.initMap(this.containername);},0);
     }
   }
 
