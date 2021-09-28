@@ -130,5 +130,24 @@ public makescale(bins=5){
     return a;
   }
 
+  public stringwrap(string,maxlength=30){
+    let newstring = "";
+    let wordsarray = string.split(" ");
+    let fulllength = string.length
+    let linelength = 0
+    for (let word of wordsarray){
+      let wordlen = word.length;
+      if ((linelength+wordlen)<maxlength){
+        newstring = newstring + " " + word;
+        linelength = linelength+wordlen;
+      }
+      else {
+        newstring = newstring + "<br>" + word;
+        linelength = wordlen;
+      };    
+    }
+    return newstring;
+  }
+
 }
 

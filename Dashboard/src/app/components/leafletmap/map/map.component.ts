@@ -129,6 +129,7 @@ export class MapComponent implements OnInit {
       thedata = Object.assign(this.data);
     }
     let propname = this.feature;
+    let proplegendname = this.api.stringwrap(propname);
     let theid = this.id;
     let theopacity = this.opacity;
     let basestyle = {
@@ -266,7 +267,7 @@ export class MapComponent implements OnInit {
       legend.onAdd = function (map) {
 
         this._ldiv = L.DomUtil.create('div', 'customlegend');
-        this._ldiv.innerHTML = '<p><strong>' + propname + '</strong></p>';
+        this._ldiv.innerHTML = '<p><strong>' + proplegendname + '</strong></p>';
         if (this.percent == true) {
           this._ldiv.innerHTML += '<p><em>Anteil in %</em></p>';
         }
