@@ -165,6 +165,7 @@
             *ngIf="(this.geojson_available.indexOf(this.levelsettings['levelvalues'])>=0) && this.mapdata['features'] && this.data && this.levelid">
             <mat-card class="no-padding">            
             <app-map *ngIf="this.mapdata['features'].length>0 && this.data.length>0" [containername]="'mapdiv'"
+                [binmethod]="'equalgroupsize'"
                 [data]="this.data" [containername]="'map_koeln_startseite'" [basemap]="this.mapdata" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=10
                 [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>
             </mat-card>

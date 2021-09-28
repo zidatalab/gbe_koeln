@@ -47,6 +47,9 @@ export class MapComponent implements OnInit {
     // Init vars
     this.resetprops();
     this.clickedvalue = "";
+    if (!this.binmethod){
+      this.binmethod='equalint';
+    };
   }
   ngAfterViewInit(): void {
     // Import Map data
@@ -361,7 +364,7 @@ export class MapComponent implements OnInit {
     const layer = e.target;
     layer.setStyle({
       opacity: 1,
-      fillOpacity: this.opacity * 1.2
+      fillOpacity: this.opacity * 1.1
     });
     info.update(layer.feature.properties);
   }
@@ -374,19 +377,45 @@ export class MapComponent implements OnInit {
     });
     info.update();
   }
+
   makecutoffs(array, method = "equalint", bins) {
     let result = [];
     let minv = Math.min(...array);
     let maxv = Math.max(...array);
+
+    // equalint    
+    if (method=='equalint'){
     let steps = Math.round((maxv - minv) / bins);
     let i = 0;
     while (i < bins) {
       result.push((i + 1) * steps + minv);
       i = i + 1;
-    }
+    };
+    };
+
+   // equal group size 
+   if (method=='equalgroupsize'){    
+    let sortedarray = array.sort();
+    let arraylength = sortedarray.length;
+    let groupsize= Math.floor(arraylength/bins)+1;
+    let currentsize=0;
+    let i = 1;
+    for (let item of sortedarray){
+      if (i == 1){
+        result.push(minv);
+      };     
+      if (currentsize==groupsize){
+        result.push(item);
+        currentsize=0;
+      };
+      currentsize=currentsize+1;
+      i = i+1;
+    };          
+    };
+    
     return result;
 
-  }
+  };
 
 
   newclick(e){

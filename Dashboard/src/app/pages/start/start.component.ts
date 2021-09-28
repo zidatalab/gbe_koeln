@@ -187,8 +187,7 @@ export class StartComponent implements OnInit {
       agesexquery["showfields"].push('sg.Geschlecht');
       agesexquery["showfields"].push('sg.Altersgruppe_ID');            
       this.api.postTypeRequest('get_data/', agesexquery).subscribe(data => {
-        this.data_age_sex=this.extractsg(data['data']);
-        console.log(this.data_age_sex);},error => {});
+        this.data_age_sex=this.extractsg(data['data']);},error => {});
       
       // Remove unneeded fields
       setTimeout(() => { 
