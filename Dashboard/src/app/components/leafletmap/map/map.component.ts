@@ -133,11 +133,16 @@ export class MapComponent implements OnInit {
     let theid = this.id;
     let theopacity = this.opacity;
     let basestyle = {
-      weight: 2,
+      weight: 1,
       dashArray: '',
       "color": "grey",
       "fillOpacity": theopacity,
       "Opacity": theopacity
+    };
+
+    // If to many regions set weight to 0
+    if (thedata.length > 30 ){
+      basestyle.weight=0;
     };
 
     // Prepare dom
@@ -180,7 +185,7 @@ export class MapComponent implements OnInit {
       const geojsonFeature: FeatureCollection = Object.assign(this.basemap);
       if (this.percent) {
         for (let item of thedata) {
-          item['___thevalue'] = Math.round(item[this.feature] * 1000) / 10;
+          item['___thevalue'] = Math.round(item[this.feature] * 10000) / 100;
         }
       }
       else {
