@@ -55,7 +55,7 @@
             </mat-chip-list>    
             </p>       
             <h3>Indikator</h3>
-            <p fxHide=true fxShow.gt-sm=true>
+            <p >
                 <ng-container *ngIf="this.outcomeart==='Inanspruchnahme'">
                 <mat-chip-list>
                     <mat-chip-list>
@@ -67,7 +67,7 @@
                 </mat-chip-list>
                 </ng-container>
                 <ng-container *ngIf="this.outcomeart==='M1Q'">
-                    <mat-chip-list>
+                    <mat-chip-list >
                         <mat-chip-list>
                             <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes_m1q"
                                 [selected]="(this.levelsettings['outcomes']==item)" color="primary">

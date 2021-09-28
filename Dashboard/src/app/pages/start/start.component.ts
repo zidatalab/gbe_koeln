@@ -63,7 +63,7 @@ export class StartComponent implements OnInit {
         else {
           this.progress=false;
         };
-      }, 1500);
+      }, 2500);
     }    
   }
 
