@@ -270,11 +270,12 @@ export class MapComponent implements OnInit {
 
       let legend;
       legend = L.control.layers({}, {}, { position: 'topright' });
+      let legendtitle = this.api.stringwrap(propname);
 
       legend.onAdd = function (map) {
 
         this._ldiv = L.DomUtil.create('div', 'customlegend');
-        this._ldiv.innerHTML = '<p><strong>' + this.api.stringwrap(propname) + '</strong></p>';
+        this._ldiv.innerHTML = '<p><strong>' + legendtitle + '</strong></p>';
         if (this.percent == true) {
           this._ldiv.innerHTML += '<p><em>Anteil in %</em></p>';
         }
