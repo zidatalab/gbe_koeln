@@ -26,23 +26,7 @@
         <ng-container *ngIf="!(this.metadata.length>0 && this.levelvalues.length>0)">
             <mat-progress></mat-progress>
         </ng-container>
-         <ng-container *ngIf="this.metadata.length>0 && this.levelvalues.length>0">
-            <!-- <ng-container>
-                <h3><strong>Subgruppen</strong></h3>
-                <p>
-                    <mat-chip-list>
-                        <mat-chip-list>
-                            <ng-container *ngFor="let item of this.subgroups">
-                                <mat-chip (click)="this.setlevel('subgroups',item);"
-                                    [disabled]="this.levelsettings['levelvalues']!=='Gesamt'"
-                                    [selected]="(this.levelsettings['subgroups']==item)" color="primary">
-                                    {{item}}
-                                </mat-chip>
-                            </ng-container>
-                        </mat-chip-list>
-                    </mat-chip-list>
-                </p>
-            </ng-container> -->
+         <ng-container *ngIf="this.metadata.length>0 && this.levelvalues.length>0">            
             <h1><strong>Indikatorauswahl</strong></h1>
             <h3>Typ</h3>
             <p>
@@ -156,9 +140,66 @@
                 </mat-chip-list>
             </p>
         <h3><strong>Subgruppenauswahl</strong></h3>
-        <p>
-            Auswahl von Geschlecht, Altersgruppe und Alter
-        </p>
+            <ng-container>
+                <p>
+                    <mat-chip-list>
+                        <mat-chip-list>
+                            <ng-container *ngFor="let item of ['Gesamt','Detailliert']">
+                                <mat-chip (click)="this.setlevel('subgroupresolution',item);"                                   
+                                    [selected]="(this.levelsettings['subgroupresolution']==item)" color="primary">
+                                    {{item}}
+                                </mat-chip>
+                            </ng-container>
+                        </mat-chip-list>
+                    </mat-chip-list>
+                </p>
+            </ng-container> 
+            <ng-container *ngIf="this.levelsettings['subgroupresolution']=='Detailliert'">
+                <h3><strong>Geschlecht</strong></h3>
+                <p>
+                    <mat-chip-list>
+                        <mat-chip-list>
+                            <ng-container *ngFor="let item of ['Gesamt','Männer','Frauen']">
+                                <mat-chip (click)="this.setlevel('subgroup_gender',item);"                                   
+                                    [selected]="(this.levelsettings['subgroup_gender']==item)" color="primary">
+                                    {{item}}
+                                </mat-chip>
+                            </ng-container>
+                        </mat-chip-list>
+                    </mat-chip-list>
+                </p>
+            </ng-container> 
+            <ng-container *ngIf="this.levelsettings['subgroupresolution']=='Detailliert'">
+                <h3><strong>Alterseinteilung</strong></h3>
+                <p>
+                    <mat-chip-list>
+                        <mat-chip-list>
+                            <ng-container *ngFor="let item of this.altergruppenid_options">
+                                <mat-chip (click)="this.setlevel('subgroup_agegrpid',item['sg.Altersgruppe_ID']);"                                   
+                                    [selected]="(this.levelsettings['subgroup_agegrpid']==item['sg.Altersgruppe_ID'])" color="primary">
+                                    {{item['label']}}
+                                </mat-chip>
+                            </ng-container>
+                        </mat-chip-list>
+                    </mat-chip-list>
+                </p>
+            </ng-container> 
+            <ng-container *ngIf="this.levelsettings['subgroupresolution']=='Detailliert' && this.levelsettings['subgroup_agegrpid']>0">
+                <h3><strong>Altersgruppe</strong></h3>
+                <p>
+                    <mat-chip-list>
+                        <mat-chip-list>
+                            <ng-container *ngFor="let item of this.altergruppenid_ageoptions">
+                                <mat-chip (click)="this.setlevel('subgroup_agegrpid_agevalue',item['sg.Altersgruppe']);"                                   
+                                    [selected]="(this.levelsettings['subgroup_agegrpid_agevalue']==item['sg.Altersgruppe'])" color="primary">
+                                    {{item['sg.Altersgruppe']}}
+                                </mat-chip>
+                            </ng-container>
+                        </mat-chip-list>
+                    </mat-chip-list>
+                </p>
+            </ng-container> 
+
         <div class="minheight"
             *ngIf="(this.levelsettings['levelvalues']=='Stadtbezirke') && this.mapdata_stadtbezirke && this.data && this.levelid">
             <mat-card class="no-padding">            

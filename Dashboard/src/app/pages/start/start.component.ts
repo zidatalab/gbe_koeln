@@ -30,7 +30,7 @@ export class StartComponent implements OnInit {
   outcomes_util: any;
   outcomeart :string = "M2Q";
   determinants: any;
-  levelsettings = {};
+  levelsettings = {'subgroupresolution':'Gesamt','subgroup_agegrpid':0,'subgroup_gender':'Gesamt','subgroup_agegrpid_agevalue':'Gesamt'};
   data: any;
   data_overall: any;
   data_age_sex: any;
@@ -42,6 +42,25 @@ export class StartComponent implements OnInit {
   colorsscheme: any;
   levelid:string;
   datakeystable:any;
+  altergruppenid_ageoptions = [];
+  altergruppenid_options = [
+    {"sg.Altersgruppe_ID":"0","label":"Gesamt",
+      "data":[{"sg.Altersgruppe":"Gesamt"},{"sg.Altersgruppe":"Gesamt altersstandardisiert"}]},
+    {"sg.Altersgruppe_ID":"1","label":"Lebensphasen",
+    "data":[{"sg.Altersgruppe":"Gesamt"},{"sg.Altersgruppe":"0 bis 17 Jahre"},{"sg.Altersgruppe":"18 bis 34 Jahre"},{"sg.Altersgruppe":"35 bis 64 Jahre"},
+            {"sg.Altersgruppe":"65 und mehr Jahre"}]},
+    {"sg.Altersgruppe_ID":"2","label":"Differenzierte Lebensphasen",
+        "data":[{"sg.Altersgruppe":"Gesamt"},{"sg.Altersgruppe":"0 bis 13 Jahre"},{"sg.Altersgruppe":"14 bis 17 Jahre"},
+        {"sg.Altersgruppe":"18 bis 34 Jahre"},{"sg.Altersgruppe":"35 bis 64 Jahre"},{"sg.Altersgruppe":"65 bis 79 Jahre"},
+        {"sg.Altersgruppe":"80 und mehr Jahre"}]},
+    {"sg.Altersgruppe_ID":"3","label":"Kinder und Jugendliche",
+      "data":[{"sg.Altersgruppe":"Gesamt"},{"sg.Altersgruppe":"0 bis 5 Jahre"},{"sg.Altersgruppe":"6 bis 10 Jahre"},
+      {"sg.Altersgruppe":"11 bis 14 Jahre"}]},
+    {"sg.Altersgruppe_ID":"4","label":"5-Jahres-Altersgruppen",
+    "data":[{"sg.Altersgruppe":"Gesamt"},{"sg.Altersgruppe":"0 bis 9 Jahre"},
+      {"sg.Altersgruppe":"10 bis 19 Jahre"},{"sg.Altersgruppe":"20 bis 29 Jahre"},{"sg.Altersgruppe":"30 bis 39 Jahre"},
+      {"sg.Altersgruppe":"40 bis 49 Jahre"},{"sg.Altersgruppe":"50 bis 59 Jahre"},{"sg.Altersgruppe":"60 bis 69 Jahre"},
+      {"sg.Altersgruppe":"70 bis 79 Jahre"},{"sg.Altersgruppe":"80 und mehr Jahre"}]}];
   
 
   ngOnInit(): void {
@@ -73,6 +92,12 @@ export class StartComponent implements OnInit {
 
   setlevel(level, value) {
     this.levelsettings[level] = value;
+    if (level=="subgroup_agegrpid"){
+      this.altergruppenid_ageoptions = this.api.filterArray(this.altergruppenid_options,'sg.Altersgruppe_ID',value)[0]['data'];
+      console.log(this.altergruppenid_ageoptions);
+      this.levelsettings['subgroup_agegrpid_agevalue']="Gesamt";
+    }
+    
     this.querydata();
   }
 
@@ -144,8 +169,13 @@ export class StartComponent implements OnInit {
     };
     this.outcomeinfo = this.api.filterArray(this.metadata, "varname", this.levelsettings["outcomes"])[0];
     query["groupinfo"][this.level] = this.levelsettings["levelvalues"];
-    query["groupinfo"]['sg.Geschlecht'] = "Gesamt";
+    query["groupinfo"]['sg.Geschlecht'] = this.levelsettings['subgroup_gender'];
     query["groupinfo"]['sg.Altersgruppe_ID'] = "0";
+    if (this.levelsettings['subgroup_agegrpid']!=0 && this.levelsettings['subgroup_agegrpid_agevalue']!=='Gesamt'){
+      query["groupinfo"]['sg.Altersgruppe_ID'] = this.levelsettings['subgroup_agegrpid'];
+      query["groupinfo"]['sg.Altersgruppe'] = this.levelsettings['subgroup_agegrpid_agevalue'];
+    }
+
     let i = 0
     this.api.postTypeRequest('get_data/', query).subscribe(data => {
       this.datakeys = Object.keys(data["data"][0]);
@@ -174,6 +204,7 @@ export class StartComponent implements OnInit {
 
       // Query Age/Sex
       let agesexquery = query;
+      agesexquery["groupinfo"]={};
       agesexquery["groupinfo"]['level'] = "Gesamt";
       agesexquery["groupinfo"]['sg.Geschlecht']={"$ne":"Gesamt"};
       agesexquery["groupinfo"]['sg.Altersgruppe_ID']="1";
