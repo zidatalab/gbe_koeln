@@ -105,7 +105,7 @@ export class StartComponent implements OnInit {
     if (this.api.getmetadata("metadata")){
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
-    this.geojson_available = ["Stadtbezirke","Stadtteile"]; // levelid passt nicht: "Statistische Quartiere","Sozialräume"
+    this.geojson_available = ["Stadtbezirke","Stadtteile","Statistische Quartiere","Sozialräume"]; // levelid passt nicht: "Statistische Quartiere","Sozialräume"
     }
     if(this.metadata){
       if (this.metadata.length>0){

@@ -9,7 +9,7 @@
     <div *ngIf="this.intend=='Regionen beschreiben'">
         <div>
             <mat-chip-list>
-                <ng-container *ngFor="let item of this.levelvalues">
+                <ng-container *ngFor="let item of this.geojson_available">
                     <mat-chip (click)="this.newlevel(item)" [selected]="this.currentlevel==item" color="primary">
                         {{item}}
                     </mat-chip>
@@ -22,7 +22,9 @@
             </div>
             <div>
                 <div> 
-                    <app-map [containername]="'mapdiv'" [basemap]="this.mapdata" [(id)]="this.levelid" opacity=.8 Zoom=10
+                    <app-map [containername]="'mapdiv'" 
+                    [center]="[50.94380474348729, 6.9669503454676125]"
+                    [basemap]="this.mapdata" [(id)]="this.levelid" opacity=.8 Zoom=10
                     selectmap="true" (clicked)="changeregion($event)"></app-map>
                 </div>
                 <div>

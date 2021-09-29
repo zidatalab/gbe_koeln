@@ -93,7 +93,7 @@ export class MapComponent implements OnInit {
   resetprops() {
     if (!this.containername) { this.containername = "mapdiv" + Math.round(Math.random() * 1000).toString() + "_" + Math.round(Math.random() * 1000).toString(); };
     if (!this.Zoom) { this.Zoom = 4; };
-    if (!this.center) { this.center = this.getcenter(); };// [51.948, 10.265]; };
+    if (!this.center) { this.center = this.getcenter(); };//  DOES NOT WORK FOR TYPE MULTIPOLYGON!
     if (!this.opacity) { this.opacity = .1; };
     if (!this.customlabels) { this.customlabels = []; };
     if (!this.binmethod) { this.binmethod = "equalint" };
@@ -157,7 +157,16 @@ export class MapComponent implements OnInit {
     this.preparedom(divid);
 
     // Load Map
+
+    if (this.debug){
+      console.log('center: ',this.center );
+    }
+
     mymap = L.map(divid, { center: this.center, zoom: this.Zoom });
+
+    if (this.debug){
+      console.log('Map created');
+    }
 
     // Fix Icons see https://stackoverflow.com/questions/41144319/leaflet-marker-not-found-production-env
     const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -220,6 +229,10 @@ export class MapComponent implements OnInit {
           item['properties'][propname] = null;
         }
       }
+      if (this.debug){
+        console.log('Map Features',geojsonFeature.features);
+      }
+      
 
 
       if (!cutoffs) {
@@ -474,11 +487,16 @@ export class MapComponent implements OnInit {
     let coords = { 'a': [], 'b': [] };
     for (let item of features) {
       for (let area of item.geometry.coordinates) {
-        for (let subarea of area) {
+        for (let subarea of area) {          
           coords['a'].push(subarea[0])
           coords['b'].push(subarea[1])
+          
         }
       }
+    }
+    if (this.debug){
+      console.log("CENTER FEATURES:",this.basemap.features);
+      console.log("CENTER COORDS:",coords);
     }
     let a = coords['a'].reduce((pv, cv) => pv + cv, 0) / coords['a'].length;
     let b = coords['b'].reduce((pv, cv) => pv + cv, 0) / coords['b'].length;

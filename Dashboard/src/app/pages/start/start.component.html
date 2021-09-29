@@ -229,7 +229,7 @@
                     <app-map *ngIf="this.mapdata_stadtbezirke['features'] && this.data.length>0"
                         [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
                         [containername]="'mapdata_stadtbezirke'" [basemap]="this.mapdata_stadtbezirke" [bins]="5"
-                        [id]="this.levelid" opacity=.8 Zoom=10
+                        [id]="this.levelid" opacity=.8 Zoom=10 [center]="[50.94380474348729, 6.9669503454676125]"
                         [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true"
                         [feature]="this.levelsettings['outcomes']"></app-map>
                 </mat-card>
@@ -240,33 +240,34 @@
                     <app-map *ngIf="this.mapdata_stadtteile['features'] && this.data.length>0"
                         [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
                         [containername]="'mapdata_stadtteile'" [basemap]="this.mapdata_stadtteile" [bins]="5"
-                        [id]="this.levelid" opacity=.8 Zoom=10
+                        [id]="this.levelid" opacity=.8 Zoom=10 [debug]="false" [center]="[50.94380474348729, 6.9669503454676125]"
                         [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true"
                         [feature]="this.levelsettings['outcomes']"></app-map>
                 </mat-card>
             </div>
-          <!--   <div class="minheight"
+              <div class="minheight"
                 *ngIf="(this.levelsettings['levelvalues']=='Statistische Quartiere') && this.mapdata_statistischequartiere && this.data && this.levelid">
                 <mat-card class="no-padding">
                     <app-map *ngIf="this.mapdata_statistischequartiere['features'] && this.data.length>0"
                         [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
-                        [containername]="'mapdata_stadtteile'" [basemap]="this.mapdata_statistischequartiere" [bins]="5"
-                        [id]="this.levelid" opacity=.8 Zoom=10
+                        [containername]="'mapdata_statistischequartiere'" [basemap]="this.mapdata_statistischequartiere" [bins]="5"
+                        [id]="this.levelid" opacity=.8 Zoom=10 [debug]="false" [center]="[50.94380474348729, 6.9669503454676125]"
                         [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true"
                         [feature]="this.levelsettings['outcomes']"></app-map>
                 </mat-card>
-            </div>
+            </div> 
+            
             <div class="minheight"
             *ngIf="(this.levelsettings['levelvalues']=='Sozialräume') && this.mapdata_sozialraum && this.data && this.levelid">
             <mat-card class="no-padding">
                 <app-map *ngIf="this.mapdata_sozialraum['features'] && this.data.length>0"
                     [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
                     [containername]="'mapdata_stadtteile'" [basemap]="this.mapdata_sozialraum" [bins]="5"
-                    [id]="this.levelid" opacity=.8 Zoom=10
+                    [id]="this.levelid" opacity=.8 Zoom=10 [center]="[50.94380474348729, 6.9669503454676125]"
                     [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true"
                     [feature]="this.levelsettings['outcomes']"></app-map>
             </mat-card>
-        </div> -->
+        </div> 
             <div class="minheight" *ngIf="this.levelsettings['levelvalues']!=='Gesamt' ">
                 <mat-card>
                     <h2>Rangfolge der Regionen</h2>

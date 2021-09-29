@@ -39,7 +39,7 @@ export class PrivateComponent implements OnInit {
     this.intend = this.actions[0];
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
-    this.geojson_available = ["Stadtbezirke","Stadtteile"];
+    this.geojson_available = ["Stadtbezirke","Stadtteile","Statistische Quartiere","Sozialräume"];
     setInterval(()=>{this.auth.getRefreshToken()},60*1000*5)
     this.updatesortinfo();
     if (!this.levelid){
@@ -63,8 +63,7 @@ export class PrivateComponent implements OnInit {
     this.levelid=this.api.filterArray(this.metadata,"type","levelid")[0]['varname'];
     this.outcomes=this.api.filterArray(this.metadata,"topic","outcomes");
     this.determinants=this.api.filterArray(this.metadata,"topic","demography");
-    this.levelvalues = this.geojson_available; // this.api.filterArray(this.sortdata, "varname", this.level)[0]["values"].filter(x => this.geojson_available.includes(x));;
-    this.levelvalues = this.levelvalues.sort();
+    this.levelvalues = this.geojson_available; 
     this.currentlevel=this.levelvalues[0];
     this.newlevel(this.currentlevel);
     this.currentregion="";
@@ -129,6 +128,8 @@ export class PrivateComponent implements OnInit {
         "groupinfo": {}
       };
       query["groupinfo"][this.level] = this.currentlevel;
+      query["groupinfo"]['sg.Geschlecht'] = "Gesamt";
+      query["groupinfo"]['sg.Altersgruppe_ID'] = "0";
       query["showfields"]=[this.outcome,this.determinant];
       this.andata=null;
       this.api.postTypeRequest('get_data/', query).subscribe(data => 
@@ -139,12 +140,14 @@ export class PrivateComponent implements OnInit {
     if (this.outcome && this.determinant){
     let anquery ={
       "client_id": this.api.REST_API_SERVER_CLIENTID,
-      "groupinfo": {},
+      "groupinfo": {"level": "Statistische Quartiere", "sg.Geschlecht": "Gesamt","client_id":"2021_06_gbe_koeln", "sg.Altersgruppe_ID": "0"},
        "theoutcome": this.outcome,
        "maininterest": this.determinant,
        "controls": this.controls
      };
-     anquery["groupinfo"][this.level] = this.currentlevel;
+     anquery["groupinfo"]['level'] = this.currentlevel;
+     anquery["groupinfo"]['sg.Geschlecht'] = "Gesamt";
+     anquery["groupinfo"]['sg.Altersgruppe_ID'] = "0";
      this.regressiondata=null;
      this.api.postTypeRequest('analytics/regression/', anquery).subscribe(data => 
        {let res = data;this.regressiondata=res;
