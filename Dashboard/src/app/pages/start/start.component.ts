@@ -159,7 +159,7 @@ export class StartComponent implements OnInit {
   }
   
   querydata() {
-    this.data =[];
+    this.data =null;
     this.data_overall = "-";
     this.data_age_sex=[];
     let query = {
@@ -194,6 +194,7 @@ export class StartComponent implements OnInit {
 
       // Query Overall Data
       const overallquery = query;
+      overallquery["groupinfo"]={};
       overallquery["groupinfo"]['level'] = "Gesamt";
       this.api.postTypeRequest('get_data/', overallquery).subscribe(data => {
         this.data_overall=data['data'][0][this.levelsettings["outcomes"]];

@@ -19,115 +19,135 @@
     </div>
 
     <div *ngIf="this.progress">
-    <mat-spinner></mat-spinner>
+        <mat-spinner></mat-spinner>
     </div>
 
     <div *ngIf="this.metadata && !this.progress">
         <ng-container *ngIf="!(this.metadata.length>0 && this.levelvalues.length>0)">
             <mat-progress></mat-progress>
         </ng-container>
-         <ng-container *ngIf="this.metadata.length>0 && this.levelvalues.length>0">            
-            <h1><strong>Indikatorauswahl</strong></h1>
-            <h3>Typ</h3>
-            <p>
-            <mat-chip-list>
-                <mat-chip-list>
-                    <mat-chip (click)="this.outcomeart=item;" *ngFor="let item of ['Inanspruchnahme','M1Q','M2Q','Einflussfaktoren']"
-                        [selected]="this.outcomeart==item" color="primary">
-                        <span *ngIf="item=='M1Q'|| item=='M2Q'">Prävalenz </span>&nbsp; {{item}}</mat-chip>
-                </mat-chip-list>
-            </mat-chip-list>    
-            </p>       
-            <h3>Indikator</h3>
-            <p >
-                <ng-container *ngIf="this.outcomeart==='Inanspruchnahme'">
-                <mat-chip-list>
+        <ng-container *ngIf="this.metadata.length>0 && this.levelvalues.length>0">
+            <p fxHide=false fxShow.gt-sm=false>
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Outcome</mat-label>
+                    <mat-select [(value)]="this.levelsettings['outcomes']"
+                        (selectionChange)="this.setlevel('outcomes',this.levelsettings['outcomes']);">
+                        <mat-option value="">Keine Auswahl</mat-option><br>
+                        <ng-container *ngFor="let item of this.outcomes">
+                            <mat-option [value]="item"><strong> {{item | replace : '[_]' : '.' }}</strong></mat-option>
+                            <br>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+            </p>
+            <div fxHide=true fxShow.gt-sm=true>
+                <h3>Themenbereich</h3>
+                <p>
                     <mat-chip-list>
-                        <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes_util"
-                            [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                            {{item.replace('Anteil Patienten mit','') | replace : '[_]' : '.'}}
-                        </mat-chip>
-                    </mat-chip-list>
-                </mat-chip-list>
-                </ng-container>
-                <ng-container *ngIf="this.outcomeart==='M1Q'">
-                    <mat-chip-list >
                         <mat-chip-list>
-                            <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes_m1q"
-                                [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                                {{item.replace(' M1Q','').replace('Prävalenz von','').replace('Prävalenz der','')  | replace : '[_]' : '.'  }}
+                            <mat-chip (click)="this.outcomeart=item;"
+                                *ngFor="let item of ['Inanspruchnahme','M1Q','M2Q','Einflussfaktoren']"
+                                [selected]="this.outcomeart==item" color="primary">
+                                <span *ngIf="item=='M1Q'|| item=='M2Q'">Prävalenz </span>&nbsp; {{item}}
                             </mat-chip>
                         </mat-chip-list>
                     </mat-chip-list>
+                </p>
+                <h3>Indikator</h3>
+                <p>
+                    <ng-container *ngIf="this.outcomeart==='Inanspruchnahme'">
+                        <mat-chip-list>
+                            <mat-chip-list>
+                                <mat-chip (click)="this.setlevel('outcomes',item);"
+                                    *ngFor="let item of this.outcomes_util"
+                                    [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                                    {{item.replace('Anteil Patienten mit','') | replace : '[_]' : '.'}}
+                                </mat-chip>
+                            </mat-chip-list>
+                        </mat-chip-list>
+                    </ng-container>
+                    <ng-container *ngIf="this.outcomeart==='M1Q'">
+                        <mat-chip-list>
+                            <mat-chip-list>
+                                <mat-chip (click)="this.setlevel('outcomes',item);"
+                                    *ngFor="let item of this.outcomes_m1q"
+                                    [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                                    {{item.replace(' M1Q','').replace('Prävalenz von','').replace('Prävalenz der','') |
+                                    replace : '[_]' : '.' }}
+                                </mat-chip>
+                            </mat-chip-list>
+                        </mat-chip-list>
                     </ng-container>
                     <ng-container *ngIf="this.outcomeart==='M2Q'">
                         <mat-chip-list>
                             <mat-chip-list>
-                                <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.outcomes_m2q"
+                                <mat-chip (click)="this.setlevel('outcomes',item);"
+                                    *ngFor="let item of this.outcomes_m2q"
                                     [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                                    {{item.replace(' M2Q','').replace('Prävalenz von','').replace('Prävalenz der','')  | replace : '[_]' : '.'  }}
+                                    {{item.replace(' M2Q','').replace('Prävalenz von','').replace('Prävalenz der','') |
+                                    replace : '[_]' : '.' }}
                                 </mat-chip>
                             </mat-chip-list>
                         </mat-chip-list>
-                        </ng-container>
-                <ng-container *ngIf="this.outcomeart==='Einflussfaktoren'">
-                    <mat-chip-list>
-                        <mat-chip-list>
-                            <mat-chip (click)="this.setlevel('outcomes',item);" *ngFor="let item of this.determinants"
-                                [selected]="(this.levelsettings['outcomes']==item)" color="primary">
-                                {{item.replace(' M2Q','').replace('Prävalenz von','').replace('Prävalenz der','')  | replace : '[_]' : '.'  }}
-                            </mat-chip>
-                        </mat-chip-list>
-                    </mat-chip-list>
                     </ng-container>
-            </p>            
+                    <ng-container *ngIf="this.outcomeart==='Einflussfaktoren'">
+                        <mat-chip-list>
+                            <mat-chip-list>
+                                <mat-chip (click)="this.setlevel('outcomes',item);"
+                                    *ngFor="let item of this.determinants"
+                                    [selected]="(this.levelsettings['outcomes']==item)" color="primary">
+                                    {{item.replace(' M2Q','').replace('Prävalenz von','').replace('Prävalenz der','') |
+                                    replace : '[_]' : '.' }}
+                                </mat-chip>
+                            </mat-chip-list>
+                        </mat-chip-list>
+                    </ng-container>
+                </p>
+            </div>
         </ng-container>
     </div>
+    <div *ngIf="this.data.length==0" fxLayout="column">
+        <p>Keine Daten</p>
+        <p><a mat-raised-button color="primary" href="/">Auswahl zurücksetzen</a></p>
+    </div>
     <div *ngIf="this.data.length>0" fxLayout="column">
-        
+
         <h1>Ergebnisse</h1>
         <h2><strong>Allgemeine Informationen</strong></h2>
         <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem">
-            
+
             <div fxFlex=50 fxFlex.lt-md=100>
-                
-                    <ng-container *ngIf="this.outcomeinfo['type']=='number'">
-                    <app-box [value]="this.data_overall" [maincolor]="'#D7191C'"                    
-                    [description]="this.outcomeinfo['varname']"></app-box>
-                    </ng-container>
-                    <ng-container *ngIf="this.outcomeinfo['type']=='rate'">
-                        <app-box [value]="this.data_overall" [title]="'%'" [maincolor]="'#D7191C'"
-                        [textbehind]="true"
+
+                <ng-container *ngIf="this.outcomeinfo['type']=='number'">
+                    <app-box [value]="this.data_overall" [maincolor]="'#D7191C'"
                         [description]="this.outcomeinfo['varname']"></app-box>
-                        </ng-container>
-                    
+                </ng-container>
+                <ng-container *ngIf="this.outcomeinfo['type']=='rate'">
+                    <app-box [value]="this.data_overall" [title]="'%'" [maincolor]="'#D7191C'" [textbehind]="true"
+                        [description]="this.outcomeinfo['varname']"></app-box>
+                </ng-container>
+
             </div>
-            <div fxFlex=66 *ngIf="this.outcomeinfo['description']" >
-                <mat-card  style="background-color: rgb(235, 235, 235);">
-                    <p  class="mat-caption">{{this.outcomeinfo['description']}}</p> 
+            <div fxFlex=66 *ngIf="this.outcomeinfo['description']">
+                <mat-card style="background-color: rgb(235, 235, 235);">
+                    <p class="mat-caption">{{this.outcomeinfo['description']}}</p>
                 </mat-card>
             </div>
             <div fxFlex=100 *ngIf="this.data_age_sex">
                 <mat-card *ngIf="this.data_age_sex.length>0">
                     <h2>Alters- und Geschlechtsunterschiede</h2>
-                    <app-plot
-                    [data]="this.data_age_sex"
-                    [outcomes]="[this.outcomeinfo['varname']]"
-                    [xvalue]="'sg.Altersgruppe'"
-                    [percent]="true"
-                    [colorby]="'sg.Geschlecht'"
-                    plottype="bar"
-                    [colorscheme]="['#D7191C','#2c7bb6']"
-                    ></app-plot>
+                    <app-plot [data]="this.data_age_sex" [outcomes]="[this.outcomeinfo['varname']]"
+                        [xvalue]="'sg.Altersgruppe'" [percent]="true" [colorby]="'sg.Geschlecht'" plottype="bar"
+                        [colorscheme]="['#D7191C','#2c7bb6']"></app-plot>
                 </mat-card>
             </div>
 
 
         </div>
-        
+
         <div>
-        <h2><strong>Regionale Unterschiede</strong></h2>
-        <h3><strong>Raumeinheit</strong></h3>
+            <h2><strong>Regionale Unterschiede</strong></h2>
+            <h4>Raumeinheit</h4>
             <p>
                 <mat-chip-list>
                     <mat-chip (click)="this.setlevel('levelvalues',item);" *ngFor="let item of this.levelvalues"
@@ -139,13 +159,13 @@
                     </mat-chip>
                 </mat-chip-list>
             </p>
-        <h3><strong>Subgruppenauswahl</strong></h3>
+            <h4>Filterung</h4>
             <ng-container>
                 <p>
                     <mat-chip-list>
                         <mat-chip-list>
                             <ng-container *ngFor="let item of ['Gesamt','Detailliert']">
-                                <mat-chip (click)="this.setlevel('subgroupresolution',item);"                                   
+                                <mat-chip (click)="this.setlevel('subgroupresolution',item);"
                                     [selected]="(this.levelsettings['subgroupresolution']==item)" color="primary">
                                     {{item}}
                                 </mat-chip>
@@ -153,14 +173,14 @@
                         </mat-chip-list>
                     </mat-chip-list>
                 </p>
-            </ng-container> 
+            </ng-container>
             <ng-container *ngIf="this.levelsettings['subgroupresolution']=='Detailliert'">
-                <h3><strong>Geschlecht</strong></h3>
+                <h4>Geschlecht</h4>
                 <p>
                     <mat-chip-list>
                         <mat-chip-list>
                             <ng-container *ngFor="let item of ['Gesamt','Männer','Frauen']">
-                                <mat-chip (click)="this.setlevel('subgroup_gender',item);"                                   
+                                <mat-chip (click)="this.setlevel('subgroup_gender',item);"
                                     [selected]="(this.levelsettings['subgroup_gender']==item)" color="primary">
                                     {{item}}
                                 </mat-chip>
@@ -168,72 +188,81 @@
                         </mat-chip-list>
                     </mat-chip-list>
                 </p>
-            </ng-container> 
+            </ng-container>
             <ng-container *ngIf="this.levelsettings['subgroupresolution']=='Detailliert'">
-                <h3><strong>Alterseinteilung</strong></h3>
+                <h4>Alterseinteilung</h4>
                 <p>
                     <mat-chip-list>
                         <mat-chip-list>
                             <ng-container *ngFor="let item of this.altergruppenid_options">
-                                <mat-chip (click)="this.setlevel('subgroup_agegrpid',item['sg.Altersgruppe_ID']);"                                   
-                                    [selected]="(this.levelsettings['subgroup_agegrpid']==item['sg.Altersgruppe_ID'])" color="primary">
+                                <mat-chip (click)="this.setlevel('subgroup_agegrpid',item['sg.Altersgruppe_ID']);"
+                                    [selected]="(this.levelsettings['subgroup_agegrpid']==item['sg.Altersgruppe_ID'])"
+                                    color="primary">
                                     {{item['label']}}
                                 </mat-chip>
                             </ng-container>
                         </mat-chip-list>
                     </mat-chip-list>
                 </p>
-            </ng-container> 
-            <ng-container *ngIf="this.levelsettings['subgroupresolution']=='Detailliert' && this.levelsettings['subgroup_agegrpid']>0">
-                <h3><strong>Altersgruppe</strong></h3>
+            </ng-container>
+            <ng-container
+                *ngIf="this.levelsettings['subgroupresolution']=='Detailliert' && this.levelsettings['subgroup_agegrpid']>0">
+                <h4>Alter</h4>
                 <p>
                     <mat-chip-list>
                         <mat-chip-list>
                             <ng-container *ngFor="let item of this.altergruppenid_ageoptions">
-                                <mat-chip (click)="this.setlevel('subgroup_agegrpid_agevalue',item['sg.Altersgruppe']);"                                   
-                                    [selected]="(this.levelsettings['subgroup_agegrpid_agevalue']==item['sg.Altersgruppe'])" color="primary">
+                                <mat-chip (click)="this.setlevel('subgroup_agegrpid_agevalue',item['sg.Altersgruppe']);"
+                                    [selected]="(this.levelsettings['subgroup_agegrpid_agevalue']==item['sg.Altersgruppe'])"
+                                    color="primary">
                                     {{item['sg.Altersgruppe']}}
                                 </mat-chip>
                             </ng-container>
                         </mat-chip-list>
                     </mat-chip-list>
                 </p>
-            </ng-container> 
+            </ng-container>
 
-        <div class="minheight"
-            *ngIf="(this.levelsettings['levelvalues']=='Stadtbezirke') && this.mapdata_stadtbezirke && this.data && this.levelid">
-            <mat-card class="no-padding">            
-            <app-map *ngIf="this.mapdata_stadtbezirke['features'] && this.data.length>0" [containername]="'mapdiv'"
-                [binmethod]="'equalgroupsize'"
-                [data]="this.data" [containername]="'mapdata_stadtbezirke'" [basemap]="this.mapdata_stadtbezirke" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=10
-                [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>
-            </mat-card>           
-        </div> 
-        <div class="minheight"
-        *ngIf="(this.levelsettings['levelvalues']=='Stadtteile') && this.mapdata_stadtteile && this.data && this.levelid">
-        <mat-card class="no-padding">            
-        <app-map *ngIf="this.mapdata_stadtteile['features'] && this.data.length>0" [containername]="'mapdiv'"
-            [binmethod]="'equalgroupsize'"
-            [data]="this.data" [containername]="'mapdata_stadtteile'" [basemap]="this.mapdata_stadtteile" [bins]="5" [id]="this.levelid" opacity=.8 Zoom=10
-            [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true" [feature]="this.levelsettings['outcomes']"></app-map>
-        </mat-card>           
-    </div>   
-        <div class="minheight" *ngIf="this.levelsettings['levelvalues']!=='Gesamt' ">
-            <mat-card>
-                <h2>Rangfolge der Regionen</h2>
-                <app-plot [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }" [xvalue]="this.levelid"
-                    [percent]="true" [sort]="true" [outcomes]="[this.levelsettings['outcomes']]"
-                    [colorscheme]="['#D7191C','#fdae61','#ffffbf','#abd9e9','#2c7bb6']" plottype="bar"></app-plot>
+            <div class="minheight"
+                *ngIf="(this.levelsettings['levelvalues']=='Stadtbezirke') && this.mapdata_stadtbezirke && this.data && this.levelid">
+                <mat-card class="no-padding">
+                    <app-map *ngIf="this.mapdata_stadtbezirke['features'] && this.data.length>0"
+                        [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
+                        [containername]="'mapdata_stadtbezirke'" [basemap]="this.mapdata_stadtbezirke" [bins]="5"
+                        [id]="this.levelid" opacity=.8 Zoom=10
+                        [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true"
+                        [feature]="this.levelsettings['outcomes']"></app-map>
                 </mat-card>
-        </div>
-        <div class="minheight" *ngIf="this.data">
-            <mat-card>
-                <h2>Regionssuche</h2>
-                <app-table [data]="this.data" [columns]="this.datakeys" [addrank]="true" [outcomes_rate]="this.data_rate" [addfilter]="true"
-                    [outcomes_numeric]="this.data_number"></app-table>
+            </div>
+            <div class="minheight"
+                *ngIf="(this.levelsettings['levelvalues']=='Stadtteile') && this.mapdata_stadtteile && this.data && this.levelid">
+                <mat-card class="no-padding">
+                    <app-map *ngIf="this.mapdata_stadtteile['features'] && this.data.length>0"
+                        [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
+                        [containername]="'mapdata_stadtteile'" [basemap]="this.mapdata_stadtteile" [bins]="5"
+                        [id]="this.levelid" opacity=.8 Zoom=10
+                        [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true"
+                        [feature]="this.levelsettings['outcomes']"></app-map>
                 </mat-card>
+            </div>
+            <div class="minheight" *ngIf="this.levelsettings['levelvalues']!=='Gesamt' ">
+                <mat-card>
+                    <h2>Rangfolge der Regionen</h2>
+                    <app-plot [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
+                        [xvalue]="this.levelid" [percent]="true" [sort]="true"
+                        [outcomes]="[this.levelsettings['outcomes']]"
+                        [colorscheme]="['#D7191C','#fdae61','#ffffbf','#abd9e9','#2c7bb6']" plottype="bar"></app-plot>
+                </mat-card>
+            </div>
+            <div class="minheight" *ngIf="this.data">
+                <mat-card>
+                    <h2>Regionssuche</h2>
+                    <app-table [data]="this.data" [columns]="this.datakeys" [addrank]="true"
+                        [outcomes_rate]="this.data_rate" [addfilter]="true" [outcomes_numeric]="this.data_number">
+                    </app-table>
+                </mat-card>
+            </div>
         </div>
-    </div>
     </div>
 
 </div>
