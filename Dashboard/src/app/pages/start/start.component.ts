@@ -105,7 +105,7 @@ export class StartComponent implements OnInit {
     if (this.api.getmetadata("metadata")){
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
-    this.geojson_available = ["Stadtbezirke","Stadtteile"];
+    this.geojson_available = ["Stadtbezirke","Stadtteile"]; // levelid passt nicht: "Statistische Quartiere","Sozialräume"
     }
     if(this.metadata){
       if (this.metadata.length>0){
@@ -257,10 +257,11 @@ export class StartComponent implements OnInit {
           data => {
             this.mapdata_sozialraum = data;                
           });
-      /* this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname='+'Statistische Quartiere').subscribe(
+       this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname='+'Statistische Quartiere').subscribe(
           data => {
             this.mapdata_statistischequartiere = data;        
-          }); */
+          }); 
+      
   }
 
 

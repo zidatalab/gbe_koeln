@@ -14,6 +14,7 @@ import * as chroma from "chroma-js";
 })
 export class MapComponent implements OnInit {
   @Input() data = [];
+  @Input() nacolor = "white";
   @Input() debug :boolean = false;
   @Input() Outcome: String;
   @Input() Zoom: number;
@@ -192,12 +193,22 @@ export class MapComponent implements OnInit {
       const geojsonFeature: FeatureCollection = Object.assign(this.basemap);
       if (this.percent) {
         for (let item of thedata) {
-          item['___thevalue'] = Math.round(item[this.feature] * 10000) / 100;
+          if (item[this.feature]){
+            item['___thevalue'] = Math.round(item[this.feature] * 10000) / 100;
+          }
+          else {
+            item['___thevalue']=null;
+          }
         }
       }
       else {
-        for (let item of thedata) {
-          item['___thevalue'] = item[this.feature];
+        for (let item of thedata) {         
+          if (item[this.feature]){
+            item['___thevalue'] = item[this.feature];
+          }
+          else {
+            item['___thevalue']=null;
+          }
         }
       }
       for (let item of geojsonFeature.features) {
@@ -229,7 +240,10 @@ export class MapComponent implements OnInit {
           };
           i = i + 1;
         }
-        if (thevalue != null) { result['color'] = thecolor; };
+        if (thevalue != null) { result['color'] = thecolor; } 
+        else {
+          result['color'] = 'grey';
+        };
         return result
       };
       // Infobox
