@@ -24,6 +24,7 @@ import { InterceptorService } from './services/interceptor-service.service';
 import { PrivateComponent } from './pages/private/private.component';
 import { AdminComponent } from './pages/admin/admin.component' 
 import { ReplacePipe } from './services/replace_pipe';
+import { D3mapComponent } from './components/d3map/d3map.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -41,7 +42,8 @@ registerLocaleData(locales, 'de');
     ProfileComponent,
     PrivateComponent,
     AdminComponent,
-    ReplacePipe
+    ReplacePipe,
+    D3mapComponent
     
   ],
   imports: [

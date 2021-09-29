@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import { version } from 'src/../package.json';
+import * as pinfo from 'src/../package.json';
+
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -41,7 +42,7 @@ export class AdminComponent implements OnInit {
   uploadareaid: string;
   topicoptions = ['ordering', 'subgroups', 'demography', 'outcomes']
   typeoptions = ['level', 'levelid', 'group', 'rate', 'number']
-  appversion:string = version;
+  appversion:string = "Not possible";
   ngOnInit(): void {
     this.currentuser = this.auth.getUserDetails();
     this.updateuserlist();

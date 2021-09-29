@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { FeatureCollection } from 'geojson';
 import { ApiService } from 'src/app/services/api.service';
 import * as chroma from "chroma-js";
-import { resourceUsage } from 'process';
 
 @Component({
   selector: 'app-map',
