@@ -5,7 +5,7 @@
 <ng-container *ngIf="(this.basemap)">
 <div  class="map-container">
     <div id="map-frame" class="map-frame">
-      
+      <div [id]="this.containername"></div>
     </div>    
     <mat-spinner *ngIf="!this.mapok" color="primary"></mat-spinner>
   </div>

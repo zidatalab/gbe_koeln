@@ -51,7 +51,8 @@ export class AdminComponent implements OnInit {
     this.allmetadata = this.api.getmetadata("metadata");
     let currentmetadata = this.api.filterArray(this.allmetadata, 'type', 'level')[0];
 
-    setTimeout(() => { this.areavalues = this.api.filterArray(this.api.getmetadata("sortdata"), 'varname', currentmetadata["varname"])[0]['values']; }, 0);
+    this.areavalues = ["Stadtbezirke","Stadtteile","Statistische Quartiere","Sozialräume",
+    "Umweltbelastungszonen Hitze","Umweltbelastungszonen Lärm","Umweltbelastungszonen Luft"];
     this.api.getTypeRequest('openapi.json').subscribe(
       data=>{this.backenddoc=data;});
     

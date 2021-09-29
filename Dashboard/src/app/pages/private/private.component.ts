@@ -39,7 +39,7 @@ export class PrivateComponent implements OnInit {
     this.intend = this.actions[0];
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
-    this.geojson_available = this.api.getmetadata("geodata");
+    this.geojson_available = ["Stadtbezirke","Stadtteile"];
     setInterval(()=>{this.auth.getRefreshToken()},60*1000*5)
     this.updatesortinfo();
     if (!this.levelid){

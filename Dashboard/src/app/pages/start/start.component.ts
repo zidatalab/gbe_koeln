@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
-
-
 @Component({
   selector: 'app-start',
   templateUrl: './start.component.html',
@@ -17,8 +15,10 @@ export class StartComponent implements OnInit {
   metadata=[];
   progress:boolean;
   metadataok: boolean;
-  mapdata: any;
-  mapdatafor: string;
+  mapdata_stadtbezirke:any;
+  mapdata_stadtteile:any;
+  mapdata_sozialraum:any;
+  mapdata_statistischequartiere:any;
   sortdata=[];
   level: any;
   levelvalues: any;
@@ -47,9 +47,7 @@ export class StartComponent implements OnInit {
   ngOnInit(): void {
     this.progress=true;
     this.colorsscheme = ["#e91e63"];
-    this.mapdatafor = "";
-    this.data=[];
-    this.mapdata=[];
+    this.data=[];    
     this.updatemetadata();
     this.auth.currentUser.subscribe(data => { this.currentuser = data; });
     if (this.metadataok) { this.querydata();}
@@ -64,13 +62,12 @@ export class StartComponent implements OnInit {
           this.progress=false;
         };
       }, 2500);
-    }    
+    }
+    this.querygeodata();
   }
 
   ngOnDestroy(){
-    this.data=[];
-    this.mapdata=[];
-    
+    this.data=[];   
     }
 
 
@@ -83,7 +80,7 @@ export class StartComponent implements OnInit {
     if (this.api.getmetadata("metadata")){
     this.metadata = this.api.getmetadata("metadata");
     this.sortdata = this.api.getmetadata("sortdata");
-    this.geojson_available = this.api.getmetadata("geodata");
+    this.geojson_available = ["Stadtbezirke","Stadtteile"];
     }
     if(this.metadata){
       if (this.metadata.length>0){
@@ -135,11 +132,7 @@ export class StartComponent implements OnInit {
           this.progress=false;          
 
   }
-  thereismapdata() {
-    let res = this.thereisdata() && this.mapdata
-    return res
-  }
-
+  
   querydata() {
     this.data =[];
     this.data_overall = "-";
@@ -199,19 +192,8 @@ export class StartComponent implements OnInit {
         this.data_number = [(this.levelsettings["outcomes"])];
         this.data_rate = [];
       };
-    }, 0);
-      
-      
-      if ((this.mapdatafor !== this.levelsettings['levelvalues']) && (this.levelsettings['levelvalues'] !== 'Gesamt') && (this.geojson_available.indexOf(this.levelsettings['levelvalues']) >= 0)) {
-        this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname=' + this.levelsettings['levelvalues']).subscribe(
-          data => {
-            this.mapdata = data;
-            this.mapdatafor = this.levelsettings['levelvalues'];
-          },
-          error => {
-            this.mapdata=null;
-          });
-      }
+    }, 0);      
+            
     });
 
  
@@ -230,6 +212,24 @@ export class StartComponent implements OnInit {
 
   };
 
+  querygeodata(){
+    this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname=Stadtbezirke').subscribe(
+      data => {
+        this.mapdata_stadtbezirke = data;        
+      });
+      this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname=Stadtteile').subscribe(
+        data => {
+          this.mapdata_stadtteile = data;        
+        });
+        this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname='+'Sozialräume').subscribe(
+          data => {
+            this.mapdata_sozialraum = data;                
+          });
+      /* this.api.getTypeRequest('get_geodata/?client_id=' + this.api.REST_API_SERVER_CLIENTID + '&levelname='+'Statistische Quartiere').subscribe(
+          data => {
+            this.mapdata_statistischequartiere = data;        
+          }); */
+  }
 
 
 }

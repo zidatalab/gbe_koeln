@@ -14,6 +14,7 @@ import * as chroma from "chroma-js";
 })
 export class MapComponent implements OnInit {
   @Input() data = [];
+  @Input() debug :boolean = false;
   @Input() Outcome: String;
   @Input() Zoom: number;
   @Input() basemap: any; // geojson
@@ -43,6 +44,13 @@ export class MapComponent implements OnInit {
   
   
   ngOnInit(): void {
+    // Debug
+    if (this.debug){
+      console.log("ID:",this.id);
+      console.log("Map:",this.api.getValues(this.basemap['features'],'properties'));
+      console.log("Data:",this.data);
+    }
+    
     // Init vars
     this.resetprops();
     this.clickedvalue = "";
@@ -52,9 +60,7 @@ export class MapComponent implements OnInit {
   }
   ngAfterViewInit(): void {
     // Import Map data
-    if (this.checkallok()) {
-      setTimeout(()=>{ this.initMap(this.containername);},0);
-    }
+    this.initMap(this.containername);
   }
 
   
