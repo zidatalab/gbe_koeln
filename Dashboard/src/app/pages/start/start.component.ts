@@ -180,7 +180,7 @@ export class StartComponent implements OnInit {
     this.api.postTypeRequest('get_data/', query).subscribe(data => {
       this.datakeys = Object.keys(data["data"][0]);
       this.datakeystable = Object.keys(data["data"][0]);
-      this.data = data["data"] ;
+      this.data = this.api.filterNAArray(data["data"],this.levelsettings["outcomes"]);
       const index = this.datakeys.indexOf(this.level);
       if (index > -1) {
         this.datakeys.splice(index, 1);

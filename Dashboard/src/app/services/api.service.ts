@@ -92,6 +92,20 @@ public  filterArray(array,key,value){
  return result
 }
 
+public  filterNAArray(array,key){
+  let i =0
+  let result = []
+  for (let item of array){
+    if (item[key] && (item[key]!==null) && (!isNaN(item[key]))){
+      result.push(item)};
+    i = i+1
+  }
+  return result
+ }
+ 
+ 
+
+
 public  getmetadata(name){
   return JSON.parse(localStorage.getItem(name));
 }
