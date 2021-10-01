@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, PLATFORM_INITIALIZER } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -35,17 +35,20 @@ export class PlotComponent implements OnInit {
   @Input() ytitle = "";
   @Input() id = "";
   @Input() divid = "";
-
-  fontfamily = "Lato, sans-serif";
-  fontsize = ".85rem";
-  fontcolor= "black";
+  @Input() fontfamily = "Lato, sans-serif";
+  @Input() fontsize = ".85rem";
+  @Input() fontcolor= "black";
+  @Input() legendbg='ffffff20'; 
+  @Input() legendposx='right'; 
+  @Input() legendposy=1; 
+  @Output() clicked = new EventEmitter<string>();
 
   constructor(private api:ApiService) { }
   plotlayout: any;
   plotdata: any;
   mainconfig: any;
   plotlytype: string;
-
+  clickedvalue:any;
 
   ngOnInit(): void {
     if (this.divid==""){this.divid= "plotdiv" + Math.round(Math.random() * 1000).toString() + "_" + Math.round(Math.random() * 1000).toString();}
@@ -59,6 +62,11 @@ export class PlotComponent implements OnInit {
 
   ngOnChanges(changes: any) {
     setTimeout(()=>{this.make_plot()},0);
+  }
+
+  reportclick(input){
+    this.clicked.emit(input);
+    this.clickedvalue = input;    
   }
 
 
@@ -80,7 +88,7 @@ export class PlotComponent implements OnInit {
         yaxis: { fixedrange: true, showgrid: false, title: '', 
         automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
         autosize: true, padding: 0,
-        legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
+        legend: { x: 1, xanchor: this.legendposx , y: this.legendposy,  bgcolor: this.legendbg},
         margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
         annotations: this.annotations
       };
@@ -95,7 +103,7 @@ export class PlotComponent implements OnInit {
         xaxis: { fixedrange: false, type: 'category', automargin: false },
         yaxis: {  zeroline: false , automargin: true, rangemode: 'tozero',ticksuffix:" " },
         autosize: true, padding: 0,
-        legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
+        legend: { x: 1, xanchor: this.legendposx , y: this.legendposy,  bgcolor: this.legendbg},
         margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
         annotations: this.annotations
       };
@@ -109,9 +117,13 @@ export class PlotComponent implements OnInit {
       this.plotlayout = {
         barmode: "stack",
         xaxis: { fixedrange: false, showgrid: false, type: 'category', automargin: false},
-        yaxis: { fixedrange: true, title: '',  autosize: true, automargin: true, rangemode: 'tozero',ticksuffix:" " , nticks:this.n_yticks},
+        yaxis: { fixedrange: true, title: '',  autosize: true, automargin: true, 
+        rangemode: 'tozero',ticksuffix:" " , 
+        zerolinecolor: this.fontcolor,
+        zerolinewidth: 2,
+        nticks:this.n_yticks},
         padding: 0,
-        legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
+        legend: { x: 1, xanchor: this.legendposx , y: this.legendposy,  bgcolor: this.legendbg},
         margin: { l: 0, r: 100, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
         annotations: this.annotations
       };
@@ -127,14 +139,14 @@ export class PlotComponent implements OnInit {
           gridcolor: "lightgrey",
           gridpattern: "dot",
           gridwidth: 1,
-          zerolinecolor: "black",
+          zerolinecolor: this.fontcolor,
           zerolinewidth: 2,
           annotations: this.annotations,
           ticksuffix:" ",
           nticks:this.n_yticks          
         },
         autosize: true, padding: 0,
-        legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
+        legend: { x: 1, xanchor: this.legendposx , y: this.legendposy,  bgcolor: this.legendbg},
         margin: { l: 0, r: 20, b: 100, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent"
       };
       if (this.percent){
@@ -148,10 +160,14 @@ export class PlotComponent implements OnInit {
     if (this.plottype == "hbar") {
       this.plotlytype = "hbar";
       this.plotlayout = {
-        xaxis: { fixedrange: true, showgrid: false, title: '', automargin: true, nticks:this.n_yticks },
-        yaxis: { fixedrange: false, type: 'category', automargin: true, rangemode: 'tozero' ,ticksuffix:" "},
+        xaxis: { fixedrange: true, showgrid: true, title: '',       
+          automargin: true, nticks:this.n_yticks },
+        yaxis: { fixedrange: false, type: 'category', automargin: true, 
+        rangemode: 'tozero' ,ticksuffix:" ",
+        zerolinecolor: this.fontcolor,
+        zerolinewidth: 2},
         autosize: true, padding: 0,
-        legend: { x: 1, xanchor: 'right', y: .8, bgcolor: 'ffffffa7' },
+        legend: { x: 1, xanchor: this.legendposx , y: this.legendposy,  bgcolor: this.legendbg},
         margin: { l: 200, r: 0, b: 20, t: 0 }, paper_bgcolor: "transparent", plot_bgcolor: "transparent",
         annotations: this.annotations
 
@@ -207,7 +223,9 @@ export class PlotComponent implements OnInit {
     let outcomes = this.outcomes;
     if (this.colorby) {
       outcomes = this.api.getuniqueValues(plotdata, this.colorby);
-      this.colorscheme=this.api.makescale(outcomes.length);
+      if (outcomes.length>1){
+        this.colorscheme=this.api.makescale(outcomes.length);
+      }      
       plotdata = this.make_colorbyvalues();
     }
   

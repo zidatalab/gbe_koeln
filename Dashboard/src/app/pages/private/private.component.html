@@ -191,12 +191,12 @@
                 <h3>Werteverteilungen</h3>
                 
                 </div>
-                <div class="minsize" *ngIf="this.andata" fxFlex=45>
+                <div class="minsize" *ngIf="this.andata" fxFlex=45 fxFlex.lt-md=100>
                     <app-plot [data]="this.andata" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
                         [xvalue]="[this.outcome]" [outcomes]="[this.outcome]" [percent]="this.outcome_meta['type']=='rate'"
                         [colorscheme]="[this.api.makescale(3)[2]]" plottype="violin"></app-plot>
                 </div>
-                <div class="minsize" *ngIf="this.andata" fxFlex=45>
+                <div class="minsize" *ngIf="this.andata" fxFlex=45 fxFlex.lt-md=100>
                     <app-plot [data]="this.andata" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
                         [xvalue]="[this.determinant]" [outcomes]="[this.determinant]" [percent]="this.determinant_meta['type']=='rate'"
                         [colorscheme]="[this.api.makescale(3)[1]]" plottype="violin"></app-plot>
