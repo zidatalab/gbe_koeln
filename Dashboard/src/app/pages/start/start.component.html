@@ -106,12 +106,11 @@
             </div>
         </ng-container>
     </div>
-    <div *ngIf="this.data.length==0" fxLayout="column">
+    <div *ngIf="this.data.length==0 && this.metadata.length>0" fxLayout="column">
         <p>Keine Daten</p>
         <p><a mat-raised-button color="primary" href="/">Auswahl zurücksetzen</a></p>
     </div>
-    <div *ngIf="this.data.length>0" fxLayout="column">
-
+    <div *ngIf="this.data_overall" fxLayout="column">
         <h1>Ergebnisse</h1>
         <h2><strong>Allgemeine Informationen</strong></h2>
         <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem">
@@ -268,7 +267,7 @@
                     [feature]="this.levelsettings['outcomes']"></app-map>
             </mat-card>
         </div> 
-            <div class="minheight" *ngIf="this.levelsettings['levelvalues']!=='Gesamt' ">
+            <div class="minheight" *ngIf="this.levelsettings['levelvalues']!=='Gesamt' && this.data.length>0 " >
                 <mat-card>
                     <h2>Rangfolge der Regionen</h2>
                     <app-plot [(data)]="this.data" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
@@ -277,13 +276,16 @@
                         [colorscheme]="['#D7191C','#fdae61','#ffffbf','#abd9e9','#2c7bb6']" plottype="bar"></app-plot>
                 </mat-card>
             </div>
-            <div class="minheight" *ngIf="this.data">
+            <div class="minheight" *ngIf="this.data.length>0">
                 <mat-card>
                     <h2>Regionssuche</h2>
                     <app-table [data]="this.data" [columns]="this.datakeys" [addrank]="true"
                         [outcomes_rate]="this.data_rate" [addfilter]="true" [outcomes_numeric]="this.data_number">
                     </app-table>
                 </mat-card>
+            </div>
+            <div class="minheight" *ngIf="this.data.length==0">
+                <p>Keine Daten zur Auswahl</p>
             </div>
         </div>
     </div>
