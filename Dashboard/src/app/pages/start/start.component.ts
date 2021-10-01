@@ -56,11 +56,12 @@ export class StartComponent implements OnInit {
     {"sg.Altersgruppe_ID":"3","label":"Kinder und Jugendliche",
       "data":[{"sg.Altersgruppe":"Gesamt"},{"sg.Altersgruppe":"0 bis 5 Jahre"},{"sg.Altersgruppe":"6 bis 10 Jahre"},
       {"sg.Altersgruppe":"11 bis 14 Jahre"}]},
-    {"sg.Altersgruppe_ID":"4","label":"5-Jahres-Altersgruppen",
+    /* {"sg.Altersgruppe_ID":"4","label":"10-Jahres-Altersgruppen",
     "data":[{"sg.Altersgruppe":"Gesamt"},{"sg.Altersgruppe":"0 bis 9 Jahre"},
       {"sg.Altersgruppe":"10 bis 19 Jahre"},{"sg.Altersgruppe":"20 bis 29 Jahre"},{"sg.Altersgruppe":"30 bis 39 Jahre"},
       {"sg.Altersgruppe":"40 bis 49 Jahre"},{"sg.Altersgruppe":"50 bis 59 Jahre"},{"sg.Altersgruppe":"60 bis 69 Jahre"},
-      {"sg.Altersgruppe":"70 bis 79 Jahre"},{"sg.Altersgruppe":"80 und mehr Jahre"}]}];
+      {"sg.Altersgruppe":"70 bis 79 Jahre"},{"sg.Altersgruppe":"80 und mehr Jahre"}]} */
+    ];
   
 
   ngOnInit(): void {
@@ -208,7 +209,7 @@ export class StartComponent implements OnInit {
       agesexquery["groupinfo"]={};
       agesexquery["groupinfo"]['level'] = "Gesamt";
       agesexquery["groupinfo"]['sg.Geschlecht']={"$ne":"Gesamt"};
-      agesexquery["groupinfo"]['sg.Altersgruppe_ID']="1";
+      agesexquery["groupinfo"]['sg.Altersgruppe_ID']="4";
       agesexquery["showfields"].push('sg.Geschlecht');
       agesexquery["showfields"].push('sg.Altersgruppe_ID');            
       this.api.postTypeRequest('get_data/', agesexquery).subscribe(data => {
