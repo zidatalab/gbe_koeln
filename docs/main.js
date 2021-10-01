@@ -3793,7 +3793,7 @@ function PrivateComponent_div_7_div_3_div_1_div_4_Template(rf, ctx) { if (rf & 1
 } if (rf & 2) {
     const ctx_r71 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](4);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx_r71.andata)("custommargins", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](6, _c1))("xvalue", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](7, _c2, ctx_r71.outcome))("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](9, _c2, ctx_r71.outcome))("percent", true)("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](11, _c2, ctx_r71.api.makescale(3)[2]));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx_r71.andata)("custommargins", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](6, _c1))("xvalue", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](7, _c2, ctx_r71.outcome))("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](9, _c2, ctx_r71.outcome))("percent", ctx_r71.outcome_meta["type"] == "rate")("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](11, _c2, ctx_r71.api.makescale(3)[2]));
 } }
 function PrivateComponent_div_7_div_3_div_1_div_5_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 43);
@@ -3802,7 +3802,7 @@ function PrivateComponent_div_7_div_3_div_1_div_5_Template(rf, ctx) { if (rf & 1
 } if (rf & 2) {
     const ctx_r72 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](4);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx_r72.andata)("custommargins", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](6, _c1))("xvalue", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](7, _c2, ctx_r72.determinant))("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](9, _c2, ctx_r72.determinant))("percent", true)("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](11, _c2, ctx_r72.api.makescale(3)[1]));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx_r72.andata)("custommargins", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](6, _c1))("xvalue", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](7, _c2, ctx_r72.determinant))("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](9, _c2, ctx_r72.determinant))("percent", ctx_r72.determinant_meta["type"] == "rate")("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](11, _c2, ctx_r72.api.makescale(3)[1]));
 } }
 function PrivateComponent_div_7_div_3_div_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 40);
@@ -3834,7 +3834,7 @@ function PrivateComponent_div_7_div_3_div_2_Template(rf, ctx) { if (rf & 1) {
 } if (rf & 2) {
     const ctx_r68 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](3);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx_r68.andata)("xvalue", ctx_r68.determinant)("id", ctx_r68.levelid)("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](9, _c2, ctx_r68.outcome))("percent", true)("percentx", true)("xtitle", ctx_r68.determinant)("ytitle", ctx_r68.outcome + "<br>")("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](11, _c2, ctx_r68.api.makescale(3)[2]));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx_r68.andata)("xvalue", ctx_r68.determinant)("id", ctx_r68.levelid)("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](9, _c2, ctx_r68.outcome))("percent", ctx_r68.outcome_meta["type"] == "rate")("percentx", ctx_r68.determinant_meta["type"] == "rate")("xtitle", ctx_r68.determinant)("ytitle", ctx_r68.outcome + "<br>")("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](11, _c2, ctx_r68.api.makescale(3)[2]));
 } }
 function PrivateComponent_div_7_div_3_div_3_ng_container_4_ng_container_1_mat_chip_1_Template(rf, ctx) { if (rf & 1) {
     const _r82 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
@@ -3909,7 +3909,7 @@ function PrivateComponent_div_7_div_3_div_4_div_3_Template(rf, ctx) { if (rf & 1
 } if (rf & 2) {
     const ctx_r89 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](4);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx_r89.regressiondata["data"])("xvalue", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](8, _c2, ctx_r89.determinant))("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](10, _c4))("percent", true)("colorscheme", ctx_r89.api.makescale(2))("outcomelabels", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](11, _c5))("xtitle", ctx_r89.determinant)("ytitle", ctx_r89.outcome + "<br>");
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx_r89.regressiondata["data"])("xvalue", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](9, _c2, ctx_r89.determinant))("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](11, _c4))("colorscheme", ctx_r89.api.makescale(2))("outcomelabels", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction0"](12, _c5))("xtitle", ctx_r89.determinant)("ytitle", ctx_r89.outcome + "<br>")("percent", ctx_r89.outcome_meta["type"] == "rate")("percentx", ctx_r89.determinant_meta["type"] == "rate");
 } }
 function PrivateComponent_div_7_div_3_div_4_div_4_ng_container_20_span_11_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "span");
@@ -4044,7 +4044,7 @@ function PrivateComponent_div_7_div_3_div_4_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "h3");
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](2, "Ergenisse der Zusammenhangsanalyse");
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](3, PrivateComponent_div_7_div_3_div_4_div_3_Template, 2, 12, "div", 48);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](3, PrivateComponent_div_7_div_3_div_4_div_3_Template, 2, 13, "div", 48);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](4, PrivateComponent_div_7_div_3_div_4_div_4_Template, 37, 10, "div", 39);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
 } if (rf & 2) {
@@ -4180,6 +4180,8 @@ class PrivateComponent {
     }
     getregionandata() {
         if (this.outcome && this.determinant) {
+            this.determinant_meta = this.api.filterArray(this.metadata, 'varname', this.determinant)[0];
+            this.outcome_meta = this.api.filterArray(this.metadata, 'varname', this.outcome)[0];
             let query = {
                 "client_id": this.api.REST_API_SERVER_CLIENTID,
                 "groupinfo": {}
@@ -4215,7 +4217,7 @@ class PrivateComponent {
     }
 }
 PrivateComponent.ɵfac = function PrivateComponent_Factory(t) { return new (t || PrivateComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](src_app_services_api_service__WEBPACK_IMPORTED_MODULE_0__.ApiService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_1__.AuthService)); };
-PrivateComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: PrivateComponent, selectors: [["app-private"]], decls: 8, vars: 3, consts: [["fxLayout", "column", "fxLayoutGap", "30px", 1, "container"], ["ngClass.lt-sm", "mobileheading"], ["color", "primary", 3, "selected", "click", 4, "ngFor", "ngForOf"], [4, "ngIf"], ["fxLayout", "column", "fxLayoutGap", "15px", 4, "ngIf"], ["color", "primary", 3, "selected", "click"], [4, "ngFor", "ngForOf"], ["fxLayoutGap", "15px", 4, "ngIf"], ["fxLayoutGap", "15px"], [1, "add-margin"], ["opacity", ".8", "Zoom", "10", "selectmap", "true", 3, "containername", "center", "basemap", "id", "idChange", "clicked"], ["appearance", "fill", 1, "full-width"], [3, "value", "valueChange", "selectionChange"], [3, "value", "valueChange"], [1, "greycolor"], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "10px", 1, "add-margin"], ["fxFlex", "60"], ["fxFlex", "", "fxLayout", "row", "fxLayoutGap", "10px"], ["fxFlex", "50", "fxFlexAlign", "start start"], ["fxFlex", ""], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "10px", 4, "ngIf"], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "10px"], ["class", "primarycolor", 4, "ngIf"], ["class", "accentcolor", 4, "ngIf"], [1, "primarycolor"], [1, "accentcolor"], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "15px", 4, "ngIf"], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "15px"], ["fxLayout", "column", "fxLayoutGap", "15px"], ["fxLayout", "row wrap", "fxLayoutGap", "15px", "fxLayoutAlign", "space-between", 4, "ngIf"], ["fxLayout", "column", "fxLayoutAlign", "space-between", 4, "ngIf"], ["fxLayout", "row wrap", "fxLayoutGap", "15px", "fxLayoutAlign", "space-between"], ["fxFlex", "45", "fxFlex.lt-md", "100"], ["appearance", "outline", 1, "full-width"], ["value", ""], [3, "value"], ["fxLayout", "column", "fxLayoutAlign", "space-between"], ["fxLayout", "row wrap", 4, "ngIf"], ["class", "minsize", "fxFlex", "100", "fxFlex.lt-md", "100", 4, "ngIf"], ["class", "add-margin", 4, "ngIf"], ["fxLayout", "row wrap"], ["fxFlex", "100"], ["class", "minsize", "fxFlex", "45", 4, "ngIf"], ["fxFlex", "45", 1, "minsize"], ["plottype", "violin", 3, "data", "custommargins", "xvalue", "outcomes", "percent", "colorscheme"], ["fxFlex", "100", "fxFlex.lt-md", "100", 1, "minsize"], ["plottype", "scatter", 3, "data", "xvalue", "id", "outcomes", "percent", "percentx", "xtitle", "ytitle", "colorscheme", "dataChange"], ["color", "primary", 3, "selected", "click", 4, "ngIf"], ["class", "minsize", 4, "ngIf"], [1, "minsize"], ["plottype", "lines", 3, "data", "xvalue", "outcomes", "percent", "colorscheme", "outcomelabels", "xtitle", "ytitle"], [2, "max-width", "450px"], ["fxLayout", "row", "fxLayoutGap", "10px", "fxLayoutAlign", "space-between"], ["fxFlex", "15"]], template: function PrivateComponent_Template(rf, ctx) { if (rf & 1) {
+PrivateComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: PrivateComponent, selectors: [["app-private"]], decls: 8, vars: 3, consts: [["fxLayout", "column", "fxLayoutGap", "30px", 1, "container"], ["ngClass.lt-sm", "mobileheading"], ["color", "primary", 3, "selected", "click", 4, "ngFor", "ngForOf"], [4, "ngIf"], ["fxLayout", "column", "fxLayoutGap", "15px", 4, "ngIf"], ["color", "primary", 3, "selected", "click"], [4, "ngFor", "ngForOf"], ["fxLayoutGap", "15px", 4, "ngIf"], ["fxLayoutGap", "15px"], [1, "add-margin"], ["opacity", ".8", "Zoom", "10", "selectmap", "true", 3, "containername", "center", "basemap", "id", "idChange", "clicked"], ["appearance", "fill", 1, "full-width"], [3, "value", "valueChange", "selectionChange"], [3, "value", "valueChange"], [1, "greycolor"], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "10px", 1, "add-margin"], ["fxFlex", "60"], ["fxFlex", "", "fxLayout", "row", "fxLayoutGap", "10px"], ["fxFlex", "50", "fxFlexAlign", "start start"], ["fxFlex", ""], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "10px", 4, "ngIf"], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "10px"], ["class", "primarycolor", 4, "ngIf"], ["class", "accentcolor", 4, "ngIf"], [1, "primarycolor"], [1, "accentcolor"], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "15px", 4, "ngIf"], ["fxFlexAlign", "start", "fxLayout", "row wrap", "fxLayoutGap", "15px"], ["fxLayout", "column", "fxLayoutGap", "15px"], ["fxLayout", "row wrap", "fxLayoutGap", "15px", "fxLayoutAlign", "space-between", 4, "ngIf"], ["fxLayout", "column", "fxLayoutAlign", "space-between", 4, "ngIf"], ["fxLayout", "row wrap", "fxLayoutGap", "15px", "fxLayoutAlign", "space-between"], ["fxFlex", "45", "fxFlex.lt-md", "100"], ["appearance", "outline", 1, "full-width"], ["value", ""], [3, "value"], ["fxLayout", "column", "fxLayoutAlign", "space-between"], ["fxLayout", "row wrap", 4, "ngIf"], ["class", "minsize", "fxFlex", "100", "fxFlex.lt-md", "100", 4, "ngIf"], ["class", "add-margin", 4, "ngIf"], ["fxLayout", "row wrap"], ["fxFlex", "100"], ["class", "minsize", "fxFlex", "45", 4, "ngIf"], ["fxFlex", "45", 1, "minsize"], ["plottype", "violin", 3, "data", "custommargins", "xvalue", "outcomes", "percent", "colorscheme"], ["fxFlex", "100", "fxFlex.lt-md", "100", 1, "minsize"], ["plottype", "scatter", 3, "data", "xvalue", "id", "outcomes", "percent", "percentx", "xtitle", "ytitle", "colorscheme", "dataChange"], ["color", "primary", 3, "selected", "click", 4, "ngIf"], ["class", "minsize", 4, "ngIf"], [1, "minsize"], ["plottype", "lines", 3, "data", "xvalue", "outcomes", "colorscheme", "outcomelabels", "xtitle", "ytitle", "percent", "percentx"], [2, "max-width", "450px"], ["fxLayout", "row", "fxLayoutGap", "10px", "fxLayoutAlign", "space-between"], ["fxFlex", "15"]], template: function PrivateComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "div");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](2, "h1", 1);
@@ -4965,7 +4967,7 @@ function StartComponent_div_12_div_11_mat_card_1_Template(rf, ctx) { if (rf & 1)
 } if (rf & 2) {
     const ctx_r55 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵnextContext"](3);
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵadvance"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("data", ctx_r55.data_age_sex)("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction1"](6, _c1, ctx_r55.outcomeinfo["varname"]))("xvalue", "sg.Altersgruppe")("percent", true)("colorby", "sg.Geschlecht")("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](8, _c2));
+    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("data", ctx_r55.data_age_sex)("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction1"](6, _c1, ctx_r55.outcomeinfo["varname"]))("xvalue", "sg.Altersgruppe")("percent", ctx_r55.outcomeinfo["type"] == "rate")("colorby", "sg.Geschlecht")("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](8, _c2));
 } }
 function StartComponent_div_12_div_11_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 28);
@@ -5123,7 +5125,7 @@ function StartComponent_div_12_div_31_app_map_2_Template(rf, ctx) { if (rf & 1) 
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelement"](0, "app-map", 35);
 } if (rf & 2) {
     const ctx_r75 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵnextContext"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r75.data)("containername", "mapdata_stadtbezirke")("basemap", ctx_r75.mapdata_stadtbezirke)("bins", 5)("id", ctx_r75.levelid)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](11, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c5))("percent", true)("feature", ctx_r75.levelsettings["outcomes"]);
+    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r75.data)("containername", "mapdata_stadtbezirke")("basemap", ctx_r75.mapdata_stadtbezirke)("bins", 5)("id", ctx_r75.levelid)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](11, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c5))("percent", ctx_r75.outcomeinfo["type"] == "rate")("feature", ctx_r75.levelsettings["outcomes"]);
 } }
 function StartComponent_div_12_div_31_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 32);
@@ -5140,7 +5142,7 @@ function StartComponent_div_12_div_32_app_map_2_Template(rf, ctx) { if (rf & 1) 
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelement"](0, "app-map", 37);
 } if (rf & 2) {
     const ctx_r76 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵnextContext"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r76.data)("containername", "mapdata_stadtteile")("basemap", ctx_r76.mapdata_stadtteile)("bins", 5)("id", ctx_r76.levelid)("debug", false)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](13, _c5))("percent", true)("feature", ctx_r76.levelsettings["outcomes"]);
+    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r76.data)("containername", "mapdata_stadtteile")("basemap", ctx_r76.mapdata_stadtteile)("bins", 5)("id", ctx_r76.levelid)("debug", false)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](13, _c5))("percent", ctx_r76.outcomeinfo["type"] == "rate")("feature", ctx_r76.levelsettings["outcomes"]);
 } }
 function StartComponent_div_12_div_32_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 32);
@@ -5157,7 +5159,7 @@ function StartComponent_div_12_div_33_app_map_2_Template(rf, ctx) { if (rf & 1) 
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelement"](0, "app-map", 37);
 } if (rf & 2) {
     const ctx_r77 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵnextContext"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r77.data)("containername", "mapdata_statistischequartiere")("basemap", ctx_r77.mapdata_statistischequartiere)("bins", 5)("id", ctx_r77.levelid)("debug", false)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](13, _c5))("percent", true)("feature", ctx_r77.levelsettings["outcomes"]);
+    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r77.data)("containername", "mapdata_statistischequartiere")("basemap", ctx_r77.mapdata_statistischequartiere)("bins", 5)("id", ctx_r77.levelid)("debug", false)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](13, _c5))("percent", ctx_r77.outcomeinfo["type"] == "rate")("feature", ctx_r77.levelsettings["outcomes"]);
 } }
 function StartComponent_div_12_div_33_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 32);
@@ -5174,7 +5176,7 @@ function StartComponent_div_12_div_34_app_map_2_Template(rf, ctx) { if (rf & 1) 
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelement"](0, "app-map", 35);
 } if (rf & 2) {
     const ctx_r78 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵnextContext"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r78.data)("containername", "mapdata_stadtteile")("basemap", ctx_r78.mapdata_sozialraum)("bins", 3)("id", ctx_r78.levelid)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](11, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c5))("percent", true)("feature", ctx_r78.levelsettings["outcomes"]);
+    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r78.data)("containername", "mapdata_stadtteile")("basemap", ctx_r78.mapdata_sozialraum)("bins", 3)("id", ctx_r78.levelid)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](11, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c5))("percent", ctx_r78.outcomeinfo["type"] == "rate")("feature", ctx_r78.levelsettings["outcomes"]);
 } }
 function StartComponent_div_12_div_34_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 32);
@@ -5204,7 +5206,7 @@ function StartComponent_div_12_div_35_Template(rf, ctx) { if (rf & 1) {
 } if (rf & 2) {
     const ctx_r53 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵnextContext"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵadvance"](4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("data", ctx_r53.data)("custommargins", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](7, _c6))("xvalue", ctx_r53.levelid)("percent", true)("sort", true)("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction1"](8, _c1, ctx_r53.levelsettings["outcomes"]))("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](10, _c7));
+    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("data", ctx_r53.data)("custommargins", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](7, _c6))("xvalue", ctx_r53.levelid)("percent", ctx_r53.outcomeinfo["type"] == "rate")("sort", true)("outcomes", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction1"](8, _c1, ctx_r53.levelsettings["outcomes"]))("colorscheme", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](10, _c7));
 } }
 function StartComponent_div_12_div_36_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 32);
