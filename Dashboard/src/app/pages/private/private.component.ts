@@ -29,8 +29,10 @@ export class PrivateComponent implements OnInit {
   andata:any;
   outcomes:any;
   outcome:string;
+  outcome_meta:any;
   determinants:any;
   determinant:string;
+  determinant_meta:any;
   controls:any;
   regressiondata:any;
 
@@ -123,6 +125,10 @@ export class PrivateComponent implements OnInit {
 
   getregionandata(){
     if (this.outcome && this.determinant){
+      this.determinant_meta = this.api.filterArray(this.metadata,'varname',this.determinant)[0];
+      this.outcome_meta = this.api.filterArray(this.metadata,'varname',this.outcome)[0];
+
+
       let query = {
         "client_id": this.api.REST_API_SERVER_CLIENTID,
         "groupinfo": {}

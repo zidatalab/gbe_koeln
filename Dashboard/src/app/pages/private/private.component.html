@@ -189,22 +189,23 @@
             <div fxLayout="row wrap" *ngIf="this.andata">
                 <div fxFlex=100>
                 <h3>Werteverteilungen</h3>
+                
                 </div>
                 <div class="minsize" *ngIf="this.andata" fxFlex=45>
                     <app-plot [data]="this.andata" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
-                        [xvalue]="[this.outcome]" [outcomes]="[this.outcome]" [percent]="true"
+                        [xvalue]="[this.outcome]" [outcomes]="[this.outcome]" [percent]="this.outcome_meta['type']=='rate'"
                         [colorscheme]="[this.api.makescale(3)[2]]" plottype="violin"></app-plot>
                 </div>
                 <div class="minsize" *ngIf="this.andata" fxFlex=45>
                     <app-plot [data]="this.andata" [custommargins]="{ l: 0, r: 40, b: 150, t: 0 }"
-                        [xvalue]="[this.determinant]" [outcomes]="[this.determinant]" [percent]="true"
+                        [xvalue]="[this.determinant]" [outcomes]="[this.determinant]" [percent]="this.determinant_meta['type']=='rate'"
                         [colorscheme]="[this.api.makescale(3)[1]]" plottype="violin"></app-plot>
                 </div>
             </div>
             <div class="minsize" *ngIf="this.andata" fxFlex=100 fxFlex.lt-md=100>
                 <h3>Streudiagramm</h3>
                 <app-plot [(data)]="this.andata" [xvalue]="this.determinant" [id]="this.levelid"
-                    [outcomes]="[this.outcome]" [percent]="true" [percentx]="true"
+                    [outcomes]="[this.outcome]" [percent]="this.outcome_meta['type']=='rate'" [percentx]="this.determinant_meta['type']=='rate'"
                     [xtitle]="this.determinant" [ytitle]="this.outcome+'<br>'" 
                     [colorscheme]="[this.api.makescale(3)[2]]" plottype="scatter"></app-plot>
             </div>
@@ -229,9 +230,11 @@
                 <h3>Ergenisse der Zusammenhangsanalyse</h3>
                 <div class="minsize" *ngIf="this.regressiondata['data']">
                     <app-plot [data]="this.regressiondata['data']"
-                    [xvalue]="[this.determinant]" [outcomes]="['base','controlled']" [percent]="true"
+                    [xvalue]="[this.determinant]" [outcomes]="['base','controlled']"
                     [colorscheme]="this.api.makescale(2)" [outcomelabels]="['allgemeiner Zusammenhang','mit Kontrollvariablen']" 
                     [xtitle]="this.determinant" [ytitle]="this.outcome+'<br>'" 
+                    [percent]="this.outcome_meta['type']=='rate'"
+                     [percentx]="this.determinant_meta['type']=='rate'"
                     plottype="lines"></app-plot>
                 </div>
                 <div class="add-margin" *ngIf="this.regressiondata.params">
