@@ -262,7 +262,7 @@
             <mat-card class="no-padding">
                 <app-map *ngIf="this.mapdata_sozialraum['features'] && this.data.length>0"
                     [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
-                    [containername]="'mapdata_stadtteile'" [basemap]="this.mapdata_sozialraum" [bins]="5"
+                    [containername]="'mapdata_stadtteile'" [basemap]="this.mapdata_sozialraum" [bins]="3"
                     [id]="this.levelid" opacity=.8 Zoom=10 [center]="[50.94380474348729, 6.9669503454676125]"
                     [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="true"
                     [feature]="this.levelsettings['outcomes']"></app-map>

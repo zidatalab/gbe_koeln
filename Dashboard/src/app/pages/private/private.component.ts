@@ -140,7 +140,7 @@ export class PrivateComponent implements OnInit {
     if (this.outcome && this.determinant){
     let anquery ={
       "client_id": this.api.REST_API_SERVER_CLIENTID,
-      "groupinfo": {"level": "Statistische Quartiere", "sg.Geschlecht": "Gesamt","client_id":"2021_06_gbe_koeln", "sg.Altersgruppe_ID": "0"},
+      "groupinfo": {"sg.Geschlecht": "Gesamt","sg.Altersgruppe_ID": "0"},
        "theoutcome": this.outcome,
        "maininterest": this.determinant,
        "controls": this.controls
@@ -148,10 +148,11 @@ export class PrivateComponent implements OnInit {
      anquery["groupinfo"]['level'] = this.currentlevel;
      anquery["groupinfo"]['sg.Geschlecht'] = "Gesamt";
      anquery["groupinfo"]['sg.Altersgruppe_ID'] = "0";
+    console.log("QUERY: ",anquery);
      this.regressiondata=null;
      this.api.postTypeRequest('analytics/regression/', anquery).subscribe(data => 
        {let res = data;this.regressiondata=res;
-        //console.log(this.regressiondata);
+        
       }); 
     };
   }
