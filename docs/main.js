@@ -4196,7 +4196,7 @@ class PrivateComponent {
         if (this.outcome && this.determinant) {
             let anquery = {
                 "client_id": this.api.REST_API_SERVER_CLIENTID,
-                "groupinfo": { "level": "Statistische Quartiere", "sg.Geschlecht": "Gesamt", "client_id": "2021_06_gbe_koeln", "sg.Altersgruppe_ID": "0" },
+                "groupinfo": { "sg.Geschlecht": "Gesamt", "sg.Altersgruppe_ID": "0" },
                 "theoutcome": this.outcome,
                 "maininterest": this.determinant,
                 "controls": this.controls
@@ -4204,11 +4204,11 @@ class PrivateComponent {
             anquery["groupinfo"]['level'] = this.currentlevel;
             anquery["groupinfo"]['sg.Geschlecht'] = "Gesamt";
             anquery["groupinfo"]['sg.Altersgruppe_ID'] = "0";
+            console.log("QUERY: ", anquery);
             this.regressiondata = null;
             this.api.postTypeRequest('analytics/regression/', anquery).subscribe(data => {
                 let res = data;
                 this.regressiondata = res;
-                //console.log(this.regressiondata);
             });
         }
         ;
@@ -5174,7 +5174,7 @@ function StartComponent_div_12_div_34_app_map_2_Template(rf, ctx) { if (rf & 1) 
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelement"](0, "app-map", 35);
 } if (rf & 2) {
     const ctx_r78 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵnextContext"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r78.data)("containername", "mapdata_stadtteile")("basemap", ctx_r78.mapdata_sozialraum)("bins", 5)("id", ctx_r78.levelid)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](11, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c5))("percent", true)("feature", ctx_r78.levelsettings["outcomes"]);
+    _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵproperty"]("containername", "mapdiv")("binmethod", "equalgroupsize")("data", ctx_r78.data)("containername", "mapdata_stadtteile")("basemap", ctx_r78.mapdata_sozialraum)("bins", 3)("id", ctx_r78.levelid)("center", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](11, _c4))("colorscale", _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵpureFunction0"](12, _c5))("percent", true)("feature", ctx_r78.levelsettings["outcomes"]);
 } }
 function StartComponent_div_12_div_34_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "div", 32);
