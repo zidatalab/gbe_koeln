@@ -1,11 +1,11 @@
 <div class="container" fxLayout="column" fxLayoutGap="1rem">
     <h1 ngClass.lt-sm="mobileheading">Administration</h1>
-    <p class="mat-caption greycolor"> Frontend Version: {{this.appversion}}, Backend Version: {{this.backenddoc['info']['version']}}</p>
+    <p *ngIf="this.backenddoc" class="mat-caption greycolor"> Frontend Version: {{this.appversion}}, Backend Version:
+        {{this.backenddoc['info']['version']}}</p>
     <div *ngIf="!this.adduser && !this.adddata" fxLayout="row wrap" fxLayoutGap="1rem"
         fxLayoutAlign="start space-between">
         <div fxFlex=100>
-            <h2>Administrationsaufgaben</h2>
-            <p class="mat-caption greycolor">In diesem Bereich können Dashboard Administratoren ("Admin") und 
+            <p class="mat-caption greycolor">In diesem Bereich können Dashboard Administratoren ("Admin") und
                 Zi-Administratoren ("Superadmin") Daten oder Nutzer*innen hinzufügen.</p>
         </div>
         <div>
@@ -16,12 +16,9 @@
         </div>
 
     </div>
-    <div fxShow=false fxShow.lt-md=true>
-        <h4>Hinweis:</h4>
-        <p>Daten und Metadaten können nur auf großen Bildschirmen bearbeitet werden.</p>
-    </div>
 
-    <div *ngIf="!this.adduser && !this.adddata">
+    <!-- Nutzerrechte ändern-->
+    <div *ngIf="!this.adduser && !this.adddata &&  this.currentuser['is_superadmin']">
         <h2>Nutzerliste</h2>
         <p class="mat-caption greycolor">In diesem Bereich können Nutzerberechtigungen geändert werden.</p>
         <mat-list>
@@ -76,9 +73,8 @@
             </ng-container>
         </mat-list>
     </div>
-
+    <!-- Nutzer hinzufügen-->
     <div fxLayout="row wrap" *ngIf="this.adduser">
-
 
         <div fxFlex=100>
             <h2><strong>Nutzer hinzufügen</strong></h2>
@@ -136,15 +132,16 @@
         </div>
 
     </div>
-    <div *ngIf="this.adddata" fxLayout="column" fxLayoutGap="10px" >
-        <h2><strong>Daten hinzufügen</strong></h2>
-        <p>Mehr Informationen <a href="./assets/docs/Upload_Dateien.html">hier</a></p>
+    <!-- Daten hinzufügen-->
+    <div *ngIf="this.adddata" fxLayout="column" fxLayoutGap="10px">
+        <h2><strong>Datenpunkte ergänzen</strong></h2>
+        <p *ngIf="this.dataintend=='dataupload'">Sie können keine Datenpunkte für Subgruppen ergänzen. Es können lediglich Regionaldaten ohne Differenzierung nach Alter und Geschlecht hinzugefügt werden.</p>
         <mat-card>
             <div>
                 <h3><strong>Was soll hochgeladen werden?</strong></h3>
                 <mat-radio-group [(ngModel)]="this.dataintend">
                     <mat-radio-button value="dataupload">Daten hinzufügen&nbsp;&nbsp;</mat-radio-button>
-                    <mat-radio-button *ngIf="this.areavalues" value="geodataupload">Geodaten hinzufügen&nbsp;
+                    <mat-radio-button *ngIf="this.areavalues && this.currentuser['is_superadmin']" value="geodataupload">Geodaten hinzufügen&nbsp;
                     </mat-radio-button>
                 </mat-radio-group>
                 <br><br>
@@ -174,13 +171,13 @@
                             (click)="dataInput.click()">Daten
                             Auswählen</button>
                     </div>
-                   
+
                 </div>
                 <div *ngIf="this.geojsonfile" fxLayout="column" fxLayoutGap="10px">
                     <div fxFlex=100>
                         <h3><strong>2. GEOJSON beschreiben</strong> <span *ngIf="this.geodatafile">
                                 <mat-icon color="primary">check_circle</mat-icon>
-                            </span></h3>                            
+                            </span></h3>
                     </div>
                     <div fxFlex=100>
                         <p>Die Datei hat {{this.geojsonfile['features'].length | number}} Regionen.</p>
@@ -195,17 +192,46 @@
 
                 </div>
             </div>
-
             <div *ngIf="this.dataintend=='dataupload'">
-
-                <h3><strong>1. CSV Datei hochladen</strong> <span *ngIf="this.datafile">
+                <h3><strong>1. Raumeinheit auswählen</strong><span *ngIf="this.uploadarea">
                         <mat-icon color="primary">check_circle</mat-icon>
                     </span></h3>
+                <p *ngIf="!this.uploadarea">
+                    <mat-form-field appearance="outline" *ngIf="true">
+                        <mat-label>Raumeinheit</mat-label>
+                        <mat-select [(value)]="this.uploadarea">
+                            <mat-option *ngFor="let option of this.areavalues" [value]="option">{{option}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </p>
+            </div>
+            <div *ngIf="this.dataintend=='dataupload' && this.uploadarea">
 
-                <div *ngIf="!this.datafile" fxFlex.lt-md=100 fxFlex=50>
+                <h3><strong>2. Referenzdatei herunterladen</strong> <span *ngIf="this.adddatarefdata">
+                        <mat-icon color="primary">check_circle</mat-icon>
+                    </span> </h3>
+                <p *ngIf="!this.adddatarefdata">
+                    <a mat-raised-button color="primary" (click)="this.refdatadownload()">Referenzdatei</a>
+                </p>
+                <p>Bitte fügen Sie dieser Referenzdatei im csv-Datei bitte neue einheitlich benannte Spalten hinzu.
+                    Ändern Sie bitte weder die Zeilenanzahl noch die Formatierung der Datei (Trennzeichen
+                    <code>;</code>) noch die Kodierung der Datei (UTF-8). Zahlenspalten sollten als Zahlen ohne
+                    umgebende Anführungszeichen eingefügt werden.</p>
+            </div>
+
+            <div *ngIf="this.dataintend=='dataupload' && this.adddatarefdata" fxLayout="column">
+                <div fxFlex=100>
+                    <h3><strong>3. Neue Daten hochladen</strong> <span *ngIf="this.datafile">
+                            <mat-icon color="primary">check_circle</mat-icon>
+                        </span></h3>
+                    <p>Bitte fügen Sie neue Daten als neue Spalten in der Tabelle ein. Bitte geben sie den Spalten neue, sprechende Namen. Bestehende Spalten dürfen nicht verändert werden.</p>
+
+                </div>
+                <div *ngIf="!this.datafile" fxFlex=100>
 
                     <input type="file" accept='.csv' style="display: none"
-                        (change)="this.datafile=this.changeListener($event);" #dataInput>
+                        (change)="this.datafile=this.changeListenerDataUpload($event);" #dataInput>
                     <br><br>
                     <button mat-raised-button color="primary" (click)="dataInput.click()">Daten
                         Auswählen</button>
@@ -214,18 +240,18 @@
         </mat-card>
         <mat-card *ngIf="this.metadatafile && this.dataintend=='dataupload'">
             <div>
-
-                <h3><strong>2. Daten beschreiben</strong><span *ngIf="this.metadone">
+                <h3><strong>4. Daten beschreiben</strong><span *ngIf="this.metadone">
                         <mat-icon color="primary">check_circle</mat-icon>
                     </span></h3>
-                <p>Bitte prüfen Sie die initinale Zuordnung sorgfältig. Jeder Upload muss mindestens zwei Variablen vom
-                    Bereich "ordering" enthalten
-                    (Typen: level,levelid). Ebenso sollten alle Subgruppenvariablen vom Typ Gruppe sein. Jede Variable
-                    aus den Bereichen "ordering" oder "sungroups" muss Angaben zur Referenzkategorie machen.
-                    Zellen für diese Kategorie müssen auch in der Tabelle zu finden sein. Die Variablen aus den
-                    Bereichen Outcomes oder
-                    Demography sollten vom Typ 'rate' oder 'number' sein. Das Hinzufügen einer Indikatorenbeschreibung
-                    ist optional.</p>
+                <ng-container *ngIf="!this.metadone">
+                <p>Bitte prüfen Sie die Zuordnung sorgfältig.</p>
+                <p>Der <strong>Name</strong> der hinzugefügten Merkmale wird den Nutzern angezeigt.</p>
+                <p>Das <strong>Thema</strong> sortiert die Merkmale entweder den Gesundheitsoutcomes ("outcomes") oder den (sozialen) Determinanten ('demography') der Gesundheit zu.</p>
+                <p>Der <strong>Typ</strong> bestimmt die Anzeige der Inhalte. Der Typ "rate" kennzeichnet Prozentwerte 
+                    (Zellinhalt=<code>0.012</code> für 1,2%) und der Typ "number" andere Ganz- und Dezimalzahlen 
+                    (Zellinhalt=<code>1.2</code> für "1,2", Zellinhalt=<code>10001</code> für "10.001").</p>
+                <p>Die Veröffentlichung der hochgeladenen Merkmale und das Hinzufügen einer Indikatorenbeschreibung sind optional.</p>
+            </ng-container>
             </div>
             <div *ngIf="(this.datacheck.length>0)">
                 <mat-list>
@@ -242,8 +268,8 @@
                     <div fxFlex=15>Name</div>
                     <div fxFlex=20>Thema</div>
                     <div fxFlex=20>Typ</div>
-                    <div fxFlex>Referenzkategorie</div>
-                    <div fxFlex=15></div>
+                    <!-- <div fxFlex>Referenzkategorie</div> -->
+                    <div fxFlex></div>
 
                 </div>
 
@@ -254,7 +280,7 @@
                         <mat-form-field appearance="outline" *ngIf="true">
                             <mat-label>Bereich</mat-label>
                             <mat-select [(value)]="row.topic" (selectionChange)="this.checkmetadata()">
-                                <mat-option *ngFor="let option of this.topicoptions" [value]="option">{{option}}
+                                <mat-option *ngFor="let option of topicoptions" [value]="option">{{option}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -268,7 +294,7 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div fxFlex>
+                    <!-- <div fxFlex>
                         <ng-container *ngIf="['ordering','subgroups'].indexOf(row.topic)>=0">
                             <mat-form-field appearance="outline" *ngIf="true">
                                 <mat-label>Referenzkategorie</mat-label>
@@ -279,7 +305,8 @@
                             </mat-form-field>
                             <mat-form-field appearance="outline" *ngIf="row.type=='level'">
                                 <mat-label>Öffentliche Raumebenen</mat-label>
-                                <mat-select [(value)]="row.publiclevels" (selectionChange)="this.checkmetadata()" multiple>
+                                <mat-select [(value)]="row.publiclevels" (selectionChange)="this.checkmetadata()"
+                                    multiple>
                                     <mat-option *ngFor="let option of this.getrefvalues(row.varname)" [value]="option">
                                         {{option}}</mat-option>
                                 </mat-select>
@@ -289,16 +316,16 @@
 
                         </ng-container>
 
-                    </div>
-                    <div fxFlex=15>
-                        <mat-chip-list>
+                    </div> -->
+                    <div fxFlex>
+                        <mat-chip-list >
                             <mat-chip color="primary" (change)="this.checkmetadata()" [selected]="row.public"
                                 (click)="row.public=!row.public">
                                 <span *ngIf="row.public">Öffentlich</span>
                                 <span *ngIf="!row.public">Privat</span>
                             </mat-chip>
                             <mat-chip color="primary" [selected]="row.adddescr" (click)="row.adddescr=!row.adddescr">
-                                Beschreibung
+                                Beschreibung hinzufügen
                             </mat-chip>
                         </mat-chip-list>
                     </div>
@@ -319,29 +346,12 @@
                 </div>
 
             </div>
-        </mat-card>
+        </mat-card>      
+        <div class="add-margin" fxLayoutAlign="space-between" >
+         <!-- *ngIf="(!this.uploadres || this.uploadres=='error')"-->
 
-        <div *ngIf="this.metadone">
-            <mat-card>
-                <h3><strong>3. Sollen die aktuellen Daten überschrieben werden?</strong></h3>
-                <p>
-                    <mat-slide-toggle [(ngModel)]="this.replacedata"></mat-slide-toggle>
-                    <span style="color:crimson;" *ngIf="this.replacedata">überschreiben</span>
-                    <span *ngIf="!this.replacedata">nicht überschreiben.</span>
-
-                </p>
-                <p *ngIf="!this.replacedata"><em>Achtung: Das Ergänzen der Daten ist aufwändig und erfordert ggf. viel
-                        Zeit. Bitte ergänzen Sie nur kleine Datenkörper!</em></p>
-            </mat-card>
-        </div>
-
-
-
-        <div class="add-margin" fxLayoutAlign="space-between" 
-        *ngIf="(!this.uploadres || this.uploadres=='error')">
-            <div><button mat-raised-button (click)="uploadnewdata()" [disabled]="(!this.metadone) && (!this.uploadareaid)"
-                    color="accent">Hinzufügen
-
+            <div><button mat-raised-button (click)="uploadnewdata()"
+                    [disabled]="(!this.metadone) && (!this.uploadareaid)" color="accent">Hinzufügen
                 </button></div>
             <div><button mat-raised-button (click)="this.resetall();" color="primary">Abbrechen</button></div>
         </div>
@@ -349,8 +359,8 @@
             <mat-card>
                 <h1>Datenupload</h1>
                 <mat-spinner *ngIf="this.uploadres=='pending'" [diameter]="50"></mat-spinner>
-                <p *ngIf="this.uploadres=='pending'">Hinweis: Bitte haben Sie Geduld: Es kann etwas dauern wenn viele
-                    Daten aktualisiert oder gelöscht werden müssen.</p>
+                <p *ngIf="this.uploadres=='pending'">Hinweis: Bitte haben Sie Geduld: Es kann etwas dauern, wenn viele
+                    Daten aktualisiert werden müssen.</p>
                 <p *ngIf="this.uploadres=='success'">
                     <strong>Upload erfolgreich!</strong>
                 </p>
@@ -361,5 +371,5 @@
             </mat-card>
         </div>
     </div>
-   
+
 </div>

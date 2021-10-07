@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import * as pinfo from 'src/../package.json';
+import { CsvexportService } from 'src/app/services/csvexport.service';
+import { timeHours } from 'd3-time';
 
 @Component({
   selector: 'app-admin',
@@ -14,7 +15,9 @@ export class AdminComponent implements OnInit {
   constructor(
     private api: ApiService,
     private auth: AuthService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private csv: CsvexportService
+    ) { }
 
   users: any;
   myRegform: any;
@@ -22,6 +25,8 @@ export class AdminComponent implements OnInit {
   adduser: boolean;
   newuser: any;
   adddata: boolean;
+  adddatalevel: string;
+  adddatarefdata:any[];
   uploaderror: any;
   datafile: any;
   metadatafile: any;
@@ -40,8 +45,8 @@ export class AdminComponent implements OnInit {
   backenddoc:any;
   uploadarea: string;
   uploadareaid: string;
-  topicoptions = ['ordering', 'subgroups', 'demography', 'outcomes']
-  typeoptions = ['level', 'levelid', 'group', 'rate', 'number']
+  topicoptions = ['demography', 'outcomes']
+  typeoptions = ['rate', 'number']
   appversion:string = "Not possible";
   ngOnInit(): void {
     this.currentuser = this.auth.getUserDetails();
@@ -55,7 +60,7 @@ export class AdminComponent implements OnInit {
     "Umweltbelastungszonen Hitze","Umweltbelastungszonen Lärm","Umweltbelastungszonen Luft"];
     this.api.getTypeRequest('openapi.json').subscribe(
       data=>{this.backenddoc=data;});
-    
+     
   }
 
   ngOnDestroy(){
@@ -66,7 +71,7 @@ export class AdminComponent implements OnInit {
     }
 
   //File upload function
-  changeListener(event) {
+  changeListenerDataUpload(event) {
     let files = event.target.files;
     let file = files[0];
     let reader: FileReader = new FileReader();
@@ -82,29 +87,18 @@ export class AdminComponent implements OnInit {
       }
       datalines.shift();
       this.datafile = [newvarnames.join(',')].concat(datalines).join('\n');
-      varnames = newvarnames;
+      varnames = newvarnames.slice(2);
       this.datafilearray = this.csvToDataArray(this.datafile);
       let newmetadata = [];
+      // only upload new vars as metadata
       let index = 0;
       for (let varname of varnames) {
         index = index + 1;
-        let topush = { 'varname': varname.replace(/(\r\n|\n|\r)/gm, ""), 'topic': "", 'description': "", "allforlevel": '',  "publiclevels": [] , "public" : false }
-        if (index == 1) {
-          topush["topic"] = "ordering";
-          topush["type"] = "level";         
-        }
-        if (index == 2) {
-          topush["topic"] = "ordering";
-          topush["type"] = "levelid";
-        }
-        if (index > 2) {
+        let topush = { 'varname': varname.replace(/(\r\n|\n|\r)/gm, ""), 'topic': "", 'description': "", 
+        "allforlevel": '',  "publiclevels": [] , "public" : false }
           topush["type"] = "rate";
-          topush["topic"] = "outcomes";
-        }
-
-
+          topush["topic"] = "demography";        
         newmetadata.push(topush);
-
       }
       this.metadone = false;
       setTimeout(() => {
@@ -205,9 +199,7 @@ export class AdminComponent implements OnInit {
 
   };
 
-  buildDataUploadForm() {
-
-    
+  buildDataUploadForm() {   
     if (this.dataintend == 'geodataupload') {
       this.myDataUploadform = new FormData();
       this.geouploadinfo = {
@@ -222,8 +214,24 @@ export class AdminComponent implements OnInit {
     }
 
     if (this.dataintend == 'dataupload') {
-      this.myDataUploadform = new FormData();
-      this.myDataUploadform.append('data', new Blob([this.datafile], { type: 'text/csv' }));
+      this.myDataUploadform = new FormData(); 
+      let data2array = this.csvToArray(this.datafile);
+      let index =0;
+      console.log(data2array);
+      let newarray = [];
+      for (let item of data2array){
+        index = index+1;
+        if (index==1){
+          item = item.concat(['sg.Geschlecht','sg.Altersgruppe']);
+        }
+        else {
+          item = item.concat(['Gesamt','Gesamt altersstandardisiert']);
+        };
+        newarray.push(item);
+      }
+      
+      let uploaddata = this.csv.arraytocsvcontent(newarray).split("\n").slice(1).join("\n");
+      this.myDataUploadform.append('data', new Blob([uploaddata], { type: 'text/csv' }));
       this.myDataUploadform.append('metadata', this.arrayToCsv(this.metadatafile));
     }
   }
@@ -231,19 +239,20 @@ export class AdminComponent implements OnInit {
 
   uploadnewdata() {
     this.buildDataUploadForm();
-    this.uploadres = "pending";
+    // this.uploadres = "pending";
     this.uploaderror = null;
     if (this.dataintend == 'dataupload') {
-      this.api.postTypeRequestnotimeout('upload_data/?replacedata=' + this.replacedata, this.myDataUploadform).subscribe(data => {
+      console.log(this.myDataUploadform);
+      this.api.postTypeRequestnotimeout('add_data/?replacedata=' + false, this.myDataUploadform).subscribe(data => {
         this.uploadres = "success";
-        setTimeout(() => {
+       /*  setTimeout(() => {
           this.resetall();
-        }, 1500);
+        }, 1500); */
       },
         error => {
-          this.uploadres = "error";
-          this.uploaderror = error.error;
-        })
+          // this.uploadres = "error";
+          this.uploaderror = error.error; 
+        }); 
     }
     if (this.dataintend == 'geodataupload') {
       this.api.postTypeRequestnotimeout('upload_geodata/', this.myDataUploadform).subscribe(data => {
@@ -271,13 +280,8 @@ export class AdminComponent implements OnInit {
     let test6 = true;
     for (let item of this.metadatafile) {
 
-      if (item.topic == "ordering" && ['levelid', 'level'].indexOf(item.type) >= 0) { test1counter = test1counter + 1; }
-      if (item.topic == "subgroups" && item.type !== 'group') { item.type = 'group'; }
-      if (item.topic == "outcomes" && ['rate', 'number'].indexOf(item.type) < 0) { test3 = false; }
+       if (item.topic == "outcomes" && ['rate', 'number'].indexOf(item.type) < 0) { test3 = false; }
       if (item.topic == "demography" && ['rate', 'number'].indexOf(item.type) < 0) { test4 = false; }
-    }
-    if (test1counter !== 2) {
-      err.push("Level, and levelid missing or not labelled as topic.")
     }
     if (!test2) {
       err.push("Subgroups not typed correctly")
@@ -293,12 +297,6 @@ export class AdminComponent implements OnInit {
 
     if (!test5) {
       err.push("Reference Levels not specified")
-    }
-
-    let test6data = this.api.filterArray(this.metadatafile, 'type', 'level')[0];
-    test6 = ((test6data['publiclevels'].length == 0) || !test6data['public']) || ((test6data['publiclevels'].length >0) && test6data['public'])
-    if (!test6) {
-      err.push("No public levels not for public level var specified")
     }
 
     let test7 = this.metadatafile.length == this.api.getValues(this.metadatafile,"varname").length
@@ -354,6 +352,28 @@ export class AdminComponent implements OnInit {
     document.execCommand('copy');
   }
 
+  refdatadownload(){
+    let query = {
+      "client_id": this.api.REST_API_SERVER_CLIENTID,
+      "groupinfo": {},
+      "showfields": ['level','levelid']
+    };
+    query["groupinfo"]['level'] = this.uploadarea;
+    // For later filtering, only upload to overall allowed.
+    query["groupinfo"]['sg.Geschlecht'] = 'Gesamt';
+    query["groupinfo"]['sg.Altersgruppe'] = "Gesamt altersstandardisiert";
+    this.api.postTypeRequest('get_data/', query)
+    .subscribe(data => {
+      this.adddatarefdata=data['data'];
+      for (let item of this.adddatarefdata){
+        delete item['sg'];
+        item['Neue Daten hier']=null;
+      }
+      this.csv.exportToCsv("Uploadvorlage_"+this.uploadarea+".csv",this.adddatarefdata);
+    }, error => {});
+
+  }
+
   resetall() {
     this.adddata = !this.adddata;
     this.datafile = null;
@@ -369,7 +389,8 @@ export class AdminComponent implements OnInit {
     this.uploadarea = null;
     this.geouploadinfo = null;
     this.uploadareaid = null;
-
+    this.adddatalevel=null;
+    this.adddatarefdata=null;   
   }
 
   arrayToCsv(rows: object[]) {

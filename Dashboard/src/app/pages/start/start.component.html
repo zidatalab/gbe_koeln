@@ -110,12 +110,12 @@
         <p>Keine Daten</p>
         <p><a mat-raised-button color="primary" href="/">Auswahl zurücksetzen</a></p>
     </div>
-    <div *ngIf="this.data_overall" fxLayout="column">
-        <h1>Ergebnisse</h1>
-        <h2><strong>Allgemeine Informationen</strong></h2>
+    <div *ngIf="this.data_overall ||  this.data" fxLayout="column">
+        <h1>Ergebnisse</h1>      
+        <h2 *ngIf="this.data_age_sex && this.data_overall"><strong>Allgemeine Informationen</strong></h2>
         <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem">
 
-            <div fxFlex=50 fxFlex.lt-md=100>
+            <div fxFlex=50 fxFlex.lt-md=100 *ngIf="this.data_overall">
 
                 <ng-container *ngIf="this.outcomeinfo['type']=='number'">
                     <app-box [value]="this.data_overall" [maincolor]="'#D7191C'"
@@ -132,7 +132,7 @@
                     <p class="mat-caption">{{this.outcomeinfo['description']}}</p>
                 </mat-card>
             </div>
-            <div fxFlex=100 *ngIf="this.data_age_sex">
+            <div fxFlex=100 *ngIf="this.data_age_sex && this.data_overall">
                 <mat-card *ngIf="this.data_age_sex.length>0">
                     <h2>Alters- und Geschlechtsunterschiede</h2>
                     <app-plot  [data]="this.data_age_sex" [outcomes]="[this.outcomeinfo['varname']]"
