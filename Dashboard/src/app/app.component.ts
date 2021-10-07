@@ -11,7 +11,7 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Test Dashboard';
+  title = 'Stadt Köln | Zi-Tool für kleinräumige GBE';
   public currentuser : any;
   loginoption = true;
   public loginstatus:boolean;
