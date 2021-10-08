@@ -217,7 +217,6 @@ export class AdminComponent implements OnInit {
       this.myDataUploadform = new FormData(); 
       let data2array = this.csvToArray(this.datafile);
       let index =0;
-      console.log(data2array);
       let newarray = [];
       for (let item of data2array){
         index = index+1;
@@ -242,12 +241,11 @@ export class AdminComponent implements OnInit {
     // this.uploadres = "pending";
     this.uploaderror = null;
     if (this.dataintend == 'dataupload') {
-      console.log(this.myDataUploadform);
       this.api.postTypeRequestnotimeout('add_data/?replacedata=' + false, this.myDataUploadform).subscribe(data => {
         this.uploadres = "success";
-/*          setTimeout(() => {
+          setTimeout(() => {
           this.resetall();
-        }, 1500);  */
+        }, 1500);  
       },
         error => {
           this.uploadres = "error";

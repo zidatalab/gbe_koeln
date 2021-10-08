@@ -154,7 +154,6 @@ export class PrivateComponent implements OnInit {
      anquery["groupinfo"]['level'] = this.currentlevel;
      anquery["groupinfo"]['sg.Geschlecht'] = "Gesamt";
      anquery["groupinfo"]['sg.Altersgruppe_ID'] = "0";
-    console.log("QUERY: ",anquery);
      this.regressiondata=null;
      this.api.postTypeRequest('analytics/regression/', anquery).subscribe(data => 
        {let res = data;this.regressiondata=res;

@@ -95,7 +95,6 @@ export class StartComponent implements OnInit {
     this.levelsettings[level] = value;
     if (level=="subgroup_agegrpid"){
       this.altergruppenid_ageoptions = this.api.filterArray(this.altergruppenid_options,'sg.Altersgruppe_ID',value)[0]['data'];
-      console.log(this.altergruppenid_ageoptions);
       this.levelsettings['subgroup_agegrpid_agevalue']="Gesamt";
     }
     
