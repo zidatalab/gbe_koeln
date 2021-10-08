@@ -245,12 +245,12 @@ export class AdminComponent implements OnInit {
       console.log(this.myDataUploadform);
       this.api.postTypeRequestnotimeout('add_data/?replacedata=' + false, this.myDataUploadform).subscribe(data => {
         this.uploadres = "success";
-       /*  setTimeout(() => {
+/*          setTimeout(() => {
           this.resetall();
-        }, 1500); */
+        }, 1500);  */
       },
         error => {
-          // this.uploadres = "error";
+          this.uploadres = "error";
           this.uploaderror = error.error; 
         }); 
     }

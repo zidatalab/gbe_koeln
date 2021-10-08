@@ -234,7 +234,7 @@
                         (change)="this.datafile=this.changeListenerDataUpload($event);" #dataInput>
                     <br><br>
                     <button mat-raised-button color="primary" (click)="dataInput.click()">Daten
-                        Auswählen</button>
+                        auswählen</button>
                 </div>
             </div>
         </mat-card>
@@ -340,9 +340,7 @@
                 </div>
                 <div>
                     <div><button mat-raised-button [disabled]="!(this.datacheck.length==0)" (click)="this.metadone=true"
-                            color="accent">Beschreibung
-                            Fertig</button></div>
-
+                            color="accent">Beschreibung fertig</button></div>
                 </div>
 
             </div>
@@ -366,7 +364,7 @@
                 </p>
                 <p *ngIf="this.uploadres=='error'">
                     <strong>Fehler beim Upload</strong> Fehlermeldung: <span
-                        class="primarycolor">{{this.uploaderror}}</span>
+                        class="primarycolor">{{this.uploaderror['detail']}}</span>
                 </p>
             </mat-card>
         </div>
