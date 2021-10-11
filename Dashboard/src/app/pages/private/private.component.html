@@ -1,6 +1,6 @@
 <div class="container" fxLayout="column" fxLayoutGap="30px">
     <div>
-        <h1 ngClass.lt-sm="mobileheading">Interne Tools</h1>
+        <h1 ngClass.lt-sm="mobileheading">Regionenportraits</h1>
         <mat-chip-list>
             <mat-chip *ngFor="let action of this.actions" color="primary" [selected]="this.action==this.intend"
                 (click)="this.intend=action">{{action}}</mat-chip>
