@@ -2905,7 +2905,6 @@ class AdminComponent {
             this.myDataUploadform = new FormData();
             let data2array = this.csvToArray(this.datafile);
             let index = 0;
-            console.log(data2array);
             let newarray = [];
             for (let item of data2array) {
                 index = index + 1;
@@ -2928,12 +2927,11 @@ class AdminComponent {
         // this.uploadres = "pending";
         this.uploaderror = null;
         if (this.dataintend == 'dataupload') {
-            console.log(this.myDataUploadform);
             this.api.postTypeRequestnotimeout('add_data/?replacedata=' + false, this.myDataUploadform).subscribe(data => {
                 this.uploadres = "success";
-                /*          setTimeout(() => {
-                          this.resetall();
-                        }, 1500);  */
+                setTimeout(() => {
+                    this.resetall();
+                }, 1500);
             }, error => {
                 this.uploadres = "error";
                 this.uploaderror = error.error;
@@ -4255,7 +4253,6 @@ class PrivateComponent {
             anquery["groupinfo"]['level'] = this.currentlevel;
             anquery["groupinfo"]['sg.Geschlecht'] = "Gesamt";
             anquery["groupinfo"]['sg.Altersgruppe_ID'] = "0";
-            console.log("QUERY: ", anquery);
             this.regressiondata = null;
             this.api.postTypeRequest('analytics/regression/', anquery).subscribe(data => {
                 let res = data;
@@ -5443,7 +5440,6 @@ class StartComponent {
         this.levelsettings[level] = value;
         if (level == "subgroup_agegrpid") {
             this.altergruppenid_ageoptions = this.api.filterArray(this.altergruppenid_options, 'sg.Altersgruppe_ID', value)[0]['data'];
-            console.log(this.altergruppenid_ageoptions);
             this.levelsettings['subgroup_agegrpid_agevalue'] = "Gesamt";
         }
         this.querydata();
