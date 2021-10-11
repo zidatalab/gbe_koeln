@@ -127,9 +127,9 @@
                 </ng-container>
 
             </div>
-            <div fxFlex=66 *ngIf="this.outcomeinfo['description']">
-                <mat-card style="background-color: rgb(235, 235, 235);">
-                    <p class="mat-caption">{{this.outcomeinfo['description']}}</p>
+            <div fxFlex fxFlex.lt-md=100 *ngIf="this.outcomeinfo['description']">
+                <mat-card class="descriptioncontainer" >
+                    <mat-card-content>{{this.outcomeinfo['description']}}</mat-card-content>
                 </mat-card>
             </div>
             <div fxFlex=100 *ngIf="this.data_age_sex && this.data_overall">
