@@ -103,8 +103,14 @@ public  filterNAArray(array,key){
   return result
  }
  
- 
-
+ public  filterNA(array){
+  let result = []
+  for (let item of array){
+    if (!isNaN(item)){
+      result.push(item)};  
+  }
+  return result
+ }
 
 public  getmetadata(name){
   return JSON.parse(localStorage.getItem(name));
@@ -118,9 +124,6 @@ public sortArray(array, key, order = "ascending") {
   else {
     return result.sort((a, b) => (a[key] > b[key] ? -1 : 1));
   }
-
-
-
 }
 
 public sumArray(array) {

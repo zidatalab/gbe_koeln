@@ -37,6 +37,7 @@ export class MapComponent implements OnInit {
   legend: any;
   map: any;
   useprovider = 0;
+  firstload = true;
   providers = ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png']
   attributions = ['Kartenmaterial &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -48,8 +49,7 @@ export class MapComponent implements OnInit {
     // Debug
     if (this.debug){
       console.log("ID:",this.id);
-      console.log("Map:",this.api.getValues(this.basemap['features'],'properties'));
-      console.log("Data:",this.data);
+      console.log("Map:",this.api.getValues(this.basemap['features'],'properties'));  
     }
 
     // Sort data
@@ -89,7 +89,7 @@ export class MapComponent implements OnInit {
 
   ngOnDestroy(){
     this.map = null;
-    
+    this.data = null;
     }
 
 
@@ -122,15 +122,16 @@ export class MapComponent implements OnInit {
     return res;
   }
   preparedom(divid) {
-    if (document.getElementById(divid)) { document.getElementById(divid).remove() };
+    if (document.getElementById(divid)) { document.getElementById(divid).remove();};
     let mapcontainer = this.renderer.createElement("div");
     this.renderer.setProperty(mapcontainer, 'id', divid);
-    this.renderer.addClass(mapcontainer, "mapdiv");
-    this.renderer.appendChild(document.getElementById("map-frame"), mapcontainer);
+    this.renderer.addClass(mapcontainer, "mapdiv");    
+    if (document.getElementById("map-frame")!==null){
+      this.renderer.appendChild(document.getElementById("map-frame"), mapcontainer);}
     return true;
   }
 
-  initMap(divid): void {
+  async initMap(divid) {
     // Init
     let mymap;
     this.mapok = false;
@@ -157,16 +158,22 @@ export class MapComponent implements OnInit {
     };
 
     // Prepare dom
-    this.preparedom(divid);
-
+    this.firstload= false;
+    let removed = false;
+    await this.preparedom(divid);
     // Load Map
 
     if (this.debug){
       console.log('center: ',this.center );
     }
-
-    mymap = L.map(divid, { center: this.center, zoom: this.Zoom });
-
+    try {
+    mymap = await L.map(divid, { center: this.center, zoom: this.Zoom });
+    }
+    catch(e){
+      document.getElementById(divid).remove();
+      await this.preparedom(divid);
+      mymap = await L.map(divid, { center: this.center, zoom: this.Zoom });
+    };
     if (this.debug){
       console.log('Map created');
     }
@@ -234,6 +241,7 @@ export class MapComponent implements OnInit {
       }
       if (this.debug){
         console.log('Map Features',geojsonFeature.features);
+        console.log("Data:",this.data);
       }
       
 
@@ -413,7 +421,7 @@ export class MapComponent implements OnInit {
     info.update();
   }
 
-  makecutoffs(array, method = "equalint", bins) {
+  makecutoffs(array, method = "equalint", bins) { 
     let result = [];
     let minv = Math.min(...array);
     let maxv = Math.max(...array);
@@ -426,28 +434,29 @@ export class MapComponent implements OnInit {
       result.push((i + 1) * steps + minv);
       i = i + 1;
     };
+    if (this.debug){
+      console.log("CUTOFF RESULT",result,"\ninputarray",array);
+    }
     };
 
    // equal group size 
    if (method=='equalgroupsize'){    
-    let sortedarray = array.sort();
+    let sortedarray = this.api.filterNA(array.sort((a,b)=>parseFloat(a)-parseFloat(b)));
     let arraylength = sortedarray.length;
-    let groupsize= Math.round(arraylength/bins)+1;
-    let currentsize=0;
-    let i = 1;
-    for (let item of sortedarray){
-      if (i == 1){
-        result.push(minv);
-      };     
-      if (currentsize==groupsize){
-        result.push(item);
-        currentsize=0;
-      };
-      currentsize=currentsize+1;
-      i = i+1;
-    };          
+    let groupsize= Math.floor(arraylength/bins);    
+    for (let thebin of Array.apply(null, {length: bins}).map(Number.call, Number)){
+      if (thebin==0){
+        result.push(sortedarray[0])
+      }
+      else {
+        result.push(sortedarray[groupsize*thebin]);
+      }
+    }
+    if (this.debug){
+      console.log("CUTOFF RESULT",result.sort(),"\ninputarray",sortedarray,"Group Size",groupsize);
+    }     
     };
-    
+   
     return result;
 
   };
@@ -507,6 +516,8 @@ export class MapComponent implements OnInit {
     return [b, a]
   }
 
-
+donothing(e){
+  return null;
+};
 }
 
