@@ -133,7 +133,7 @@
                 </mat-card>
             </div>
             <div fxFlex=100 *ngIf="this.data_age_sex && this.data_overall">
-                <mat-card *ngIf="this.data_age_sex.length>0">
+                <mat-card *ngIf="this.data_age_sex.length>0 && this.levelsettings['outcomes']!='Anteil Patienten mit Früherkennungsleistung'">
                     <h2>Alters- und Geschlechtsunterschiede</h2>
                     <app-plot  [data]="this.data_age_sex" [outcomes]="[this.outcomeinfo['varname']]"
                         [xvalue]="'sg.Altersgruppe'" [percent]="this.outcomeinfo['type']=='rate'" [colorby]="'sg.Geschlecht'" plottype="bar"
@@ -227,9 +227,9 @@
                 <mat-card class="no-padding">
                     <app-map *ngIf="this.mapdata_stadtbezirke['features'] && this.data.length>0"
                         [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
-                        [containername]="'mapdata_stadtbezirke'" [basemap]="this.mapdata_stadtbezirke" [bins]="5"
+                        [containername]="'mapdata_stadtbezirke'" [basemap]="this.mapdata_stadtbezirke" [bins]="3"
                         [id]="this.levelid" opacity=.8 Zoom=10 [center]="[50.94380474348729, 6.9669503454676125]"
-                        [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="this.outcomeinfo['type']=='rate'"
+                        [colorscale]="['#2c7bb6','#ffffbf','#D7191C']" [percent]="this.outcomeinfo['type']=='rate'"
                         [feature]="this.levelsettings['outcomes']"></app-map>
                 </mat-card>
             </div>
@@ -263,7 +263,7 @@
                     [containername]="'mapdiv'" [binmethod]="'equalgroupsize'" [data]="this.data"
                     [containername]="'mapdata_stadtteile'" [basemap]="this.mapdata_sozialraum" [bins]="3"
                     [id]="this.levelid" opacity=.8 Zoom=10 [center]="[50.94380474348729, 6.9669503454676125]"
-                    [colorscale]="['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#D7191C']" [percent]="this.outcomeinfo['type']=='rate'"
+                    [colorscale]="['#2c7bb6','#ffffbf','#D7191C']" [percent]="this.outcomeinfo['type']=='rate'"
                     [feature]="this.levelsettings['outcomes']"></app-map>
             </mat-card>
         </div> 

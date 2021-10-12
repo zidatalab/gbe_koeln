@@ -51,6 +51,9 @@ export class MapComponent implements OnInit {
       console.log("Map:",this.api.getValues(this.basemap['features'],'properties'));
       console.log("Data:",this.data);
     }
+
+    // Sort data
+    this.data = this.api.sortArray(this.data,this.Outcome);
     
     // Init vars
     this.resetprops();
@@ -429,7 +432,7 @@ export class MapComponent implements OnInit {
    if (method=='equalgroupsize'){    
     let sortedarray = array.sort();
     let arraylength = sortedarray.length;
-    let groupsize= Math.floor(arraylength/bins)+1;
+    let groupsize= Math.round(arraylength/bins)+1;
     let currentsize=0;
     let i = 1;
     for (let item of sortedarray){
