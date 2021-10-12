@@ -47,6 +47,7 @@ metadf <- bind_rows(metadf,metadf %>% filter(topic=="subgroup") %>%  tail(1) %>%
 
 write_csv(metadf,path = "~/Downloads/meta_export_ramona.csv",na = "")
 
+texte_ramona <- read_csv2("~/Downloads/Indikatordefinition_undText_fin.csv",na = "")
 
 
 # check levels
