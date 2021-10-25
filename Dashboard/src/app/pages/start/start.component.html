@@ -112,7 +112,7 @@
         <p><a mat-raised-button color="primary" href="/">Auswahl zurücksetzen</a></p>
     </div>
     </ng-container>
-    <div *ngIf="this.data_overall ||  this.data" fxLayout="column">
+    <div *ngIf="this.outcomeinfo && (this.data_overall ||  this.data)" fxLayout="column">
         <h1>Ergebnisse</h1>      
         <h2 *ngIf="this.data_age_sex && this.data_overall"><strong>Allgemeine Informationen</strong></h2>
         <div fxFlex=100 fxLayout="row wrap" fxLayoutGap="1rem">
