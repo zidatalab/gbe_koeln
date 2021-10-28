@@ -7,7 +7,7 @@ library(sf)
 client_name ="2021_06_gbe_koeln"
 options(scipen=999)
 
-df  <- read_csv("Downloads/daten_fin5_praev1_fin_fin.csv") %>%
+df  <- read_csv("~/Downloads/daten_fin5_praev1_fin_fin.csv") %>%
   rename(level=Raumgliederung,levelid=Raum_ID_Name,
          "sg.Raumgliederung_sort"="Raumgliederung_sort",
          "sg.Raum_ID"= "Raum_ID",
@@ -45,13 +45,16 @@ metadf <- tibble(varname=colnames(df),
 
 metadf <- bind_rows(metadf,metadf %>% filter(topic=="subgroup") %>%  tail(1) %>% mutate(varname="sg", topic="metasubgroup"))
 
+texte_ramona <- read_csv2("~/git/gbe_koeln/Dashboard/src/assets/docs/Indikatordefinition.csv",na = "") %>%
+  select(varname="Indikator",description="Text")
+
+metadf <- metadf %>% select(-description) %>% left_join(texte_ramona) %>%
+  filter(varname!="PATZAHL")
+
 write_csv(metadf,path = "~/Downloads/meta_export_ramona.csv",na = "")
 
-texte_ramona <- read_csv2("~/Downloads/Indikatordefinition_undText_fin.csv",na = "")
-
-
 # check levels
-levels_koeln_quartier <- read_sf("/Users/lekroll/git/geodatarepo/cities/koeln/Statistisches_Quartier_simp.geojson")  %>% 
+levels_koeln_quartier <- read_sf("~/git/geodatarepo/cities/koeln/Statistisches_Quartier_simp.geojson")  %>% 
   rename(levelid=NAME) %>% group_by(levelid) %>% count()
 
 levels_koeln_quartier_df<- df %>% filter(level=="Statistische Quartiere") %>% 
