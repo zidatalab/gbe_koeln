@@ -2310,9 +2310,17 @@ function AdminComponent_div_7_div_18_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](6, "p");
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](7, "Bitte f\u00FCgen Sie dieser Referenzdatei im csv-Datei bitte neue einheitlich benannte Spalten hinzu. \u00C4ndern Sie bitte weder die Zeilenanzahl noch die Formatierung der Datei (Trennzeichen ");
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](8, "code");
-    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](9, ";");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](9, ",");
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](10, ") noch die Kodierung der Datei (UTF-8). Zahlenspalten sollten als Zahlen ohne umgebende Anf\u00FChrungszeichen eingef\u00FCgt werden.");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](10, " und Dezimalzahlen mit Trennzeichen ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](11, "code");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](12, ".");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](13, " und ohne Zeichen f\u00FCr gro\u00DFe Zahlen bspqw. ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementStart"](14, "code");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](15, "10000.23");
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtext"](16, ") noch die Kodierung der Datei (UTF-8). Zahlenspalten sollten als Zahlen ohne umgebende Anf\u00FChrungszeichen eingef\u00FCgt werden.");
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
 } if (rf & 2) {
@@ -2719,7 +2727,7 @@ function AdminComponent_div_7_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](16, AdminComponent_div_7_div_16_Template, 8, 3, "div", 53);
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](17, AdminComponent_div_7_div_17_Template, 6, 2, "div", 4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](18, AdminComponent_div_7_div_18_Template, 11, 2, "div", 4);
+    _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](18, AdminComponent_div_7_div_18_Template, 17, 2, "div", 4);
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](19, AdminComponent_div_7_div_19_Template, 9, 2, "div", 53);
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵtemplate"](20, AdminComponent_div_7_mat_card_20_Template, 9, 4, "mat-card", 4);
