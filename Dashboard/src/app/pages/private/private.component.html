@@ -1,6 +1,6 @@
 <div class="container" fxLayout="column" fxLayoutGap="30px">
     <div>
-        <h1 ngClass.lt-sm="mobileheading">Regionenportraits</h1>
+        <h1 ngClass.lt-sm="mobileheading">Regionen und Analysen</h1>
         <mat-chip-list>
             <mat-chip *ngFor="let action of this.actions" color="primary" [selected]="this.action==this.intend"
                 (click)="this.intend=action">{{action}}</mat-chip>
@@ -143,7 +143,7 @@
         </div>
 
     </div>
-    <div *ngIf="this.intend=='Analysen'" fxLayout="column" fxLayoutGap="15px">
+    <div *ngIf="this.intend=='Zusammenhangsanalysen'" fxLayout="column" fxLayoutGap="15px">
         <div *ngIf="this.levelvalues">
             <mat-chip-list>
                 <ng-container *ngFor="let item of this.levelvalues">

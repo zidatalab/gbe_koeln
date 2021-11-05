@@ -12,7 +12,7 @@ export class PrivateComponent implements OnInit {
   
   constructor(private api:ApiService, private auth:AuthService) { }
 
-  actions =  ['Regionen beschreiben','Analysen']
+  actions =  ['Regionen beschreiben','Zusammenhangsanalysen']
   intend ="";
   metadata:any;
   sortdata:any;
