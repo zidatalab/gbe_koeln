@@ -21,6 +21,7 @@ df  <- read_csv("~/Downloads/daten_fin5_praev1_fin_fin.csv") %>%
   mutate_at(vars(contains('Anteil von')),.funs=as.numeric) %>%
   relocate(client_id,level,levelid,contains("sg."))
 
+colnames(df) <- str_replace(str_replace(colnames(df),"der Angina Prectoris","Angina Pectoris"),"Herzinfarkten","Herzinfarkte")
 write_csv(df,path = "~/Downloads/export_ramona.csv",na = "")
 
 df <- read_csv("~/Downloads/export_ramona.csv",na = "")
