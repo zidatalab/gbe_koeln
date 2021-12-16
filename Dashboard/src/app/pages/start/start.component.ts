@@ -211,6 +211,8 @@ export class StartComponent implements OnInit {
       agesexquery["groupinfo"]['sg.Altersgruppe_ID']="4";
       agesexquery["showfields"].push('sg.Geschlecht');
       agesexquery["showfields"].push('sg.Altersgruppe_ID');            
+      agesexquery["showfields"].push('sg.Altersgruppe');            
+      //agesexquery["showfields"].push('sg.Altersgruppe');            
       this.api.postTypeRequest('get_data/', agesexquery).subscribe(data => {
         this.data_age_sex=this.extractsg(data['data']);},error => {});
       
