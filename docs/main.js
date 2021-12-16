@@ -5597,6 +5597,8 @@ class StartComponent {
             agesexquery["groupinfo"]['sg.Altersgruppe_ID'] = "4";
             agesexquery["showfields"].push('sg.Geschlecht');
             agesexquery["showfields"].push('sg.Altersgruppe_ID');
+            agesexquery["showfields"].push('sg.Altersgruppe');
+            //agesexquery["showfields"].push('sg.Altersgruppe');            
             this.api.postTypeRequest('get_data/', agesexquery).subscribe(data => {
                 this.data_age_sex = this.extractsg(data['data']);
             }, error => { });
@@ -5710,7 +5712,7 @@ __webpack_require__.r(__webpack_exports__);
 class ApiService {
     constructor(httpClient) {
         this.httpClient = httpClient;
-        this.REST_API_SERVER = "https://zidashboardapi.azurewebsites.net/"; // "https://zidashboardapi.azurewebsites.net/";//"http://localhost:8000/" ; // 
+        this.REST_API_SERVER = "https://dashboardapi.ziapp.de/"; // "https://zidashboardapi.azurewebsites.net/";//"http://localhost:8000/" ; // 
         this.REST_API_SERVER_CLIENTID = "2021_06_gbe_koeln";
         this.primarycolor = "e1141c"; // "#e91e63";
         this.accentcolor = "3714e1";
