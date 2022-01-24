@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service'; 
 import {ApiService} from '../../services/api.service' 
 import {HttpParams} from '@angular/common/http';  
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-
  
 @Component({ 
   selector: 'app-login', 
