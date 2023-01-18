@@ -5675,7 +5675,7 @@ __webpack_require__.r(__webpack_exports__);
 class ApiService {
     constructor(httpClient) {
         this.httpClient = httpClient;
-        this.REST_API_SERVER = "https://barebonedashboardapi.azurewebsites.net/"; // "https://api.zidatasciencelab.de/" ; 
+        this.REST_API_SERVER = "https://api.zidatasciencelab.de/"; // "https://barebonedashboardapi.azurewebsites.net/"
         this.REST_API_SERVER_CLIENTID = "2021_06_gbe_koeln";
         this.primarycolor = "e1141c"; // "#e91e63";
         this.accentcolor = "3714e1";
